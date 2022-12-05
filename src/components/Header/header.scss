@@ -1,0 +1,30 @@
+.header {
+  background: #1890ff;
+
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 873px;
+    margin: auto;
+
+    // padding-left: 230px;
+    // padding-right: 230px;
+    h1 {
+      color: white;
+    }
+  }
+  .ant-menu-item a {
+    color: white;
+  }
+  .ant-menu-item a:hover {
+    opacity: 1;
+    color: #1272cc;
+  }
+}
+.menu {
+  width: 180px;
+  padding: 0 20px;
+  line-height: 63px;
+  border: 0;
+  background: transparent;
+}
