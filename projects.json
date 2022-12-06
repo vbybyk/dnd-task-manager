@@ -11,15 +11,15 @@
             "priority": "high"
           },
           {
-            "id": 2,
-            "name": "Add new project",
+            "id": 4,
+            "name": "Connect database",
             "decription": "Lorem ipsum ipsum lorem lorem",
             "status": "todo",
             "priority": "high"
           },
           {
-            "id": 4,
-            "name": "Connect database",
+            "id": 2,
+            "name": "Add new project",
             "decription": "Lorem ipsum ipsum lorem lorem",
             "status": "todo",
             "priority": "high"

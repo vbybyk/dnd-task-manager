@@ -1,6 +1,8 @@
 import "./App.scss";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HeaderApp, Favorite, List } from "../index";
+import { Provider } from "react-redux";
+import store from "../store";
 
 const APP: React.FC = () => {
   return (
@@ -16,5 +18,9 @@ const APP: React.FC = () => {
   );
 };
 export const App: React.FC = (props: any) => {
-  return <APP {...props} />;
+  return (
+    <Provider store={store}>
+      <APP {...props} />
+    </Provider>
+  );
 };

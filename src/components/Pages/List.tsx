@@ -1,16 +1,15 @@
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import {
   DndContext,
   DragOverlay,
-  useDroppable,
   useSensor,
   useSensors,
   KeyboardSensor,
   PointerSensor,
   TouchSensor,
 } from "@dnd-kit/core";
-import { useSortable, SortableContext, rectSortingStrategy, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
+import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { Layout, Button, Checkbox, Menu, Space } from "antd";
 import { arrayMove, insertAtIndex, removeAtIndex } from "../Utils/utils";
 import useTasks from "../Hooks/useTasks";
@@ -20,25 +19,12 @@ import "./list.scss";
 
 const { Content } = Layout;
 
-const tasks = {
-  todo: [
-    { id: 1, text: "task 1" },
-    { id: 2, text: "task 2" },
-    { id: 3, text: "task 3" },
-  ],
-  progress: [
-    { id: 4, text: "task 4" },
-    { id: 6, text: "task 6" },
-  ],
-  done: [],
-};
-
 export const List: React.FC = () => {
   const [items, setItems] = useState(null);
   const [activeId, setActiveId] = useState(null);
-  // const [projects, setProjects] = useState([])
 
-  const { getProjects, getProjectById, projects, updateProjectTasks } = useTasks();
+  const { getProjects, updateProjectTasks } = useTasks();
+  const { projects, isFetching } = useSelector((state: any) => state);
 
   useEffect(() => {
     getProjects();
