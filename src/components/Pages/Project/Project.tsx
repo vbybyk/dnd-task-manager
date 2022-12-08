@@ -11,7 +11,7 @@ import {
   TouchSensor,
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import { Layout, Button, Checkbox, Menu, Space } from "antd";
+import { Layout, Row, Col, Button, Checkbox, Menu, Space } from "antd";
 import { arrayMove, insertAtIndex, removeAtIndex } from "../../Utils/utils";
 import useTasks from "../../Hooks/useTasks";
 import { Item } from "../../Common/Item/Item";
@@ -164,11 +164,14 @@ export const Project: React.FC = () => {
         onDragEnd={handleDragEnd}
       >
         <div className="tasks-container">
-          {items &&
-            Object.keys(items).map((group: any) => (
-              // @ts-ignore
-              <Droppable id={group} items={items[group]} name={group} activeId={activeId} key={group} />
-            ))}
+          <Row gutter={12}>
+            {items &&
+              Object.keys(items).map((group: any) => (
+                <Col xs={24} sm={12} md={6} lg={5}>
+                  <Droppable id={group} items={items[group]} name={group} activeId={activeId} key={group} />
+                </Col>
+              ))}
+          </Row>
         </div>
         <DragOverlay>{activeId ? <Item id={activeId} tasks={activeItem} dragOverlay /> : null}</DragOverlay>
       </DndContext>

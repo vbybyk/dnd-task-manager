@@ -9,6 +9,7 @@ export const SortableItem = (props: any) => {
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : 1,
+    width: "100%",
   };
 
   return (
