@@ -2,12 +2,15 @@ import { ProjectService } from "../API/ProjectService";
 import { Dispatch } from "redux";
 import { useDispatch } from "react-redux";
 import {
-  getProjectRequest,
+  getProjectsRequest,
   getProjectsSuccess,
   getProjectsError,
   postProjectRequest,
   postProjectSuccess,
   postProjectError,
+  getProjectRequest,
+  getProjectSuccess,
+  getProjectError,
 } from "../store/actions";
 
 const useTasks = () => {
@@ -15,7 +18,7 @@ const useTasks = () => {
 
   const getProjects = async () => {
     try {
-      dispatch(getProjectRequest());
+      dispatch(getProjectsRequest());
       const { status, data } = await ProjectService.getProjects();
       status === 200 && dispatch(getProjectsSuccess(data));
     } catch (err) {
@@ -25,17 +28,17 @@ const useTasks = () => {
     }
   };
 
-  // const getProjectById = async (projId: number) => {
-  //   try {
-  //     setIsProjectFetching(true);
-  //     const { status, data } = await ProjectService.getProjectById(projId);
-  //     status === 200 && setProject(data);
-  //   } catch (err) {
-  //     console.log(err);
-  //   } finally {
-  //     setIsProjectFetching(false);
-  //   }
-  // };
+  const getProjectById = async (projId: number) => {
+    try {
+      dispatch(getProjectRequest());
+      const { status, data } = await ProjectService.getProjectById(projId);
+      status === 200 && dispatch(getProjectSuccess(data));
+    } catch (err) {
+      //@ts-ignore
+      dispatch(getProjectError(err));
+      console.log(err);
+    }
+  };
 
   const updateProjectTasks = async (projId: number, tasks: any) => {
     try {
@@ -52,6 +55,6 @@ const useTasks = () => {
     }
   };
 
-  return { getProjects, updateProjectTasks };
+  return { getProjects, updateProjectTasks, getProjectById };
 };
 export default useTasks;

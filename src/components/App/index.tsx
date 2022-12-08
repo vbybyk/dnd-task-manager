@@ -1,6 +1,6 @@
 import "./App.scss";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { HeaderApp, Favorite, List } from "../index";
+import { HeaderApp, Dashboard, Project } from "../index";
 import { Provider } from "react-redux";
 import store from "../store";
 
@@ -10,8 +10,8 @@ const APP: React.FC = () => {
       <div className="App">
         <HeaderApp />
         <Routes>
-          <Route path="/list" element={<List />} />
-          <Route path="/favorite" element={<Favorite />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/projects/:projId" element={<Project />} />
         </Routes>
       </div>
     </BrowserRouter>

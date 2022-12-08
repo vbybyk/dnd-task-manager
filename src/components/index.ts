@@ -1,4 +1,4 @@
 export * from "./App";
 export * from "./Header";
-export * from "./Pages/Favorite";
-export * from "./Pages/List";
+export * from "./Pages/Dashboard/Dashboard";
+export * from "./Pages/Project/Project";

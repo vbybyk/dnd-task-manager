@@ -8,5 +8,5 @@ export class ProjectService {
   static getProjectTaskById = async (projId: number, container: string) =>
     await Axios.get(`http://localhost:3001/projects/${projId}/containers/${container}`);
   static updateProjectTasks = async (projId: number, containers: any) =>
-    await Axios.put(`http://localhost:3001/projects/${projId}`, { containers });
+    await Axios.patch(`http://localhost:3001/projects/${projId}`, { containers });
 }

@@ -8,13 +8,13 @@ export const SortableItem = (props: any) => {
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    opacity: isDragging ? 0 : 1,
+    opacity: isDragging ? 0.5 : 1,
   };
 
   return (
     // @ts-ignore
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <Item id={props.id} name={props.name} />
+      <Item id={props.id} tasks={props.tasks} />
     </div>
   );
 };

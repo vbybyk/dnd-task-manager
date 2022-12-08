@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import {
   DndContext,
   DragOverlay,
@@ -11,29 +12,41 @@ import {
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { Layout, Button, Checkbox, Menu, Space } from "antd";
-import { arrayMove, insertAtIndex, removeAtIndex } from "../Utils/utils";
-import useTasks from "../Hooks/useTasks";
-import { Item } from "../Common/Item/Item";
-import { Droppable } from "../Common/Droppable/Droppable";
-import "./list.scss";
+import { arrayMove, insertAtIndex, removeAtIndex } from "../../Utils/utils";
+import useTasks from "../../Hooks/useTasks";
+import { Item } from "../../Common/Item/Item";
+import { Droppable } from "../../Common/Droppable/Droppable";
+import { ITask } from "../../Interfaces/tasks";
+import "./project.scss";
 
 const { Content } = Layout;
+type Params = {
+  projId: string;
+};
 
-export const List: React.FC = () => {
+export const Project: React.FC = () => {
   const [items, setItems] = useState(null);
   const [activeId, setActiveId] = useState(null);
+  const [activeItem, setActiveItem] = useState<ITask | undefined>(undefined);
 
-  const { getProjects, updateProjectTasks } = useTasks();
-  const { projects, isFetching } = useSelector((state: any) => state);
+  const { getProjects, updateProjectTasks, getProjectById } = useTasks();
+  const { project, isFetching } = useSelector((state: any) => state);
+  const { projId } = useParams<Params>() as Params;
 
   useEffect(() => {
-    getProjects();
+    getProjectById(+projId);
   }, []);
 
   useEffect(() => {
     // @ts-ignore
-    setItems(projects[0]?.containers);
-  }, [projects]);
+    !items && setItems(project?.containers);
+  }, [project]);
+
+  useEffect(() => {
+    getProjectById(+projId);
+    // @ts-ignore
+    setItems(project?.containers);
+  }, [projId]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -44,11 +57,15 @@ export const List: React.FC = () => {
   );
 
   const handleDragStart = ({ active }: { active: any }) => {
+    const activeContainer = active.data.current.sortable.containerId;
+    // @ts-ignore
+    setActiveItem(items[activeContainer].filter((elem) => elem.id === active.id)[0]);
     setActiveId(active.id);
   };
 
   const handleDragCancel = () => {
     setActiveId(null);
+    setActiveItem(undefined);
   };
 
   const handleDragOver = (event: any) => {
@@ -85,6 +102,7 @@ export const List: React.FC = () => {
 
     if (!over) {
       setActiveId(null);
+      setActiveItem(undefined);
       return;
     }
 
@@ -116,9 +134,9 @@ export const List: React.FC = () => {
         return newItems;
       });
     }
-    console.log("after setting items", items);
-    updateProjectTasks(1, items);
+    updateProjectTasks(+projId, items);
     setActiveId(null);
+    setActiveItem(undefined);
   };
 
   const moveBetweenContainers = (
@@ -152,7 +170,7 @@ export const List: React.FC = () => {
               <Droppable id={group} items={items[group]} name={group} activeId={activeId} key={group} />
             ))}
         </div>
-        <DragOverlay>{activeId ? <Item id={activeId} dragOverlay /> : null}</DragOverlay>
+        <DragOverlay>{activeId ? <Item id={activeId} tasks={activeItem} dragOverlay /> : null}</DragOverlay>
       </DndContext>
     </Content>
   );

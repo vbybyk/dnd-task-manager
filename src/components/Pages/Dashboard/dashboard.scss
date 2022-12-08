@@ -1,0 +1,25 @@
+.dashboard {
+  padding: 0 50px;
+}
+.dashboard-title-wrapper {
+  padding: 20px;
+  display: flex;
+  width: 400px;
+  justify-content: space-between;
+  align-items: center;
+  .dashboard-title {
+    margin: 0;
+  }
+}
+.dashboard-projects__wrapper {
+  padding: 20px;
+  background-color: rgb(248, 246, 246);
+  .dashboard-projects__title {
+    margin-bottom: 25px;
+  }
+}
+.dashboard-project-card {
+  max-width: 300px;
+  box-shadow: 0px 1px 1px rgb(149, 149, 149);
+  border-radius: 5px;
+}

@@ -1,28 +1,38 @@
 .header {
-  background: #1890ff;
+  height: 50px;
+  line-height: 50px;
+  background: rgb(55, 50, 136);
+  background: linear-gradient(90deg, rgba(55, 50, 136, 1) 0%, rgba(45, 45, 189, 1) 61%, rgba(48, 150, 208, 1) 97%);
 
   .header-container {
     display: flex;
-    justify-content: space-between;
-    max-width: 873px;
-    margin: auto;
+    justify-content: start;
+    height: inherit;
+    max-width: 1020px;
 
     // padding-left: 230px;
     // padding-right: 230px;
-    h1 {
+    h2 {
       color: white;
     }
   }
   .ant-menu-item a {
     color: white;
   }
-  .ant-menu-item a:hover {
+  .ant-menu-item:hover {
+    opacity: 1;
+    color: #1272cc;
+  }
+  .ant-menu-title-content {
+    color: white;
+  }
+  .ant-menu-overflow-item span:hover {
     opacity: 1;
     color: #1272cc;
   }
 }
 .menu {
-  width: 180px;
+  width: 250px;
   padding: 0 20px;
   line-height: 63px;
   border: 0;

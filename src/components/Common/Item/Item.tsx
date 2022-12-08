@@ -1,21 +1,23 @@
+import { ITask } from "../../Interfaces/tasks";
+import { Card } from "../Card/Card";
 import "./item.scss";
 
 export const Item = ({
-  id,
-  name,
+  tasks,
   dragOverlay,
+  id,
 }: {
-  id: number | null;
-  name?: string | undefined;
+  tasks?: ITask | undefined;
   dragOverlay?: any | undefined;
+  id: number;
 }) => {
   const style = {
     cursor: dragOverlay ? "grabbing" : "grab",
   };
   return (
     <div style={style} className="item">
-      Task #{id}
-      <h3>{name}</h3>
+      {tasks && <Card id={id} tasks={tasks} />}
+      {/* <span>Task name: {tasks?.name}</span> */}
     </div>
   );
 };

@@ -14,7 +14,7 @@ export function Droppable(props: any) {
         <div className="droppable-container" ref={setNodeRef}>
           {name}
           {items.map((item: any) => (
-            <SortableItem key={item.id} id={item.id} />
+            <SortableItem key={item.id} id={item.id} tasks={item} />
           ))}
         </div>
       </SortableContext>
