@@ -17,6 +17,7 @@ import useTasks from "../../Hooks/useTasks";
 import { Item } from "../../Common/Item/Item";
 import { Droppable } from "../../Common/Droppable/Droppable";
 import { ITask } from "../../Interfaces/tasks";
+import { IState } from "../../store/reducers";
 import "./project.scss";
 
 const { Content } = Layout;
@@ -30,12 +31,12 @@ export const Project: React.FC = () => {
   const [activeItem, setActiveItem] = useState<ITask | undefined>(undefined);
 
   const { getProjects, updateProjectTasks, getProjectById } = useTasks();
-  const { project, isFetching } = useSelector((state: any) => state);
+  const { project, isFetching } = useSelector((state: IState) => state);
   const { projId } = useParams<Params>() as Params;
 
   useEffect(() => {
     getProjectById(+projId);
-  }, []);
+  }, [projId]);
 
   useEffect(() => {
     // @ts-ignore
@@ -43,10 +44,11 @@ export const Project: React.FC = () => {
   }, [project]);
 
   useEffect(() => {
-    getProjectById(+projId);
     // @ts-ignore
     setItems(project?.containers);
-  }, [projId]);
+  }, [project]);
+
+  console.log(projId);
 
   const sensors = useSensors(
     useSensor(PointerSensor),

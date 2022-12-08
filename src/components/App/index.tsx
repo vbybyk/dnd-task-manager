@@ -1,10 +1,16 @@
-import "./App.scss";
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HeaderApp, Dashboard, Project } from "../index";
 import { Provider } from "react-redux";
 import store from "../store";
+import useTasks from "../Hooks/useTasks";
+import "./App.scss";
 
 const APP: React.FC = () => {
+  const { getProjects } = useTasks();
+  useEffect(() => {
+    getProjects();
+  }, []);
   return (
     <BrowserRouter>
       <div className="App">

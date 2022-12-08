@@ -1,5 +1,6 @@
 import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 import { useDroppable } from "@dnd-kit/core";
+import { Divider } from "antd";
 import { SortableItem } from "../SortableItem/SortableItem";
 import "./droppable.scss";
 
@@ -10,9 +11,11 @@ export function Droppable(props: any) {
   return (
     <>
       <SortableContext id={id} items={items} strategy={rectSortingStrategy}>
-        {/* @ts-ignore */}
         <div className="droppable-container" ref={setNodeRef}>
-          {name}
+          <div className="droppable-container__name-wrapper">
+            <h4 className="droppable-container__name">{name}</h4>
+          </div>
+          <Divider style={{ margin: "7px 0" }} />
           {items.map((item: any) => (
             <SortableItem key={item.id} id={item.id} tasks={item} />
           ))}

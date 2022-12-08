@@ -1,10 +1,26 @@
 .card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   padding: 10px;
-  min-height: 150px;
-  // border: solid 1px grey;
+  min-height: 100px;
   border-radius: 3px;
   margin: 5px;
   cursor: pointer;
   background-color: white;
   box-shadow: 0px 1px 1px rgb(88, 88, 88);
+}
+.card-name {
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+.card-label {
+  font-size: 11px;
+  font-weight: 700;
+  width: fit-content;
+  margin-left: 10px;
+  margin-bottom: 5px;
+  background-color: #f7d8693d;
+  color: #f99c07;
+  box-shadow: -10px 0 0 #f7d8693d, 10px 0 0 #f7d8693d;
 }

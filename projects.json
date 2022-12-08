@@ -6,37 +6,38 @@
       "containers": {
         "todo": [
           {
-            "id": 2,
-            "name": "Add new functions",
+            "id": 3,
+            "name": "AP/Client AP: Allow to match talent teams for Creatine Directors if 'Open to Teams' option is selected",
             "description": "Lorem ipsum ipsum lorem lorem",
-            "label": "todo",
-            "priority": "high"
-          },
-          {
-            "id": 4,
-            "name": "Connect database",
-            "description": "Lorem ipsum ipsum lorem lorem",
-            "label": "todo",
-            "priority": "high"
-          },
-          {
-            "id": 1,
-            "name": "Create app",
-            "description": "Lorem ipsum ipsum lorem lorem",
-            "label": "todo",
+            "label": "TODO",
             "priority": "high"
           }
         ],
         "progress": [
           {
-            "id": 3,
-            "name": "Add redux",
+            "id": 4,
+            "name": "BE: Send communication messages on invoice dispute",
             "description": "Lorem ipsum ipsum lorem lorem",
-            "label": "todo",
+            "label": "TODO",
+            "priority": "high"
+          },
+          {
+            "id": 1,
+            "name": "Add Number of Bookings for each talent in My Talent Network",
+            "description": "Lorem ipsum ipsum lorem lorem",
+            "label": "TODO",
             "priority": "high"
           }
         ],
-        "done": []
+        "done": [
+          {
+            "id": 2,
+            "name": "Add new Node technologies in Project",
+            "description": "Lorem ipsum ipsum lorem lorem",
+            "label": "TODO",
+            "priority": "high"
+          }
+        ]
       },
       "id": 1
     },
@@ -45,35 +46,36 @@
         "todo": [
           {
             "id": 1,
-            "name": "Create something",
+            "name": "Create something in Project 2",
             "description": "Lorem ipsum ipsum lorem lorem",
-            "label": "todo",
-            "priority": "high"
-          },
-          {
-            "id": 2,
-            "name": "Add new something",
-            "description": "Lorem ipsum ipsum lorem lorem",
-            "label": "todo",
+            "label": "DESIGN",
             "priority": "high"
           },
           {
             "id": 4,
-            "name": "Connect something",
+            "name": "Connect something in Project 2",
             "description": "Lorem ipsum ipsum lorem lorem",
-            "label": "todo",
+            "label": "DESIGN",
             "priority": "high"
           },
           {
             "id": 3,
-            "name": "Add something",
+            "name": "Add something in Project 2",
             "description": "Lorem ipsum ipsum lorem lorem",
-            "label": "todo",
+            "label": "DESIGN",
             "priority": "high"
           }
         ],
         "progress": [],
-        "done": []
+        "done": [
+          {
+            "id": 2,
+            "name": "Add new something in Project 2",
+            "description": "Lorem ipsum ipsum lorem lorem",
+            "label": "DESIGN",
+            "priority": "high"
+          }
+        ]
       },
       "id": 2,
       "name": "Project TWO",

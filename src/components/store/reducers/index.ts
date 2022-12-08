@@ -1,20 +1,10 @@
 import { AnyAction } from "redux";
-import { ITask } from "../../Interfaces/tasks";
+import { IProject, ITask } from "../../Interfaces/tasks";
 
-interface IState {
+export interface IState {
   projects?: IProject[] | undefined;
   isFetching: boolean;
   project?: IProject;
-}
-interface IProject {
-  id: number;
-  name: string;
-  decription: string;
-  containers: {
-    todo: ITask[];
-    progress: ITask[];
-    done: ITask[];
-  };
 }
 
 const initialState: IState = {

@@ -1,21 +1,23 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Layout, Checkbox, Space, Alert, Button, List, Card } from "antd";
-import useTasks from "../../Hooks/useTasks";
 import { ProjectService } from "../../API/ProjectService";
-import { ITask } from "../../Interfaces/tasks";
+import useTasks from "../../Hooks/useTasks";
+import { IProject } from "../../Interfaces/tasks";
+import { IState } from "../../store/reducers";
 import "./dashboard.scss";
 
 const { Content } = Layout;
 
 export const Dashboard: React.FC = () => {
-  const { getProjects } = useTasks();
-  const { projects, isFetching } = useSelector((state: any) => state);
+  const { projects, isFetching } = useSelector((state: IState) => state);
 
+  const { getProjects } = useTasks();
   useEffect(() => {
     getProjects();
   }, []);
 
+  console.log(projects);
   return (
     <>
       <Content className="dashboard">
@@ -34,17 +36,11 @@ export const Dashboard: React.FC = () => {
               lg: 3,
             }}
             dataSource={projects}
-            renderItem={(item) => (
+            renderItem={(item: IProject) => (
               <List.Item>
                 {projects && (
-                  //@ts-ignore
                   <Card title={item?.name} bordered={false} className="dashboard-project-card">
-                    <p>
-                      {
-                        //@ts-ignore
-                        item.description
-                      }
-                    </p>
+                    <p>{item.description}</p>
                     <p>Open tasks</p>
                     <p>Closed tasks</p>
                   </Card>
