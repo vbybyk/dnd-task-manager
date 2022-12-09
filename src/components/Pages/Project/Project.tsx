@@ -11,11 +11,12 @@ import {
   TouchSensor,
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import { Layout, Row, Col, Button, Checkbox, Menu, Space } from "antd";
+import { Layout, Row, Col, Button, Modal, Checkbox, Menu, Space } from "antd";
 import { arrayMove, insertAtIndex, removeAtIndex } from "../../Utils/utils";
 import useTasks from "../../Hooks/useTasks";
 import { Item } from "../../Common/Item/Item";
 import { Droppable } from "../../Common/Droppable/Droppable";
+import { NewTaskModal } from "../../Modals/NewTaskModal/NewTaskModal";
 import { ITask } from "../../Interfaces/tasks";
 import { IState } from "../../store/reducers";
 import "./project.scss";
@@ -34,6 +35,8 @@ export const Project: React.FC = () => {
   const { project, isFetching } = useSelector((state: IState) => state);
   const { projId } = useParams<Params>() as Params;
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   useEffect(() => {
     getProjectById(+projId);
   }, [projId]);
@@ -47,8 +50,6 @@ export const Project: React.FC = () => {
     // @ts-ignore
     setItems(project?.containers);
   }, [project]);
-
-  console.log(projId);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -157,7 +158,14 @@ export const Project: React.FC = () => {
   };
 
   return (
-    <Content className="list-page">
+    <Content className="project-page">
+      <div className="project-page__title">
+        <h2>{project?.name}</h2>
+        <Button type="primary" onClick={() => setIsModalOpen(true)} style={{ marginLeft: "80px" }}>
+          Create Task
+        </Button>
+      </div>
+
       <DndContext
         sensors={sensors}
         onDragStart={handleDragStart}
@@ -169,7 +177,7 @@ export const Project: React.FC = () => {
           <Row gutter={12}>
             {items &&
               Object.keys(items).map((group: any) => (
-                <Col xs={24} sm={12} md={6} lg={5}>
+                <Col key={group} xs={24} sm={12} md={6} lg={5}>
                   <Droppable id={group} items={items[group]} name={group} activeId={activeId} key={group} />
                 </Col>
               ))}
@@ -177,6 +185,8 @@ export const Project: React.FC = () => {
         </div>
         <DragOverlay>{activeId ? <Item id={activeId} tasks={activeItem} dragOverlay /> : null}</DragOverlay>
       </DndContext>
+      <NewTaskModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+      {/* <Modal title="New Task" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}></Modal> */}
     </Content>
   );
 };

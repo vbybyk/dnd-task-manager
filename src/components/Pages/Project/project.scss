@@ -1,3 +1,11 @@
+.project-page {
+  padding: 20px 20px;
+  &__title {
+    padding-left: 20px;
+    display: flex;
+  }
+}
+
 .tasks-container {
-  padding: 20px;
+  padding: 20px 0;
 }

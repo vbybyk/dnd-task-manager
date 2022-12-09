@@ -1,0 +1,10 @@
+.new-task-modal {
+  &__form {
+    display: flex;
+    flex-direction: column;
+  }
+  &__buttons-wrapper {
+    display: flex;
+    justify-content: end;
+  }
+}
