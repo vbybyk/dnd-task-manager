@@ -55,30 +55,20 @@ export const Project: React.FC = () => {
   }, [project]);
 
   useEffect(() => {
-    // items &&
-    //   setItems((items: any) => {
-    //     let newItems;
-    //     let newTodo;
-    //     newTask && (newTask.id = Date.now());
-    //     // @ts-ignore
-    //     console.log(items["todo"].filter((el: any) => el.id === newTask.id).length);
-    //     // @ts-ignore
-    //     if (items["todo"].filter((el: any) => el.id === newTask.id).length === 0) {
-    //       newTodo = items["todo"].push(newTask);
-    //       newItems = {
-    //         ...items,
-    //         newTodo,
-    //       };
-    //       return newItems;
-    //     } else return items;
-
-    //     console.log("setItems", items);
-    //   });
     newTask && (newTask.id = Date.now());
     // @ts-ignore
-    items && items["todo"].push(newTask);
-    setItems(items);
-    newTask && updateProjectTasks(+projId, items);
+    // items && items["todo"].push(newTask);
+    setItems((items) => {
+      if (items) {
+        const newTodo = [...items["todo"], newTask];
+        return {
+          // @ts-ignore
+          ...items,
+          ["todo"]: newTodo,
+        };
+      }
+    });
+    // newTask && updateProjectTasks(+projId, items);
   }, [newTask]);
 
   const sensors = useSensors(
