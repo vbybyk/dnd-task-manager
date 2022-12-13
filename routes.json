@@ -1,0 +1,5 @@
+{
+  "/projects/:id/containers/:containerId": "/containers/:containerId",
+  "/projects/:id/containers/:containerId/tasks": "/tasks",
+  "/projects/:id/containers/:containerId/tasks/:taskId": "/tasks/:taskId"
+}

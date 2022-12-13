@@ -30,12 +30,15 @@ export const Project: React.FC = () => {
   const [items, setItems] = useState(null);
   const [activeId, setActiveId] = useState(null);
   const [activeItem, setActiveItem] = useState<ITask | undefined>(undefined);
-
+  const [newTask, setNewTask] = useState<ITask | null>(null);
   const { getProjects, updateProjectTasks, getProjectById } = useTasks();
   const { project, isFetching } = useSelector((state: IState) => state);
   const { projId } = useParams<Params>() as Params;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // @ts-ignore
+  items && console.log(items["todo"]);
 
   useEffect(() => {
     getProjectById(+projId);
@@ -50,6 +53,33 @@ export const Project: React.FC = () => {
     // @ts-ignore
     setItems(project?.containers);
   }, [project]);
+
+  useEffect(() => {
+    // items &&
+    //   setItems((items: any) => {
+    //     let newItems;
+    //     let newTodo;
+    //     newTask && (newTask.id = Date.now());
+    //     // @ts-ignore
+    //     console.log(items["todo"].filter((el: any) => el.id === newTask.id).length);
+    //     // @ts-ignore
+    //     if (items["todo"].filter((el: any) => el.id === newTask.id).length === 0) {
+    //       newTodo = items["todo"].push(newTask);
+    //       newItems = {
+    //         ...items,
+    //         newTodo,
+    //       };
+    //       return newItems;
+    //     } else return items;
+
+    //     console.log("setItems", items);
+    //   });
+    newTask && (newTask.id = Date.now());
+    // @ts-ignore
+    items && items["todo"].push(newTask);
+    setItems(items);
+    newTask && updateProjectTasks(+projId, items);
+  }, [newTask]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -185,7 +215,7 @@ export const Project: React.FC = () => {
         </div>
         <DragOverlay>{activeId ? <Item id={activeId} tasks={activeItem} dragOverlay /> : null}</DragOverlay>
       </DndContext>
-      <NewTaskModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+      <NewTaskModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} setNewTask={setNewTask} />
       {/* <Modal title="New Task" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}></Modal> */}
     </Content>
   );

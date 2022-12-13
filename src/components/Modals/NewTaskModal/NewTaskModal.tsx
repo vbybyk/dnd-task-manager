@@ -4,6 +4,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import type { CustomTagProps } from "rc-select/lib/BaseSelect";
 import { requiredFieldMessage } from "../../Common/Constants/Constants";
+import { ProjectService } from "../../API/ProjectService";
+import { ITask } from "../../Interfaces/tasks";
 import "./newTaskModal.scss";
 
 interface IFormInputs {
@@ -16,6 +18,7 @@ interface IFormInputs {
 interface IProps {
   isModalOpen: boolean;
   setIsModalOpen: (isModalOpen: boolean) => void;
+  setNewTask: (newTask: ITask) => void;
 }
 
 const { TextArea } = Input;
@@ -67,8 +70,22 @@ const tagRender = (props: CustomTagProps) => {
   );
 };
 
+const addProjectTask = async (projId: number, task: any) => {
+  try {
+    console.log("trying to put new task", task);
+
+    await ProjectService.addNewProjectTask(projId, task);
+  } catch (err) {
+    //@ts-ignore
+    dispatch(postProjectError(err));
+    console.log(err);
+  } finally {
+    console.log("TASKS UPDATED");
+  }
+};
+
 export const NewTaskModal = (props: IProps) => {
-  const { isModalOpen, setIsModalOpen } = props;
+  const { isModalOpen, setIsModalOpen, setNewTask } = props;
   const {
     control,
     register,
@@ -95,6 +112,8 @@ export const NewTaskModal = (props: IProps) => {
 
   const onSubmit = (data: IFormInputs) => {
     console.log(data);
+    //@ts-ignore
+    setNewTask(data);
     setIsModalOpen(false);
     setTimeout(() => {
       reset();
