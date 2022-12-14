@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Layout, Checkbox, Space, Alert, Button, List, Card } from "antd";
+import { Layout, Button, List, Card } from "antd";
 import { ProjectService } from "../../API/ProjectService";
 import useTasks from "../../Hooks/useTasks";
 import { IProject } from "../../Interfaces/tasks";
@@ -17,7 +18,6 @@ export const Dashboard: React.FC = () => {
     getProjects();
   }, []);
 
-  console.log(projects);
   return (
     <>
       <Content className="dashboard">
@@ -39,11 +39,13 @@ export const Dashboard: React.FC = () => {
             renderItem={(item: IProject) => (
               <List.Item>
                 {projects && (
-                  <Card title={item?.name} bordered={false} className="dashboard-project-card">
-                    <p>{item.description}</p>
-                    <p>Open tasks</p>
-                    <p>Closed tasks</p>
-                  </Card>
+                  <Link to={`/projects/${item.id}`}>
+                    <Card title={item?.name} bordered={false} className="dashboard-project-card">
+                      <p>{item.description}</p>
+                      <p>Open tasks</p>
+                      <p>Closed tasks</p>
+                    </Card>
+                  </Link>
                 )}
               </List.Item>
             )}

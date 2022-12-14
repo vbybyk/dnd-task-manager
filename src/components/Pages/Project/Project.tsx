@@ -37,9 +37,6 @@ export const Project: React.FC = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // @ts-ignore
-  items && console.log(items["todo"]);
-
   useEffect(() => {
     getProjectById(+projId);
   }, [projId]);
@@ -58,17 +55,18 @@ export const Project: React.FC = () => {
     newTask && (newTask.id = Date.now());
     // @ts-ignore
     // items && items["todo"].push(newTask);
-    setItems((items) => {
-      if (items) {
-        const newTodo = [...items["todo"], newTask];
-        return {
-          // @ts-ignore
-          ...items,
-          ["todo"]: newTodo,
-        };
-      }
-    });
-    // newTask && updateProjectTasks(+projId, items);
+    newTask &&
+      setItems((items) => {
+        if (items) {
+          const newTodo = [...items["todo"], newTask];
+          return {
+            // @ts-ignore
+            ...items,
+            ["todo"]: newTodo,
+          };
+        }
+      });
+    newTask && updateProjectTasks(+projId, items);
   }, [newTask]);
 
   const sensors = useSensors(

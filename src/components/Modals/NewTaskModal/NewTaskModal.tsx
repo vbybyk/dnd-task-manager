@@ -111,8 +111,7 @@ export const NewTaskModal = (props: IProps) => {
   };
 
   const onSubmit = (data: IFormInputs) => {
-    console.log(data);
-    //@ts-ignore
+    // @ts-ignore
     setNewTask(data);
     setIsModalOpen(false);
     setTimeout(() => {
