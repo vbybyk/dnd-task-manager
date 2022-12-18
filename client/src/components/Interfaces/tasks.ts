@@ -13,6 +13,6 @@ export interface ITask {
   name: string;
   description?: string;
   img?: string;
-  label: string;
+  label?: { label: string; value: string; key: string }[] | null;
   priority: string;
 }

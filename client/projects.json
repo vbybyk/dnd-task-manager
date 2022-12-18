@@ -7,13 +7,25 @@
             "id": 1,
             "name": "Create something in Project 1",
             "description": "Lorem ipsum ipsum lorem lorem",
-            "label": "DESIGN",
+            "label": [
+              {
+                "label": "DESIGN",
+                "value": "lime",
+                "key": "lime"
+              }
+            ],
             "priority": "high"
           },
           {
             "name": "Jameson",
             "description": ",c,,c",
-            "label": [],
+            "label": [
+              {
+                "label": "DESIGN",
+                "value": "lime",
+                "key": "lime"
+              }
+            ],
             "priority": "low",
             "id": 1670922699976
           },
@@ -21,24 +33,45 @@
             "id": 2,
             "name": "Connect something in Project 1",
             "description": "Lorem ipsum ipsum lorem lorem",
-            "label": "DESIGN",
+            "label": [
+              {
+                "label": "DESIGN",
+                "value": "lime",
+                "key": "lime"
+              }
+            ],
             "priority": "high"
           },
           {
-            "id": 3,
-            "name": "Add something in Project 1",
-            "description": "Lorem ipsum ipsum lorem lorem",
-            "label": "DESIGN",
-            "priority": "high"
+            "id": 1671015750650
           }
         ],
         "progress": [
           {
             "name": "Create Node Server",
             "description": "To create node server",
-            "label": [],
+            "label": [
+              {
+                "label": "DESIGN",
+                "value": "lime",
+                "key": "lime"
+              }
+            ],
             "priority": "low",
             "id": 1670997346977
+          },
+          {
+            "id": 3,
+            "name": "Add something in Project 1",
+            "description": "Lorem ipsum ipsum lorem lorem",
+            "label": [
+              {
+                "label": "DESIGN",
+                "value": "lime",
+                "key": "lime"
+              }
+            ],
+            "priority": "high"
           }
         ],
         "done": [
@@ -46,13 +79,25 @@
             "id": 4,
             "name": "Add new something in Project 1",
             "description": "Lorem ipsum ipsum lorem lorem",
-            "label": "DESIGN",
+            "label": [
+              {
+                "label": "DESIGN",
+                "value": "lime",
+                "key": "lime"
+              }
+            ],
             "priority": "high"
           },
           {
             "name": "Taskkkk",
             "description": "mfkf",
-            "label": [],
+            "label": [
+              {
+                "label": "DESIGN",
+                "value": "lime",
+                "key": "lime"
+              }
+            ],
             "priority": "low",
             "id": 1670946016907
           }
@@ -69,21 +114,39 @@
             "id": 5,
             "name": "Create something in Project 2",
             "description": "Lorem ipsum ipsum lorem lorem",
-            "label": "DESIGN",
+            "label": [
+              {
+                "label": "DESIGN",
+                "value": "lime",
+                "key": "lime"
+              }
+            ],
             "priority": "high"
           },
           {
             "id": 6,
             "name": "Connect something in Project 2",
             "description": "Lorem ipsum ipsum lorem lorem",
-            "label": "DESIGN",
+            "label": [
+              {
+                "label": "DESIGN",
+                "value": "lime",
+                "key": "lime"
+              }
+            ],
             "priority": "high"
           },
           {
             "id": 7,
             "name": "Add something in Project 2",
             "description": "Lorem ipsum ipsum lorem lorem",
-            "label": "DESIGN",
+            "label": [
+              {
+                "label": "DESIGN",
+                "value": "lime",
+                "key": "lime"
+              }
+            ],
             "priority": "high"
           }
         ],
@@ -93,7 +156,13 @@
             "id": 8,
             "name": "Add new something in Project 2",
             "description": "Lorem ipsum ipsum lorem lorem",
-            "label": "DESIGN",
+            "label": [
+              {
+                "label": "DESIGN",
+                "value": "lime",
+                "key": "lime"
+              }
+            ],
             "priority": "high"
           }
         ]
@@ -124,21 +193,39 @@
       "id": 1,
       "name": "Create new TASK ",
       "description": "Lorem ipsum ipsum lorem lorem",
-      "label": "DESIGN",
+      "label": [
+        {
+          "label": "DESIGN",
+          "value": "lime",
+          "key": "lime"
+        }
+      ],
       "priority": "high"
     },
     {
       "id": 2,
       "name": "Create new TASK 2 ",
       "description": "Lorem ipsum ipsum lorem lorem",
-      "label": "DESIGN",
+      "label": [
+        {
+          "label": "DESIGN",
+          "value": "lime",
+          "key": "lime"
+        }
+      ],
       "priority": "high"
     },
     {
       "id": 3,
       "name": "Create new Task in Project 1, Container 1",
       "description": "Lorem ipsum ipsum lorem lorem",
-      "label": "DESIGN",
+      "label": [
+        {
+          "label": "DESIGN",
+          "value": "lime",
+          "key": "lime"
+        }
+      ],
       "priority": "high"
     }
   ]

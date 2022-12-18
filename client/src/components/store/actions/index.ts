@@ -57,3 +57,9 @@ export const getProjectError = (err: AxiosError) => {
     payload: err?.response?.data,
   };
 };
+
+export const toggleUpdateTaskModal = () => {
+  return {
+    type: "TOGGLE_UPDATE_TASK_MODAL",
+  };
+};

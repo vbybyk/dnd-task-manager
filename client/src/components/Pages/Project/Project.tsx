@@ -32,10 +32,13 @@ export const Project: React.FC = () => {
   const [activeItem, setActiveItem] = useState<ITask | undefined>(undefined);
   const [newTask, setNewTask] = useState<ITask | null>(null);
   const { getProjects, updateProjectTasks, getProjectById } = useTasks();
-  const { project, isFetching } = useSelector((state: IState) => state);
+  const { project, isFetching, isUpdateModalOpen } = useSelector((state: IState) => state);
   const { projId } = useParams<Params>() as Params;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  console.log("newTask -----", newTask);
+  console.log("update modal open", isUpdateModalOpen);
 
   useEffect(() => {
     getProjectById(+projId);
@@ -52,7 +55,7 @@ export const Project: React.FC = () => {
   }, [project]);
 
   useEffect(() => {
-    newTask && (newTask.id = Date.now());
+    // newTask && (newTask.id = Date.now());
     // @ts-ignore
     // items && items["todo"].push(newTask);
     newTask &&
@@ -70,7 +73,12 @@ export const Project: React.FC = () => {
   }, [newTask]);
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        tolerance: 5,
+        delay: 300,
+      },
+    }),
     useSensor(TouchSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
@@ -204,7 +212,7 @@ export const Project: React.FC = () => {
         <DragOverlay>{activeId ? <Item id={activeId} tasks={activeItem} dragOverlay /> : null}</DragOverlay>
       </DndContext>
       <NewTaskModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} setNewTask={setNewTask} />
-      {/* <Modal title="New Task" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}></Modal> */}
+      <Modal title="New Task" open={isUpdateModalOpen}></Modal>
     </Content>
   );
 };

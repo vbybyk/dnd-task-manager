@@ -5,12 +5,14 @@ export interface IState {
   projects?: IProject[] | undefined;
   isFetching: boolean;
   project?: IProject;
+  isUpdateModalOpen: boolean;
 }
 
 const initialState: IState = {
   projects: [],
   project: undefined,
   isFetching: false,
+  isUpdateModalOpen: false,
 };
 
 const reducer = (state = initialState, action: AnyAction): IState => {
@@ -29,6 +31,8 @@ const reducer = (state = initialState, action: AnyAction): IState => {
     case "PROJECT_REQUEST_ERROR":
     case "TASKS_UPDATED_ERROR":
       return { ...state, isFetching: false };
+    case "TOGGLE_UPDATE_TASK_MODAL":
+      return { ...state, isUpdateModalOpen: !state.isUpdateModalOpen };
     default:
       return state;
   }
