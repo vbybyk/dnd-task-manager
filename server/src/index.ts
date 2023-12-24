@@ -30,18 +30,18 @@ const mount = async (app: Application) => {
     }).clone();
   });
 
-  // app.get("/projects/:id", async (_req, res) => {
-  //   await ProjectModel.find({ id: _req.params.id }, (err: any, data: any) => {
-  //     if (err) {
-  //       res.send(err);
-  //     } else {
-  //       res.send(data);
-  //     }
-  //   }).clone();
-  // });
+  app.get("/projects/:id", async (_req, res) => {
+    await ProjectModel.find({ id: _req.params.id }, (err: any, data: any) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(data);
+      }
+    }).clone();
+  });
 
   app.put("/projects/:id/name", async (_req, res) => {
-    const newName = "Project ONE NAME";
+    const newName = "Project ONE NAME 2";
     const id = _req.params.id;
     // try {
     //   await ProjectModel.findOneAndUpdate( id, { name: newName }, { returnOriginal: false }).then(() => {
@@ -74,11 +74,11 @@ const mount = async (app: Application) => {
     }
   });
 
-  // const startServer = async() => {
-  //     await server.start();
-  //     server.applyMiddleware({app, path: "/api"})
-  // }
-  // startServer()
+  // const startServer = async () => {
+  //   await server.start();
+  //   server.applyMiddleware({ app, path: "/api" });
+  // };
+  // startServer();
   app.listen(port);
   console.log(`App is listening on port ${port}`);
 
