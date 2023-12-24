@@ -37,8 +37,10 @@ export const Project: React.FC = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  console.log("newTask -----", newTask);
-  console.log("update modal open", isUpdateModalOpen);
+  console.log("project", project);
+
+  // console.log("newTask -----", newTask);
+  // console.log("update modal open", isUpdateModalOpen);
 
   useEffect(() => {
     getProjectById(+projId);

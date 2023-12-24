@@ -124,19 +124,6 @@
             "priority": "high"
           },
           {
-            "id": 6,
-            "name": "Connect something in Project 2",
-            "description": "Lorem ipsum ipsum lorem lorem",
-            "label": [
-              {
-                "label": "DESIGN",
-                "value": "lime",
-                "key": "lime"
-              }
-            ],
-            "priority": "high"
-          },
-          {
             "id": 7,
             "name": "Add something in Project 2",
             "description": "Lorem ipsum ipsum lorem lorem",
@@ -150,7 +137,21 @@
             "priority": "high"
           }
         ],
-        "progress": [],
+        "progress": [
+          {
+            "id": 6,
+            "name": "Connect something in Project 2",
+            "description": "Lorem ipsum ipsum lorem lorem",
+            "label": [
+              {
+                "label": "DESIGN",
+                "value": "lime",
+                "key": "lime"
+              }
+            ],
+            "priority": "high"
+          }
+        ],
         "done": [
           {
             "id": 8,
