@@ -9,9 +9,10 @@ import { ITask } from "../../Interfaces/tasks";
 import "./newTaskModal.scss";
 
 interface IFormInputs {
+  id?: number;
   name: string;
-  description: string;
-  label: [];
+  description?: string;
+  label?: { label: string; value: string; key: string }[] | undefined | null;
   priority: string;
 }
 
@@ -95,9 +96,10 @@ export const NewTaskModal = (props: IProps) => {
     formState: { errors },
   } = useForm<IFormInputs>({
     defaultValues: {
+      id: undefined,
       name: "",
       description: "",
-      label: [],
+      label: null,
       priority: "",
     },
     resolver: yupResolver(schema),
@@ -110,9 +112,24 @@ export const NewTaskModal = (props: IProps) => {
     }, 500);
   };
 
-  const onSubmit = (data: IFormInputs) => {
+  const onSubmit = (data: any) => {
+    console.log(data);
     // @ts-ignore
-    setNewTask(data);
+    data && console.log(data.label[0].label);
+
+    let task = {
+      ...data,
+      id: Date.now(),
+      label: [
+        {
+          label: data.label[0].label,
+          value: data.label[0].value,
+          key: data.label[0].key,
+        },
+      ],
+    };
+    data && setNewTask(task);
+
     setIsModalOpen(false);
     setTimeout(() => {
       reset();
@@ -162,7 +179,7 @@ export const NewTaskModal = (props: IProps) => {
               mode="multiple"
               showArrow
               tagRender={tagRender}
-              defaultValue={[]}
+              defaultValue={null}
               style={{ width: "100%" }}
               options={labelOptions}
               {...field}
