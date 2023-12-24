@@ -9,6 +9,9 @@ interface Label {
 
 export interface Task {
   id: number;
+  projectId: number;
+  containerId: number;
+  sortId: number;
   name: string;
   description: string;
   label?: Types.DocumentArray<Label>;
@@ -18,8 +21,11 @@ export interface Task {
 
 export const TaskSchema = new Schema<Task, Model<Task>>({
   id: { type: Number, required: true },
-  name: { type: String, required: true },
-  description: { type: String, required: true },
+  projectId: { type: Number, required: true },
+  containerId: { type: Number, required: true },
+  sortId: { type: Number, required: true },
+  name: { type: String, required: false },
+  description: { type: String, required: false },
   label: [{ label: String, value: String, key: String }],
   priority: { type: String, required: false },
   img: { type: String, required: false },
