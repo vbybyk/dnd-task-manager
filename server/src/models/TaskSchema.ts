@@ -23,7 +23,7 @@ export const TaskSchema = new Schema<Task, Model<Task>>({
   id: { type: Number, required: true },
   projectId: { type: Number, required: true },
   containerId: { type: Number, required: true },
-  sortId: { type: Number, required: true },
+  sortId: { type: Number, required: false },
   name: { type: String, required: false },
   description: { type: String, required: false },
   label: [{ label: String, value: String, key: String }],

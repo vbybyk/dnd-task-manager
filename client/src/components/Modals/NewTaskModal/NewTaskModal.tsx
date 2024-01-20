@@ -17,6 +17,7 @@ interface IFormInputs {
 }
 
 interface IProps {
+  projectId: number;
   isModalOpen: boolean;
   setIsModalOpen: (isModalOpen: boolean) => void;
   setNewTask: (newTask: ITask) => void;
@@ -71,11 +72,11 @@ const tagRender = (props: CustomTagProps) => {
   );
 };
 
-const addProjectTask = async (projId: number, task: any) => {
+const addProjectTask = async (task: any) => {
   try {
     console.log("trying to put new task", task);
 
-    await ProjectService.addNewProjectTask(projId, task);
+    await ProjectService.addNewProjectTask(task);
   } catch (err) {
     //@ts-ignore
     dispatch(postProjectError(err));
@@ -86,7 +87,7 @@ const addProjectTask = async (projId: number, task: any) => {
 };
 
 export const NewTaskModal = (props: IProps) => {
-  const { isModalOpen, setIsModalOpen, setNewTask } = props;
+  const { projectId, isModalOpen, setIsModalOpen, setNewTask } = props;
   const {
     control,
     register,
@@ -117,9 +118,12 @@ export const NewTaskModal = (props: IProps) => {
     // @ts-ignore
     data && console.log(data.label[0].label);
 
-    let task = {
+    let task: ITask = {
       ...data,
       id: Date.now(),
+      projectId,
+      containerId: 1,
+      // sortId: 1,
       label: [
         {
           label: data.label[0].label,
@@ -128,6 +132,7 @@ export const NewTaskModal = (props: IProps) => {
         },
       ],
     };
+    data && addProjectTask(task);
     data && setNewTask(task);
 
     setIsModalOpen(false);

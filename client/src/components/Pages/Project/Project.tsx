@@ -213,8 +213,13 @@ export const Project: React.FC = () => {
         </div>
         <DragOverlay>{activeId ? <Item id={activeId} tasks={activeItem} dragOverlay /> : null}</DragOverlay>
       </DndContext>
-      <NewTaskModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} setNewTask={setNewTask} />
-      <Modal title="New Task" open={isUpdateModalOpen}></Modal>
+      <NewTaskModal
+        projectId={+projId}
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        setNewTask={setNewTask}
+      />
+      {/* <Modal title="New Task" open={isUpdateModalOpen}></Modal> */}
     </Content>
   );
 };

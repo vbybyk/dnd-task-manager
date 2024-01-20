@@ -10,6 +10,9 @@ export interface IProject {
 }
 export interface ITask {
   id: number;
+  projectId: number;
+  containerId: string;
+  sortId?: number;
   name: string;
   description?: string;
   img?: string;

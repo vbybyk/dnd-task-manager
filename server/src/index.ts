@@ -4,6 +4,7 @@ import cors from "cors";
 import express, { Application } from "express";
 import mongoose from "mongoose";
 import { ProjectModel } from "./models/ProjectSchema";
+import { TaskModel } from "./models/TaskSchema";
 import { updateTasks } from "./commands/Tasks";
 
 const port = process.env.PORT || 9000;
@@ -62,6 +63,24 @@ const mount = async (app: Application) => {
       throw new Error(`Failed to query project: ${error}`);
     }
     // res.send("Updated");
+  });
+
+  app.post("/tasks/create", async (req, res) => {
+    try {
+      const tasks = await TaskModel.find({ containerId: 1, projectId: req.body.projectId });
+
+      tasks.sort((a, b) => a.sortId - b.sortId);
+
+      const lastSortId = tasks.length > 0 ? tasks[tasks.length - 1].sortId : 0;
+
+      const newSortId = lastSortId + 1;
+
+      const newTask = await TaskModel.create({ ...req.body, sortId: newSortId });
+
+      res.json(newTask);
+    } catch (err) {
+      res.status(500).send(`Error creating task: ${err}`);
+    }
   });
 
   app.put("/tasks/update", async (req, res) => {
