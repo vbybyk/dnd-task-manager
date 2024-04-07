@@ -8,6 +8,8 @@ export function Droppable(props: any) {
   const { id, items, name } = props;
   const { isOver, setNodeRef } = useDroppable({ id });
 
+  // console.log("items in Droppable", items);
+
   return (
     <>
       <SortableContext id={id} items={items} strategy={rectSortingStrategy}>

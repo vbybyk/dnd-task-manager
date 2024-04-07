@@ -24,7 +24,7 @@ export const Card = (props: any) => {
         </div>
       )}
       <span className="card-name">{name}</span>
-      {label && <div className="card-label">{label[0].label}</div>}
+      {label && <div className="card-label">{label[0]?.label}</div>}
       <span>
         <CheckSquareTwoTone twoToneColor="#1890ff" />
         <span> - </span>

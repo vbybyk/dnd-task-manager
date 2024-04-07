@@ -12,13 +12,14 @@ import {
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { Layout, Row, Col, Button, Modal, Checkbox, Menu, Space } from "antd";
-import { arrayMove, insertAtIndex, removeAtIndex } from "../../Utils/utils";
 import useTasks from "../../Hooks/useTasks";
 import { Item } from "../../Common/Item/Item";
 import { Droppable } from "../../Common/Droppable/Droppable";
 import { NewTaskModal } from "../../Modals/NewTaskModal/NewTaskModal";
-import { ITask } from "../../Interfaces/tasks";
+import { IContainer, ITask } from "../../Interfaces/tasks";
 import { IState } from "../../store/reducers";
+import { arrayMove, moveBetweenContainers } from "../../Utils/dnd";
+import { transformData, flattenData } from "../../Utils/project";
 import "./project.scss";
 
 const { Content } = Layout;
@@ -27,52 +28,28 @@ type Params = {
 };
 
 export const Project: React.FC = () => {
-  const [items, setItems] = useState(null);
+  const [items, setItems] = useState<Record<number, ITask[]>>({});
   const [activeId, setActiveId] = useState(null);
   const [activeItem, setActiveItem] = useState<ITask | undefined>(undefined);
   const [newTask, setNewTask] = useState<ITask | null>(null);
-  const { getProjects, updateProjectTasks, getProjectById } = useTasks();
-  const { project, isFetching, isUpdateModalOpen } = useSelector((state: IState) => state);
+  const { getProjects, updateProjectTasks, getProjectById, getProjectTasks, getProjectContainers } = useTasks();
+  const { project, containers, tasks, isFetching, isUpdateModalOpen } = useSelector((state: IState) => state);
   const { projId } = useParams<Params>() as Params;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  console.log("project", project);
-
-  // console.log("newTask -----", newTask);
-  // console.log("update modal open", isUpdateModalOpen);
-
   useEffect(() => {
     getProjectById(+projId);
+    getProjectTasks(+projId);
+    getProjectContainers(+projId);
   }, [projId]);
 
   useEffect(() => {
-    // @ts-ignore
-    !items && setItems(project?.containers);
-  }, [project]);
-
-  useEffect(() => {
-    // @ts-ignore
-    setItems(project?.containers);
-  }, [project]);
-
-  useEffect(() => {
-    // newTask && (newTask.id = Date.now());
-    // @ts-ignore
-    // items && items["todo"].push(newTask);
-    newTask &&
-      setItems((items) => {
-        if (items) {
-          const newTodo = [...items["todo"], newTask];
-          return {
-            // @ts-ignore
-            ...items,
-            ["todo"]: newTodo,
-          };
-        }
-      });
-    newTask && updateProjectTasks(+projId, items);
-  }, [newTask]);
+    if (tasks && containers.length > 0) {
+      const transformedData = transformData(tasks, containers);
+      setItems(transformedData);
+    }
+  }, [tasks, containers]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -89,8 +66,8 @@ export const Project: React.FC = () => {
 
   const handleDragStart = ({ active }: { active: any }) => {
     const activeContainer = active.data.current.sortable.containerId;
-    // @ts-ignore
-    setActiveItem(items[activeContainer].filter((elem) => elem.id === active.id)[0]);
+
+    setActiveItem(items[activeContainer].find((elem) => elem.id === active.id));
     setActiveId(active.id);
   };
 
@@ -104,14 +81,14 @@ export const Project: React.FC = () => {
 
     const overId = over?.id;
 
-    if (!overId) {
+    if (!overId || !active.data.current || !over.data.current) {
       return;
     }
 
     const activeContainer = active.data.current.sortable.containerId;
     const overContainer = over.data.current?.sortable.containerId || over.id;
     const activeIndex = active.data.current.sortable.index;
-    // @ts-ignore
+
     const overIndex = over.id in items ? items[overContainer].length + 1 : over.data.current.sortable.index;
 
     if (activeContainer !== overContainer) {
@@ -136,12 +113,11 @@ export const Project: React.FC = () => {
       setActiveItem(undefined);
       return;
     }
-
     if (active.id !== over.id) {
       const activeContainer = active.data.current.sortable.containerId;
       const overContainer = over.data.current?.sortable.containerId || over.id;
       const activeIndex = active.data.current.sortable.index;
-      // @ts-ignore
+
       const overIndex = over.id in items ? items[overContainer].length + 1 : over.data.current.sortable.index;
 
       setItems((itemGroups: any) => {
@@ -162,27 +138,19 @@ export const Project: React.FC = () => {
             itemGroups[activeContainer][activeIndex]
           );
         }
+        for (let containerId in newItems) {
+          newItems[containerId].forEach((item: any, index: number) => {
+            item.sortId = index + 1;
+            item.containerId = +containerId;
+          });
+        }
         return newItems;
       });
     }
-    updateProjectTasks(+projId, items);
+
+    updateProjectTasks(+projId, flattenData(items));
     setActiveId(null);
     setActiveItem(undefined);
-  };
-
-  const moveBetweenContainers = (
-    items: any,
-    activeContainer: any,
-    activeIndex: any,
-    overContainer: any,
-    overIndex: any,
-    item: any
-  ) => {
-    return {
-      ...items,
-      [activeContainer]: removeAtIndex(items[activeContainer], activeIndex),
-      [overContainer]: insertAtIndex(items[overContainer], overIndex, item),
-    };
   };
 
   return (
@@ -203,10 +171,16 @@ export const Project: React.FC = () => {
       >
         <div className="tasks-container">
           <Row gutter={12}>
-            {items &&
-              Object.keys(items).map((group: any) => (
-                <Col key={group} xs={24} sm={12} md={6} lg={5}>
-                  <Droppable id={group} items={items[group]} name={group} activeId={activeId} key={group} />
+            {containers.length > 0 &&
+              containers.map((container: IContainer) => (
+                <Col key={container._id} xs={24} sm={12} md={6}>
+                  <Droppable
+                    id={container.id}
+                    items={items[container.id] || []}
+                    name={container.name}
+                    activeId={activeId}
+                    key={container._id}
+                  />
                 </Col>
               ))}
           </Row>

@@ -11,6 +11,12 @@ import {
   getProjectRequest,
   getProjectSuccess,
   getProjectError,
+  getTasksRequest,
+  getTasksSuccess,
+  getTasksError,
+  getContainersRequest,
+  getContainersSuccess,
+  getContainersError,
 } from "../store/actions";
 
 const useTasks = () => {
@@ -40,6 +46,18 @@ const useTasks = () => {
     }
   };
 
+  const getProjectTasks = async (projId: number) => {
+    try {
+      dispatch(getTasksRequest());
+      const { status, data } = await ProjectService.getProjectTasks(projId);
+      status === 200 && dispatch(getTasksSuccess(data));
+    } catch (err) {
+      //@ts-ignore
+      dispatch(getTasksError(err));
+      console.log(err);
+    }
+  };
+
   const updateProjectTasks = async (projId: number, tasks: any) => {
     try {
       console.log("trying to put ", tasks);
@@ -55,6 +73,18 @@ const useTasks = () => {
     }
   };
 
-  return { getProjects, updateProjectTasks, getProjectById };
+  const getProjectContainers = async (projId: number) => {
+    try {
+      dispatch(getContainersRequest());
+      const { status, data } = await ProjectService.getProjectContainers(projId);
+      status === 200 && dispatch(getContainersSuccess(data));
+    } catch (err) {
+      //@ts-ignore
+      dispatch(getContainersError(err));
+      console.log(err);
+    }
+  };
+
+  return { getProjects, updateProjectTasks, getProjectById, getProjectTasks, getProjectContainers };
 };
 export default useTasks;

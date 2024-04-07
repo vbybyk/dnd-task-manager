@@ -5,6 +5,7 @@ import express, { Application } from "express";
 import mongoose from "mongoose";
 import { ProjectModel } from "./models/ProjectSchema";
 import { TaskModel } from "./models/TaskSchema";
+import { ContainerModel } from "./models/ContainerSchema";
 import { updateTasks } from "./commands/Tasks";
 
 const port = process.env.PORT || 9000;
@@ -83,13 +84,43 @@ const mount = async (app: Application) => {
     }
   });
 
-  app.put("/tasks/update", async (req, res) => {
-    const { taskId, projectId, containerId, sortId } = req.body;
+  app.put("/projects/:id/tasks", async (req, res) => {
+    const { id } = req.params;
     try {
-      await updateTasks(taskId, projectId, containerId, sortId);
+      await updateTasks(id, req.body);
       res.send("Tasks updated successfully");
     } catch (err) {
       res.status(500).send(`Error updating tasks: ${err}`);
+    }
+  });
+
+  app.get("/projects/:id/tasks", async (_req, res) => {
+    try {
+      const tasks = await TaskModel.find({ projectId: _req.params.id });
+      res.send(tasks);
+    } catch (err) {
+      res.status(500).send(`Error getting tasks: ${err}`);
+    }
+  });
+
+  app.get("/projects/:id/containers", async (_req, res) => {
+    try {
+      const containers = await ContainerModel.find({ projectId: _req.params.id });
+      res.send(containers);
+    } catch (err) {
+      res.status(500).send(`Error getting containers: ${err}`);
+    }
+  });
+
+  app.post("/projects/:id/containers", async (_req, res) => {
+    try {
+      const containers = await ContainerModel.find({ projectId: _req.params.id });
+      const lastContainerId = containers.length > 0 ? containers[containers.length - 1].id : 0;
+      const newContainerId = lastContainerId + 1;
+      const newContainer = await ContainerModel.create({ ..._req.body, id: newContainerId });
+      res.json(newContainer);
+    } catch (err) {
+      res.status(500).send(`Error creating container: ${err}`);
     }
   });
 
