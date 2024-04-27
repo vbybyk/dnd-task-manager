@@ -1,12 +1,12 @@
 import { AxiosError, AxiosResponse } from "axios";
-import exp from "constants";
+import { IContainer, IProject, ITask } from "../../Interfaces/tasks";
 
 export const getProjectsRequest = () => {
   return {
     type: "PROJECTS_REQUEST",
   };
 };
-export const getProjectsSuccess = (projects: any) => {
+export const getProjectsSuccess = (projects: IProject[]) => {
   return {
     type: "PROJECTS_SUCCESS",
     payload: projects,
@@ -39,7 +39,7 @@ export const getProjectRequest = () => {
     type: "PROJECT_REQUEST",
   };
 };
-export const getProjectSuccess = (project: any) => {
+export const getProjectSuccess = (project: IProject) => {
   return {
     type: "PROJECT_SUCCESS",
     payload: project,
@@ -61,7 +61,7 @@ export const getTasksRequest = () => {
     type: "PROJECT_TASKS_REQUEST",
   };
 };
-export const getTasksSuccess = (tasks: any) => {
+export const getTasksSuccess = (tasks: ITask[]) => {
   return {
     type: "PROJECT_TASKS_SUCCESS",
     payload: tasks,
@@ -78,7 +78,7 @@ export const getContainersRequest = () => {
     type: "PROJECT_CONTAINERS_REQUEST",
   };
 };
-export const getContainersSuccess = (containers: any) => {
+export const getContainersSuccess = (containers: IContainer[]) => {
   return {
     type: "PROJECT_CONTAINERS_SUCCESS",
     payload: containers,
@@ -88,5 +88,12 @@ export const getContainersError = (err: AxiosError) => {
   return {
     type: "PROJECT_CONTAINERS_REQUEST_ERROR",
     payload: err?.response?.data,
+  };
+};
+
+export const setNewTask = (task: ITask) => {
+  return {
+    type: "SET_NEW_TASK",
+    payload: task,
   };
 };

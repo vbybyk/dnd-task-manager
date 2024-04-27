@@ -50,6 +50,8 @@ const reducer = (state = initialState, action: AnyAction): IState => {
       return { ...state, isFetching: true };
     case "PROJECT_CONTAINERS_SUCCESS":
       return { ...state, isFetching: false, containers: action.payload };
+    case "SET_NEW_TASK":
+      return { ...state, tasks: [...state.tasks, action.payload] };
     default:
       return state;
   }

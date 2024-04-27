@@ -87,8 +87,8 @@ const mount = async (app: Application) => {
   app.put("/projects/:id/tasks", async (req, res) => {
     const { id } = req.params;
     try {
-      await updateTasks(id, req.body);
-      res.send("Tasks updated successfully");
+      const updatedTasks = await updateTasks(id, req.body);
+      res.json({ data: updatedTasks });
     } catch (err) {
       res.status(500).send(`Error updating tasks: ${err}`);
     }

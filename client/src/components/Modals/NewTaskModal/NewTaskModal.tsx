@@ -1,10 +1,12 @@
 import { Input, Modal, Button, Divider, Select, Tag } from "antd";
+import { useDispatch } from "react-redux";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import type { CustomTagProps } from "rc-select/lib/BaseSelect";
 import { requiredFieldMessage } from "../../Common/Constants/Constants";
 import { ProjectService } from "../../API/ProjectService";
+import { setNewTask as setTask } from "../../store/actions";
 import { ITask } from "../../Interfaces/tasks";
 import "./newTaskModal.scss";
 
@@ -72,22 +74,10 @@ const tagRender = (props: CustomTagProps) => {
   );
 };
 
-const addProjectTask = async (task: any) => {
-  try {
-    console.log("trying to put new task", task);
-
-    await ProjectService.addNewProjectTask(task);
-  } catch (err) {
-    //@ts-ignore
-    dispatch(postProjectError(err));
-    console.log(err);
-  } finally {
-    console.log("TASKS UPDATED");
-  }
-};
-
 export const NewTaskModal = (props: IProps) => {
   const { projectId, isModalOpen, setIsModalOpen, setNewTask } = props;
+  const dispatch = useDispatch();
+
   const {
     control,
     register,
@@ -100,7 +90,7 @@ export const NewTaskModal = (props: IProps) => {
       id: undefined,
       name: "",
       description: "",
-      label: null,
+      label: [],
       priority: "",
     },
     resolver: yupResolver(schema),
@@ -111,6 +101,16 @@ export const NewTaskModal = (props: IProps) => {
     setTimeout(() => {
       reset();
     }, 500);
+  };
+
+  const addProjectTask = async (task: ITask) => {
+    try {
+      const res = await ProjectService.addNewProjectTask(task);
+      dispatch(setTask(res.data));
+    } catch (err) {
+      // dispatch(postProjectError(err)); //TODO: add dispatch
+      console.log(err);
+    }
   };
 
   const onSubmit = (data: any) => {
