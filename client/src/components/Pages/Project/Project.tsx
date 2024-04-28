@@ -20,6 +20,7 @@ import { IContainer, ITask } from "../../Interfaces/tasks";
 import { IState } from "../../store/reducers";
 import { arrayMove, moveBetweenContainers } from "../../Utils/dnd";
 import { transformData, flattenData } from "../../Utils/project";
+import { MODAL_TYPE } from "../../constants/tasks";
 import "./project.scss";
 
 const { Content } = Layout;
@@ -31,12 +32,12 @@ export const Project: React.FC = () => {
   const [items, setItems] = useState<Record<number, ITask[]>>({});
   const [activeId, setActiveId] = useState(null);
   const [activeItem, setActiveItem] = useState<ITask | undefined>(undefined);
-  const [newTask, setNewTask] = useState<ITask | null>(null);
+  const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
   const { getProjects, updateProjectTasks, getProjectById, getProjectTasks, getProjectContainers } = useTasks();
   const { project, containers, tasks, isFetching, isUpdateModalOpen } = useSelector((state: IState) => state);
   const { projId } = useParams<Params>() as Params;
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modal, setModal] = useState({ open: false, type: MODAL_TYPE.CREATE });
 
   useEffect(() => {
     getProjectById(+projId);
@@ -153,11 +154,20 @@ export const Project: React.FC = () => {
     setActiveItem(undefined);
   };
 
+  const onClickTask = (task: ITask) => {
+    setSelectedTask(task);
+    setModal({ open: true, type: MODAL_TYPE.EDIT });
+  };
+
   return (
     <Content className="project-page">
       <div className="project-page__title">
         <h2>{project?.name}</h2>
-        <Button type="primary" onClick={() => setIsModalOpen(true)} style={{ marginLeft: "80px" }}>
+        <Button
+          type="primary"
+          onClick={() => setModal({ open: true, type: MODAL_TYPE.CREATE })}
+          style={{ marginLeft: "80px" }}
+        >
           Create Task
         </Button>
       </div>
@@ -180,20 +190,15 @@ export const Project: React.FC = () => {
                     name={container.name}
                     activeId={activeId}
                     key={container._id}
+                    onClickTask={onClickTask}
                   />
                 </Col>
               ))}
           </Row>
         </div>
-        <DragOverlay>{activeId ? <Item id={activeId} tasks={activeItem} dragOverlay /> : null}</DragOverlay>
+        <DragOverlay>{activeId ? <Item id={activeId} task={activeItem} dragOverlay /> : null}</DragOverlay>
       </DndContext>
-      <NewTaskModal
-        projectId={+projId}
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
-        setNewTask={setNewTask}
-      />
-      {/* <Modal title="New Task" open={isUpdateModalOpen}></Modal> */}
+      <NewTaskModal projectId={+projId} modal={modal} setModal={setModal} selectedTask={selectedTask} />
     </Content>
   );
 };

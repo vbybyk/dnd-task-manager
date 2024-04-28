@@ -8,8 +8,8 @@ import "./card.scss";
 
 export const Card = (props: any) => {
   const dispatch: Dispatch = useDispatch();
-  const { id, tasks } = props;
-  const { name, label, img }: ITask = tasks;
+  const { id, task } = props;
+  const { name, label, img }: ITask = task;
 
   const onClick = (e: any) => {
     console.log("modal", e);

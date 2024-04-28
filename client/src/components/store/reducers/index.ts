@@ -52,6 +52,11 @@ const reducer = (state = initialState, action: AnyAction): IState => {
       return { ...state, isFetching: false, containers: action.payload };
     case "SET_NEW_TASK":
       return { ...state, tasks: [...state.tasks, action.payload] };
+    case "SET_TASK":
+      return {
+        ...state,
+        tasks: state.tasks.map((task) => (task.id === action.payload.id ? action.payload : task)),
+      };
     default:
       return state;
   }

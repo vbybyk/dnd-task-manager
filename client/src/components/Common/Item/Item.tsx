@@ -3,20 +3,22 @@ import { Card } from "../Card/Card";
 import "./item.scss";
 
 export const Item = ({
-  tasks,
+  task,
   dragOverlay,
   id,
+  onClickTask,
 }: {
-  tasks?: ITask | undefined;
+  task?: ITask | undefined;
   dragOverlay?: any | undefined;
   id: number;
+  onClickTask?: (task: ITask) => void;
 }) => {
   const style = {
     cursor: dragOverlay ? "grabbing" : "grab",
   };
   return (
-    <div style={style} className="item">
-      {tasks && <Card id={id} tasks={tasks} />}
+    <div style={style} className="item" onClick={() => task && onClickTask && onClickTask(task)}>
+      {task && <Card id={id} task={task} />}
       {/* <span>Task name: {tasks?.name}</span> */}
     </div>
   );

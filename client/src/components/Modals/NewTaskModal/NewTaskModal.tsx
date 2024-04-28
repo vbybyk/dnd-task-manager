@@ -1,13 +1,15 @@
-import { Input, Modal, Button, Divider, Select, Tag } from "antd";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { Input, Modal, Button, Divider, Select, Tag } from "antd";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import type { CustomTagProps } from "rc-select/lib/BaseSelect";
 import { requiredFieldMessage } from "../../Common/Constants/Constants";
 import { ProjectService } from "../../API/ProjectService";
-import { setNewTask as setTask } from "../../store/actions";
+import { setNewTask, setTask } from "../../store/actions";
 import { ITask } from "../../Interfaces/tasks";
+import { MODAL_TYPE } from "../../constants/tasks";
 import "./newTaskModal.scss";
 
 interface IFormInputs {
@@ -18,11 +20,17 @@ interface IFormInputs {
   priority: string;
 }
 
+interface IModal {
+  open: boolean;
+  type: number;
+}
+
 interface IProps {
+  selectedTask: ITask | null;
   projectId: number;
-  isModalOpen: boolean;
-  setIsModalOpen: (isModalOpen: boolean) => void;
-  setNewTask: (newTask: ITask) => void;
+  modal: IModal;
+  setModal: ({ open, type }: IModal) => void;
+  type?: number;
 }
 
 const { TextArea } = Input;
@@ -75,8 +83,10 @@ const tagRender = (props: CustomTagProps) => {
 };
 
 export const NewTaskModal = (props: IProps) => {
-  const { projectId, isModalOpen, setIsModalOpen, setNewTask } = props;
+  const { projectId, modal, setModal, selectedTask } = props;
   const dispatch = useDispatch();
+
+  const isNewTask = modal.type === MODAL_TYPE.CREATE;
 
   const {
     control,
@@ -96,55 +106,59 @@ export const NewTaskModal = (props: IProps) => {
     resolver: yupResolver(schema),
   });
 
+  useEffect(() => {
+    if (selectedTask) {
+      setValue("id", selectedTask.id);
+      setValue("name", selectedTask.name);
+      setValue("description", selectedTask.description);
+      setValue("label", selectedTask.label);
+      setValue("priority", selectedTask.priority);
+    }
+  }, [selectedTask]);
+
   const handleCancel = () => {
-    setIsModalOpen(false);
+    setModal({ open: false, type: MODAL_TYPE.CREATE });
     setTimeout(() => {
       reset();
     }, 500);
   };
 
-  const addProjectTask = async (task: ITask) => {
+  const onSubmit = async (data: any) => {
     try {
-      const res = await ProjectService.addNewProjectTask(task);
-      dispatch(setTask(res.data));
+      if (isNewTask) {
+        const task: ITask = {
+          ...data,
+          id: Date.now(),
+          projectId,
+          containerId: 1,
+          label: [
+            {
+              label: data.label[0].label,
+              value: data.label[0].value,
+              key: data.label[0].key,
+            },
+          ],
+        };
+        const res = await ProjectService.addNewProjectTask(task);
+        dispatch(setNewTask(res.data));
+
+        setModal({ open: false, type: MODAL_TYPE.CREATE });
+        setTimeout(() => reset(), 500);
+      } else {
+        const res = await ProjectService.updateTask(data.id, data);
+        dispatch(setTask(res.data));
+        setModal({ open: false, type: MODAL_TYPE.CREATE });
+        setTimeout(() => reset(), 500);
+      }
     } catch (err) {
-      // dispatch(postProjectError(err)); //TODO: add dispatch
       console.log(err);
     }
   };
 
-  const onSubmit = (data: any) => {
-    console.log(data);
-    // @ts-ignore
-    data && console.log(data.label[0].label);
-
-    let task: ITask = {
-      ...data,
-      id: Date.now(),
-      projectId,
-      containerId: 1,
-      // sortId: 1,
-      label: [
-        {
-          label: data.label[0].label,
-          value: data.label[0].value,
-          key: data.label[0].key,
-        },
-      ],
-    };
-    data && addProjectTask(task);
-    data && setNewTask(task);
-
-    setIsModalOpen(false);
-    setTimeout(() => {
-      reset();
-    }, 500);
-  };
-
   return (
     <Modal
-      title="New Task"
-      open={isModalOpen}
+      title={isNewTask ? "New Task" : "Edit Task"}
+      open={modal.open}
       className="new-task-modal"
       onCancel={handleCancel}
       width={700}

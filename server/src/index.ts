@@ -84,6 +84,16 @@ const mount = async (app: Application) => {
     }
   });
 
+  app.put("/tasks/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+      const updatedTask = await TaskModel.findOneAndUpdate({ id }, req.body, { returnOriginal: false });
+      res.json(updatedTask);
+    } catch (err) {
+      res.status(500).send(`Error updating task: ${err}`);
+    }
+  });
+
   app.put("/projects/:id/tasks", async (req, res) => {
     const { id } = req.params;
     try {

@@ -8,8 +8,6 @@ export function Droppable(props: any) {
   const { id, items, name } = props;
   const { isOver, setNodeRef } = useDroppable({ id });
 
-  // console.log("items in Droppable", items);
-
   return (
     <>
       <SortableContext id={id} items={items} strategy={rectSortingStrategy}>
@@ -19,7 +17,7 @@ export function Droppable(props: any) {
           </div>
           <Divider style={{ margin: "7px 0" }} />
           {items.map((item: any) => (
-            <SortableItem key={item.id} id={item.id} tasks={item} />
+            <SortableItem key={item.id} id={item.id} task={item} onClickTask={props.onClickTask} />
           ))}
         </div>
       </SortableContext>

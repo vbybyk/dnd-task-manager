@@ -97,3 +97,10 @@ export const setNewTask = (task: ITask) => {
     payload: task,
   };
 };
+
+export const setTask = (task: ITask) => {
+  return {
+    type: "SET_TASK",
+    payload: task,
+  };
+};

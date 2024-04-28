@@ -13,4 +13,6 @@ export class ProjectService {
     await Axios.post(`http://localhost:9000/projects/${container.projectId}/containers`, container);
   static getProjectContainers = async (projId: number) =>
     await Axios.get(`http://localhost:9000/projects/${projId}/containers`);
+  static updateTask = async (taskId: number, task: any) =>
+    await Axios.put(`http://localhost:9000/tasks/${taskId}`, task);
 }
