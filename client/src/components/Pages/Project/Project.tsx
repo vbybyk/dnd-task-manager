@@ -11,11 +11,12 @@ import {
   TouchSensor,
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import { Layout, Row, Col, Button, Modal, Checkbox, Menu, Space } from "antd";
+import { Layout, Row, Col, Button } from "antd";
 import useTasks from "../../Hooks/useTasks";
 import { Item } from "../../Common/Item/Item";
 import { Droppable } from "../../Common/Droppable/Droppable";
 import { NewTaskModal } from "../../Modals/NewTaskModal/NewTaskModal";
+import { CreateSectionModal } from "../../Modals/CreateSectionModal/CreateSectionModal";
 import { IContainer, ITask } from "../../Interfaces/tasks";
 import { IState } from "../../store/reducers";
 import { arrayMove, moveBetweenContainers } from "../../Utils/dnd";
@@ -33,11 +34,12 @@ export const Project: React.FC = () => {
   const [activeId, setActiveId] = useState(null);
   const [activeItem, setActiveItem] = useState<ITask | undefined>(undefined);
   const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
-  const { getProjects, updateProjectTasks, getProjectById, getProjectTasks, getProjectContainers } = useTasks();
-  const { project, containers, tasks, isFetching, isUpdateModalOpen } = useSelector((state: IState) => state);
+  const { updateProjectTasks, getProjectById, getProjectTasks, getProjectContainers } = useTasks();
+  const { project, containers, tasks } = useSelector((state: IState) => state);
   const { projId } = useParams<Params>() as Params;
 
-  const [modal, setModal] = useState({ open: false, type: MODAL_TYPE.CREATE });
+  const [taskModal, setTaskModal] = useState({ open: false, type: MODAL_TYPE.CREATE });
+  const [newContainerModal, setNewContainerModal] = useState(false);
 
   useEffect(() => {
     getProjectById(+projId);
@@ -156,16 +158,16 @@ export const Project: React.FC = () => {
 
   const onClickTask = (task: ITask) => {
     setSelectedTask(task);
-    setModal({ open: true, type: MODAL_TYPE.EDIT });
+    setTaskModal({ open: true, type: MODAL_TYPE.EDIT });
   };
 
   return (
-    <Content className="project-page">
+    <Content className="Project-page">
       <div className="project-page__title">
         <h2>{project?.name}</h2>
         <Button
           type="primary"
-          onClick={() => setModal({ open: true, type: MODAL_TYPE.CREATE })}
+          onClick={() => setTaskModal({ open: true, type: MODAL_TYPE.CREATE })}
           style={{ marginLeft: "80px" }}
         >
           Create Task
@@ -182,29 +184,41 @@ export const Project: React.FC = () => {
         <div className="tasks-container">
           <Row gutter={12}>
             {containers.length > 0 &&
-              containers.map((container: IContainer) => (
-                <Col key={container._id} xs={24} sm={12} md={6}>
-                  <Droppable
-                    id={container.id}
-                    items={items[container.id] || []}
-                    name={container.name}
-                    activeId={activeId}
-                    key={container._id}
-                    onClickTask={onClickTask}
-                  />
-                </Col>
+              containers.map((container: IContainer, index: number) => (
+                <>
+                  <Col key={container._id} xs={24} sm={12} md={6}>
+                    <Droppable
+                      id={container.id}
+                      items={items[container.id] || []}
+                      name={container.name}
+                      activeId={activeId}
+                      key={container._id}
+                      onClickTask={onClickTask}
+                    />
+                  </Col>
+                  {index + 1 === containers.length && (
+                    <Button type="primary" className="add-section-button" onClick={() => setNewContainerModal(true)}>
+                      Add section
+                    </Button>
+                  )}
+                </>
               ))}
           </Row>
         </div>
         <DragOverlay>{activeId ? <Item id={activeId} task={activeItem} dragOverlay /> : null}</DragOverlay>
       </DndContext>
-      <NewTaskModal
-        projectId={+projId}
-        modal={modal}
-        setModal={setModal}
-        selectedTask={selectedTask}
-        setSelectedTask={setSelectedTask}
-      />
+      {taskModal.open && (
+        <NewTaskModal
+          projectId={+projId}
+          modal={taskModal}
+          setModal={setTaskModal}
+          selectedTask={selectedTask}
+          setSelectedTask={setSelectedTask}
+        />
+      )}
+      {newContainerModal && (
+        <CreateSectionModal projectId={+projId} open={newContainerModal} setModal={setNewContainerModal} />
+      )}
     </Content>
   );
 };

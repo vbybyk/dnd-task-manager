@@ -10,7 +10,7 @@ export interface IProject {
 }
 
 export interface IContainer {
-  _id: string;
+  _id?: string;
   id: number;
   projectId: number;
   name: string;

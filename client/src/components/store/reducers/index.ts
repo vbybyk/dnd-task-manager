@@ -59,6 +59,8 @@ const reducer = (state = initialState, action: AnyAction): IState => {
       };
     case "DELETE_TASK":
       return { ...state, tasks: state.tasks.filter((task) => task.id !== action.payload) };
+    case "ADD_CONTAINER":
+      return { ...state, containers: [...state.containers, action.payload] };
     default:
       return state;
   }

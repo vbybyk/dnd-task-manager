@@ -111,3 +111,10 @@ export const deleteTask = (id: number) => {
     payload: id,
   };
 };
+
+export const addContainer = (container: IContainer) => {
+  return {
+    type: "ADD_CONTAINER",
+    payload: container,
+  };
+};

@@ -91,7 +91,6 @@ export const NewTaskModal = (props: IProps) => {
 
   const {
     control,
-    register,
     handleSubmit,
     reset,
     setValue,
@@ -181,7 +180,6 @@ export const NewTaskModal = (props: IProps) => {
           render={({ field }) => <Input placeholder="Task name" {...field} />}
         />
         <p className="required-field-message">{errors.name?.message}</p>
-
         <p className="input-field-title">Description</p>
         <Controller
           name="description"
@@ -197,7 +195,6 @@ export const NewTaskModal = (props: IProps) => {
           )}
         />
         <p className="required-field-message">{errors.description?.message}</p>
-
         <p className="input-field-title">Label</p>
         <Controller
           name="label"
@@ -216,24 +213,21 @@ export const NewTaskModal = (props: IProps) => {
             />
           )}
         />
-
-        {/* <Input placeholder="Label" style={{ width: 150 }} {...register("label")} /> */}
-
         <p className="input-field-title">Priority</p>
         <Controller
           name="priority"
           control={control}
           render={({ field }) => <Select showArrow style={{ width: "150px" }} options={priorityOptions} {...field} />}
         />
-        {/* <Input placeholder="Priority" style={{ width: 150 }} {...register("priority")} /> */}
-
         <Divider />
         <div className="new-task-modal__buttons-wrapper">
-          {selectedTask && (
-            <Button type="primary" danger onClick={onDelete}>
-              Delete
-            </Button>
-          )}
+          <div className="new-task-modal__buttons-wrapper__left">
+            {selectedTask && (
+              <Button type="primary" danger onClick={onDelete}>
+                Delete
+              </Button>
+            )}
+          </div>
           <div className="new-task-modal__buttons-wrapper__right">
             <Button onClick={onClose}>Cancel</Button>
             <Button type="primary" onClick={handleSubmit(onSubmit)} style={{ marginLeft: "20px" }}>
