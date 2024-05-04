@@ -5,7 +5,11 @@
   }
   &__buttons-wrapper {
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
+    &__right {
+      display: flex;
+      justify-content: flex-end;
+    }
   }
 }
 .input-field-title {

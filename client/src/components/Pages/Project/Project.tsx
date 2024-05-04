@@ -198,7 +198,13 @@ export const Project: React.FC = () => {
         </div>
         <DragOverlay>{activeId ? <Item id={activeId} task={activeItem} dragOverlay /> : null}</DragOverlay>
       </DndContext>
-      <NewTaskModal projectId={+projId} modal={modal} setModal={setModal} selectedTask={selectedTask} />
+      <NewTaskModal
+        projectId={+projId}
+        modal={modal}
+        setModal={setModal}
+        selectedTask={selectedTask}
+        setSelectedTask={setSelectedTask}
+      />
     </Content>
   );
 };

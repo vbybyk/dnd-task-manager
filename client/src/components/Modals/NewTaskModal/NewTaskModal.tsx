@@ -7,7 +7,7 @@ import * as yup from "yup";
 import type { CustomTagProps } from "rc-select/lib/BaseSelect";
 import { requiredFieldMessage } from "../../Common/Constants/Constants";
 import { ProjectService } from "../../API/ProjectService";
-import { setNewTask, setTask } from "../../store/actions";
+import { setNewTask, setTask, deleteTask } from "../../store/actions";
 import { ITask } from "../../Interfaces/tasks";
 import { MODAL_TYPE } from "../../constants/tasks";
 import "./newTaskModal.scss";
@@ -31,6 +31,7 @@ interface IProps {
   modal: IModal;
   setModal: ({ open, type }: IModal) => void;
   type?: number;
+  setSelectedTask: (task: ITask | null) => void;
 }
 
 const { TextArea } = Input;
@@ -83,7 +84,7 @@ const tagRender = (props: CustomTagProps) => {
 };
 
 export const NewTaskModal = (props: IProps) => {
-  const { projectId, modal, setModal, selectedTask } = props;
+  const { projectId, modal, setModal, selectedTask, setSelectedTask } = props;
   const dispatch = useDispatch();
 
   const isNewTask = modal.type === MODAL_TYPE.CREATE;
@@ -116,11 +117,10 @@ export const NewTaskModal = (props: IProps) => {
     }
   }, [selectedTask]);
 
-  const handleCancel = () => {
+  const onClose = () => {
     setModal({ open: false, type: MODAL_TYPE.CREATE });
-    setTimeout(() => {
-      reset();
-    }, 500);
+    setSelectedTask(null);
+    setTimeout(() => reset(), 500);
   };
 
   const onSubmit = async (data: any) => {
@@ -141,17 +141,26 @@ export const NewTaskModal = (props: IProps) => {
         };
         const res = await ProjectService.addNewProjectTask(task);
         dispatch(setNewTask(res.data));
-
-        setModal({ open: false, type: MODAL_TYPE.CREATE });
-        setTimeout(() => reset(), 500);
+        onClose();
       } else {
         const res = await ProjectService.updateTask(data.id, data);
         dispatch(setTask(res.data));
-        setModal({ open: false, type: MODAL_TYPE.CREATE });
-        setTimeout(() => reset(), 500);
+        onClose();
       }
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const onDelete = async () => {
+    if (selectedTask) {
+      try {
+        await ProjectService.deleteTask(selectedTask.id);
+        dispatch(deleteTask(selectedTask.id));
+        onClose();
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
@@ -160,7 +169,7 @@ export const NewTaskModal = (props: IProps) => {
       title={isNewTask ? "New Task" : "Edit Task"}
       open={modal.open}
       className="new-task-modal"
-      onCancel={handleCancel}
+      onCancel={onClose}
       width={700}
       footer={null}
     >
@@ -220,10 +229,17 @@ export const NewTaskModal = (props: IProps) => {
 
         <Divider />
         <div className="new-task-modal__buttons-wrapper">
-          <Button onClick={handleCancel}>Cancel</Button>
-          <Button type="primary" onClick={handleSubmit(onSubmit)} style={{ marginLeft: "20px" }}>
-            Submit
-          </Button>
+          {selectedTask && (
+            <Button type="primary" danger onClick={onDelete}>
+              Delete
+            </Button>
+          )}
+          <div className="new-task-modal__buttons-wrapper__right">
+            <Button onClick={onClose}>Cancel</Button>
+            <Button type="primary" onClick={handleSubmit(onSubmit)} style={{ marginLeft: "20px" }}>
+              Submit
+            </Button>
+          </div>
         </div>
       </form>
     </Modal>

@@ -94,6 +94,15 @@ const mount = async (app: Application) => {
     }
   });
 
+  app.delete("/tasks/:id", async (req, res) => {
+    try {
+      await TaskModel.findOneAndDelete({ id: req.params.id });
+      res.send("Task deleted");
+    } catch (err) {
+      res.status(500).send(`Error deleting task: ${err}`);
+    }
+  });
+
   app.put("/projects/:id/tasks", async (req, res) => {
     const { id } = req.params;
     try {

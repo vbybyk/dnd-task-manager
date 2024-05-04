@@ -104,3 +104,10 @@ export const setTask = (task: ITask) => {
     payload: task,
   };
 };
+
+export const deleteTask = (id: number) => {
+  return {
+    type: "DELETE_TASK",
+    payload: id,
+  };
+};
