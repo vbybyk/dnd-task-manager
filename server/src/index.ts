@@ -66,6 +66,22 @@ const mount = async (app: Application) => {
     // res.send("Updated");
   });
 
+  app.post("/projects/create", async (req, res) => {
+    try {
+      const count = await ProjectModel.countDocuments({});
+      const newProject = new ProjectModel({
+        ...req.body,
+        id: count + 1,
+      });
+      await newProject.save();
+      await ContainerModel.create({ projectId: newProject.id, id: 1, name: "TO DO" });
+
+      res.json(newProject);
+    } catch (error) {
+      throw new Error(`Failed to create project: ${error}`);
+    }
+  });
+
   app.post("/tasks/create", async (req, res) => {
     try {
       const tasks = await TaskModel.find({ containerId: 1, projectId: req.body.projectId });

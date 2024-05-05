@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Layout, Button, List, Card } from "antd";
+import { CreateProjectModal } from "../../Modals/CreateProjectModal/CreateProjectModal";
 import { ProjectService } from "../../API/ProjectService";
 import useTasks from "../../Hooks/useTasks";
 import { IProject } from "../../Interfaces/tasks";
@@ -12,18 +13,26 @@ const { Content } = Layout;
 
 export const Dashboard: React.FC = () => {
   const { projects, isFetching } = useSelector((state: IState) => state);
+  const [createProjectModal, setCreateProjectModal] = useState(false);
 
   const { getProjects } = useTasks();
   useEffect(() => {
     getProjects();
   }, []);
 
+  const onCreateProject = async () => {
+    const project = await ProjectService.createProject({ name: "New project" });
+    getProjects();
+  };
+
   return (
     <>
       <Content className="dashboard">
         <div className="dashboard-title-wrapper">
           <h2 className="dashboard-title">My Dashboard</h2>
-          <Button type="primary">Create project</Button>
+          <Button type="primary" onClick={() => setCreateProjectModal(true)}>
+            Create project
+          </Button>
         </div>
         <div className="dashboard-projects__wrapper">
           <h3 className="dashboard-projects__title">Open Projects</h3>
@@ -51,6 +60,7 @@ export const Dashboard: React.FC = () => {
             )}
           />
         </div>
+        {createProjectModal && <CreateProjectModal open={createProjectModal} setModal={setCreateProjectModal} />}
       </Content>
     </>
   );

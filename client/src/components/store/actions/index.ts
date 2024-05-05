@@ -118,3 +118,10 @@ export const addContainer = (container: IContainer) => {
     payload: container,
   };
 };
+
+export const addProject = (project: IProject) => {
+  return {
+    type: "ADD_PROJECT",
+    payload: project,
+  };
+};

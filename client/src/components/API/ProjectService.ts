@@ -3,6 +3,7 @@ import Axios from "axios";
 export class ProjectService {
   static getProjects = async () => await Axios.get("http://localhost:9000/projects");
   static getProjectById = async (projId: number) => await Axios.get(`http://localhost:9000/projects/${projId}`);
+  static createProject = async (project: any) => await Axios.post("http://localhost:9000/projects/create", project);
   static getProjectTasks = async (projId: number) => await Axios.get(`http://localhost:9000/projects/${projId}/tasks`);
   static getProjectTaskById = async (projId: number, container: string) =>
     await Axios.get(`http://localhost:9000/projects/${projId}/containers/${container}`);

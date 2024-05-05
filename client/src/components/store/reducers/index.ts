@@ -31,6 +31,8 @@ const reducer = (state = initialState, action: AnyAction): IState => {
       return { ...state, isFetching: false, projects: action.payload };
     case "PROJECT_SUCCESS":
       return { ...state, isFetching: false, project: action.payload };
+    case "ADD_PROJECT":
+      return { ...state, projects: [...state.projects, action.payload] };
     case "TASK_UPDATED_SUCCESS":
       return { ...state, isFetching: false };
     case "PROJECTS_REQUEST_ERROR":
