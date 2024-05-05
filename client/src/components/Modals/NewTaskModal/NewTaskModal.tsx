@@ -7,7 +7,8 @@ import * as yup from "yup";
 import type { CustomTagProps } from "rc-select/lib/BaseSelect";
 import { requiredFieldMessage } from "../../Common/Constants/Constants";
 import { ProjectService } from "../../API/ProjectService";
-import { setNewTask, setTask, deleteTask } from "../../store/actions";
+import { TasksService } from "../../API/TasksService";
+import { tasksActions } from "../../store/actions/tasks";
 import { ITask } from "../../Interfaces/tasks";
 import { MODAL_TYPE } from "../../constants/tasks";
 import "./newTaskModal.scss";
@@ -138,12 +139,12 @@ export const NewTaskModal = (props: IProps) => {
             },
           ],
         };
-        const res = await ProjectService.addNewProjectTask(task);
-        dispatch(setNewTask(res.data));
+        const res = await TasksService.addNewTask(task);
+        dispatch(tasksActions.setNewTask(res.data));
         onClose();
       } else {
-        const res = await ProjectService.updateTask(data.id, data);
-        dispatch(setTask(res.data));
+        const res = await TasksService.updateTask(data.id, data);
+        dispatch(tasksActions.setTask(res.data));
         onClose();
       }
     } catch (err) {
@@ -154,8 +155,8 @@ export const NewTaskModal = (props: IProps) => {
   const onDelete = async () => {
     if (selectedTask) {
       try {
-        await ProjectService.deleteTask(selectedTask.id);
-        dispatch(deleteTask(selectedTask.id));
+        await TasksService.deleteTask(selectedTask.id);
+        dispatch(tasksActions.deleteTask(selectedTask.id));
         onClose();
       } catch (err) {
         console.log(err);

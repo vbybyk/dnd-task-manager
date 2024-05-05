@@ -3,7 +3,7 @@ import { Divider } from "antd";
 import { CheckSquareTwoTone } from "@ant-design/icons";
 import { Dispatch } from "redux";
 import { useDispatch } from "react-redux";
-import { toggleUpdateTaskModal } from "../../store/actions";
+import { tasksActions } from "../../store/actions/tasks";
 import "./card.scss";
 
 export const Card = (props: any) => {
@@ -11,12 +11,8 @@ export const Card = (props: any) => {
   const { id, task } = props;
   const { name, label, img }: ITask = task;
 
-  const onClick = (e: any) => {
-    console.log("modal", e);
-  };
-
   return (
-    <div className="card" key={id} onClick={() => dispatch(toggleUpdateTaskModal())}>
+    <div className="card" key={id} onClick={() => dispatch(tasksActions.toggleUpdateTaskModal())}>
       {img && (
         <div>
           <div className="card-img">img</div>

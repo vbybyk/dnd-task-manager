@@ -5,9 +5,9 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { requiredFieldMessage } from "../../Common/Constants/Constants";
-import { addContainer } from "../../store/actions";
+import { ContainersService } from "../../API/ContainersService";
+import { containersActions } from "../../store/actions/containers";
 import "./CreateSectionModal.scss";
-import { ProjectService } from "../../API/ProjectService";
 
 interface IFormInputs {
   id: number;
@@ -50,8 +50,8 @@ export const CreateSectionModal = (props: IProps) => {
 
   const onSubmit = async (data: IFormInputs) => {
     try {
-      await ProjectService.addNewContainer(data);
-      dispatch(addContainer(data));
+      await ContainersService.addNewContainer(data);
+      dispatch(containersActions.addContainer(data));
       setModal(false);
     } catch (error) {
       console.error(error);

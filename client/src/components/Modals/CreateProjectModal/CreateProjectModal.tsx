@@ -5,7 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { requiredFieldMessage } from "../../Common/Constants/Constants";
-import { addProject } from "../../store/actions";
+import { projectActions } from "../../store/actions/projects";
 import { ProjectService } from "../../API/ProjectService";
 import { IProject } from "../../Interfaces/tasks";
 
@@ -57,7 +57,7 @@ export const CreateProjectModal = (props: IProps) => {
     try {
       const res = await ProjectService.createProject(data);
       const newProject: IProject = res.data;
-      dispatch(addProject(newProject));
+      dispatch(projectActions.addProject(newProject));
       setModal(false);
     } catch (error) {
       console.error(error);
