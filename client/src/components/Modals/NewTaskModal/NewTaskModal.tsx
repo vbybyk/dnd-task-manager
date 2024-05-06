@@ -142,13 +142,15 @@ export const NewTaskModal = (props: IProps) => {
         const res = await TasksService.addNewTask(task);
         dispatch(tasksActions.setNewTask(res.data));
         onClose();
-        dispatch(alertActions.success("Task created successfully"));
+        dispatch(alertActions.success("Task created successfully!"));
       } else {
         const res = await TasksService.updateTask(data.id, data);
         dispatch(tasksActions.setTask(res.data));
         onClose();
+        dispatch(alertActions.success("Updated successfully!"));
       }
     } catch (err) {
+      dispatch(alertActions.error("Something went wrong!"));
       console.log(err);
     }
   };
@@ -159,7 +161,9 @@ export const NewTaskModal = (props: IProps) => {
         await TasksService.deleteTask(selectedTask.id);
         dispatch(tasksActions.deleteTask(selectedTask.id));
         onClose();
+        dispatch(alertActions.success("Task deleted successfully!"));
       } catch (err) {
+        dispatch(alertActions.error("Something went wrong!"));
         console.log(err);
       }
     }
@@ -206,7 +210,7 @@ export const NewTaskModal = (props: IProps) => {
               mode="multiple"
               tagRender={tagRender}
               defaultValue={null}
-              style={{ width: "100%" }}
+              style={{ width: "50%" }}
               options={labelOptions}
               {...field}
               optionFilterProp="label"

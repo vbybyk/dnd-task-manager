@@ -27,9 +27,10 @@ const Toaster = () => {
   useEffect(() => {
     if (alert.message) {
       notification.open({
+        key: "uniqueKey",
         message: <AlertMessage type={alert.type} message={alert.message} description="" />,
         description: "",
-        duration: 0,
+        duration: 3,
         //@ts-ignore
         onClose: handleClose,
         closeIcon: false,

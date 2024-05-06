@@ -8,6 +8,7 @@ import { requiredFieldMessage } from "../../Common/Constants/Constants";
 import { projectActions } from "../../store/actions/projects";
 import { ProjectService } from "../../API/ProjectService";
 import { IProject } from "../../Interfaces/tasks";
+import { alertActions } from "../../store/actions/alert";
 
 interface IFormInputs {
   id: number;
@@ -59,8 +60,10 @@ export const CreateProjectModal = (props: IProps) => {
       const newProject: IProject = res.data;
       dispatch(projectActions.addProject(newProject));
       setModal(false);
+      dispatch(alertActions.success("Project created successfully!"));
     } catch (error) {
       console.error(error);
+      dispatch(alertActions.error("Could not create project"));
     }
   };
 

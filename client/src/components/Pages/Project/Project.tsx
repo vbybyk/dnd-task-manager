@@ -35,7 +35,9 @@ export const Project: React.FC = () => {
   const [activeItem, setActiveItem] = useState<ITask | undefined>(undefined);
   const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
   const { updateProjectTasks, getProjectById, getProjectTasks, getProjectContainers } = useTasks();
-  const { project, containers, tasks } = useSelector((state: IState) => state.project);
+  const { project } = useSelector((state: IState) => state.project);
+  const { tasks } = useSelector((state: IState) => state.tasks);
+  const { containers } = useSelector((state: IState) => state.containers);
   const { projId } = useParams<Params>() as Params;
 
   const [taskModal, setTaskModal] = useState({ open: false, type: MODAL_TYPE.CREATE });

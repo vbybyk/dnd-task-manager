@@ -7,6 +7,7 @@ import * as yup from "yup";
 import { requiredFieldMessage } from "../../Common/Constants/Constants";
 import { ContainersService } from "../../API/ContainersService";
 import { containersActions } from "../../store/actions/containers";
+import { alertActions } from "../../store/actions/alert";
 import "./CreateSectionModal.scss";
 
 interface IFormInputs {
@@ -53,8 +54,10 @@ export const CreateSectionModal = (props: IProps) => {
       await ContainersService.addNewContainer(data);
       dispatch(containersActions.addContainer(data));
       setModal(false);
+      dispatch(alertActions.success("Section added successfully!"));
     } catch (error) {
       console.error(error);
+      dispatch(alertActions.error("Something went wrong"));
     }
   };
 
