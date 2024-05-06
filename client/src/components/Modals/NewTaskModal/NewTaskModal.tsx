@@ -6,11 +6,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import type { CustomTagProps } from "rc-select/lib/BaseSelect";
 import { requiredFieldMessage } from "../../Common/Constants/Constants";
-import { ProjectService } from "../../API/ProjectService";
 import { TasksService } from "../../API/TasksService";
 import { tasksActions } from "../../store/actions/tasks";
 import { ITask } from "../../Interfaces/tasks";
 import { MODAL_TYPE } from "../../constants/tasks";
+import { alertActions } from "../../store/actions/alert";
 import "./newTaskModal.scss";
 
 interface IFormInputs {
@@ -142,6 +142,7 @@ export const NewTaskModal = (props: IProps) => {
         const res = await TasksService.addNewTask(task);
         dispatch(tasksActions.setNewTask(res.data));
         onClose();
+        dispatch(alertActions.success("Task created successfully"));
       } else {
         const res = await TasksService.updateTask(data.id, data);
         dispatch(tasksActions.setTask(res.data));
@@ -203,7 +204,6 @@ export const NewTaskModal = (props: IProps) => {
           render={({ field }) => (
             <Select
               mode="multiple"
-              showArrow
               tagRender={tagRender}
               defaultValue={null}
               style={{ width: "100%" }}
@@ -218,7 +218,7 @@ export const NewTaskModal = (props: IProps) => {
         <Controller
           name="priority"
           control={control}
-          render={({ field }) => <Select showArrow style={{ width: "150px" }} options={priorityOptions} {...field} />}
+          render={({ field }) => <Select style={{ width: "150px" }} options={priorityOptions} {...field} />}
         />
         <Divider />
         <div className="new-task-modal__buttons-wrapper">

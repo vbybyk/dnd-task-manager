@@ -5,14 +5,14 @@ import { Layout, Button, List, Card } from "antd";
 import { CreateProjectModal } from "../../Modals/CreateProjectModal/CreateProjectModal";
 import { ProjectService } from "../../API/ProjectService";
 import useTasks from "../../Hooks/useTasks";
-import { IProject } from "../../Interfaces/tasks";
 import { IState } from "../../store/reducers";
+import { IProject } from "../../Interfaces/tasks";
 import "./dashboard.scss";
 
 const { Content } = Layout;
 
 export const Dashboard: React.FC = () => {
-  const { projects, isFetching } = useSelector((state: IState) => state);
+  const { projects, isFetching } = useSelector((state: IState) => state.project);
   const [createProjectModal, setCreateProjectModal] = useState(false);
 
   const { getProjects } = useTasks();

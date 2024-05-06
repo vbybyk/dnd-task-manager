@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
@@ -35,7 +35,7 @@ export const Project: React.FC = () => {
   const [activeItem, setActiveItem] = useState<ITask | undefined>(undefined);
   const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
   const { updateProjectTasks, getProjectById, getProjectTasks, getProjectContainers } = useTasks();
-  const { project, containers, tasks } = useSelector((state: IState) => state);
+  const { project, containers, tasks } = useSelector((state: IState) => state.project);
   const { projId } = useParams<Params>() as Params;
 
   const [taskModal, setTaskModal] = useState({ open: false, type: MODAL_TYPE.CREATE });
@@ -185,7 +185,7 @@ export const Project: React.FC = () => {
           <Row gutter={12}>
             {containers.length > 0 &&
               containers.map((container: IContainer, index: number) => (
-                <>
+                <Fragment key={container._id}>
                   <Col key={container._id} xs={24} sm={12} md={6}>
                     <Droppable
                       id={container.id}
@@ -201,7 +201,7 @@ export const Project: React.FC = () => {
                       Add section
                     </Button>
                   )}
-                </>
+                </Fragment>
               ))}
           </Row>
         </div>
