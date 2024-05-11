@@ -59,6 +59,13 @@ const addProject = (project: IProject) => {
   };
 };
 
+const updateProject = (project: IProject) => {
+  return {
+    type: "UPDATE_PROJECT",
+    payload: project,
+  };
+};
+
 export const projectActions = {
   getProjectsRequest,
   getProjectsSuccess,
@@ -70,4 +77,5 @@ export const projectActions = {
   getProjectSuccess,
   getProjectError,
   addProject,
+  updateProject,
 };

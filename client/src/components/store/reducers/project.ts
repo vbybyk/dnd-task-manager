@@ -24,6 +24,11 @@ export const project = (state = initialState, action: AnyAction): IProjectState 
       return { ...state, isFetching: false, project: action.payload };
     case "ADD_PROJECT":
       return { ...state, projects: [...state.projects, action.payload] };
+    case "UPDATE_PROJECT":
+      return {
+        ...state,
+        projects: state.projects.map((project) => (project.id === action.payload.id ? action.payload : project)),
+      };
     case "PROJECTS_REQUEST_ERROR":
     case "PROJECT_REQUEST_ERROR":
       return { ...state, isFetching: false };

@@ -23,28 +23,14 @@ export const attachProjectRoutes = (app: Application) => {
     }).clone();
   });
 
-  app.put("/projects/:id/name", async (_req, res) => {
-    const newName = "Project ONE NAME 2";
+  app.put("/projects/:id", async (_req, res) => {
     const id = _req.params.id;
-    // try {
-    //   await ProjectModel.findOneAndUpdate( id, { name: newName }, { returnOriginal: false }).then(() => {
-    //     res.send("updated");
-    //   });
-    // } catch (error) {
-    //   throw new Error(`Failed to query project: ${error}`);
-    // }
     try {
-      await ProjectModel.findOneAndUpdate({ id }, { name: newName }, (err: any, data: any) => {
-        if (err) {
-          res.send(err);
-        } else {
-          res.send(data);
-        }
-      }).clone();
+      const updatedProject = await ProjectModel.findOneAndUpdate({ id }, _req.body, { returnOriginal: false });
+      res.json(updatedProject);
     } catch (error) {
       throw new Error(`Failed to query project: ${error}`);
     }
-    // res.send("Updated");
   });
 
   app.post("/projects/create", async (req, res) => {
