@@ -3,7 +3,9 @@ dotenv.config();
 import cors from "cors";
 import express, { Application } from "express";
 import mongoose from "mongoose";
-import { ProjectModel } from "./models/ProjectSchema";
+import { attachProjectRoutes } from "./routes/projects";
+import { attachContainerRoutes } from "./routes/containers";
+import { attachTaskRoutes } from "./routes/tasks";
 
 const port = process.env.PORT || 9000;
 const user = process.env.DB_USER;
@@ -19,59 +21,17 @@ const mount = async (app: Application) => {
     `mongodb+srv://${user}:${userPassword}@${cluster}.mongodb.net/${dbName}?retryWrites=true&w=majority`
   );
 
-  app.get("/projects", async (_req, res) => {
-    await ProjectModel.find({}, (err: any, data: any) => {
-      if (err) {
-        res.send(err);
-      } else {
-        res.send(data);
-      }
-    }).clone();
-  });
+  attachProjectRoutes(app);
+  attachContainerRoutes(app);
+  attachTaskRoutes(app);
 
-  // app.get("/projects/:id", async (_req, res) => {
-  //   await ProjectModel.find({ id: _req.params.id }, (err: any, data: any) => {
-  //     if (err) {
-  //       res.send(err);
-  //     } else {
-  //       res.send(data);
-  //     }
-  //   }).clone();
-  // });
-
-  app.put("/projects/:id/name", async (_req, res) => {
-    const newName = "Project ONE NAME";
-    const id = _req.params.id;
-    // try {
-    //   await ProjectModel.findOneAndUpdate( id, { name: newName }, { returnOriginal: false }).then(() => {
-    //     res.send("updated");
-    //   });
-    // } catch (error) {
-    //   throw new Error(`Failed to query project: ${error}`);
-    // }
-    try {
-      await ProjectModel.findOneAndUpdate({ id }, { name: newName }, (err: any, data: any) => {
-        if (err) {
-          res.send(err);
-        } else {
-          res.send(data);
-        }
-      }).clone();
-    } catch (error) {
-      throw new Error(`Failed to query project: ${error}`);
-    }
-    // res.send("Updated");
-  });
-
-  // const startServer = async() => {
-  //     await server.start();
-  //     server.applyMiddleware({app, path: "/api"})
-  // }
-  // startServer()
+  // const startServer = async () => {
+  //   await server.start();
+  //   server.applyMiddleware({ app, path: "/api" });
+  // };
+  // startServer();
   app.listen(port);
   console.log(`App is listening on port ${port}`);
-
-  // console.log(`App is listening on port ${process.env.PORT}`)
 };
 
 mount(express());

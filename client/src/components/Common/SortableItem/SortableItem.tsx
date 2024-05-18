@@ -15,7 +15,7 @@ export const SortableItem = (props: any) => {
   return (
     // @ts-ignore
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <Item id={props.id} tasks={props.tasks} />
+      <Item id={props.id} task={props.task} onClickTask={props.onClickTask} />
     </div>
   );
 };

@@ -17,7 +17,7 @@ export function Droppable(props: any) {
           </div>
           <Divider style={{ margin: "7px 0" }} />
           {items.map((item: any) => (
-            <SortableItem key={item.id} id={item.id} tasks={item} />
+            <SortableItem key={item.id} id={item.id} task={item} onClickTask={props.onClickTask} />
           ))}
         </div>
       </SortableContext>

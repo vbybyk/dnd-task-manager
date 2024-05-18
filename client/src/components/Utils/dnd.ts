@@ -11,3 +11,18 @@ export const insertAtIndex = (array: any[], index: number, item: any) => {
 export const arrayMove = (array: any[], oldIndex: number, newIndex: number) => {
   return dndKitArrayMove(array, oldIndex, newIndex);
 };
+
+export const moveBetweenContainers = (
+  items: any,
+  activeContainer: any,
+  activeIndex: any,
+  overContainer: any,
+  overIndex: any,
+  item: any
+) => {
+  return {
+    ...items,
+    [activeContainer]: removeAtIndex(items[activeContainer], activeIndex),
+    [overContainer]: insertAtIndex(items[overContainer], overIndex, item),
+  };
+};

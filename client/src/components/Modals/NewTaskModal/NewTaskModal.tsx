@@ -1,11 +1,16 @@
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Input, Modal, Button, Divider, Select, Tag } from "antd";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import type { CustomTagProps } from "rc-select/lib/BaseSelect";
 import { requiredFieldMessage } from "../../Common/Constants/Constants";
-import { ProjectService } from "../../API/ProjectService";
+import { TasksService } from "../../API/TasksService";
+import { tasksActions } from "../../store/actions/tasks";
 import { ITask } from "../../Interfaces/tasks";
+import { MODAL_TYPE } from "../../constants/tasks";
+import { alertActions } from "../../store/actions/alert";
 import "./newTaskModal.scss";
 
 interface IFormInputs {
@@ -16,10 +21,18 @@ interface IFormInputs {
   priority: string;
 }
 
+interface IModal {
+  open: boolean;
+  type: number;
+}
+
 interface IProps {
-  isModalOpen: boolean;
-  setIsModalOpen: (isModalOpen: boolean) => void;
-  setNewTask: (newTask: ITask) => void;
+  selectedTask: ITask | null;
+  projectId: number;
+  modal: IModal;
+  setModal: ({ open, type }: IModal) => void;
+  type?: number;
+  setSelectedTask: (task: ITask | null) => void;
 }
 
 const { TextArea } = Input;
@@ -71,25 +84,14 @@ const tagRender = (props: CustomTagProps) => {
   );
 };
 
-const addProjectTask = async (projId: number, task: any) => {
-  try {
-    console.log("trying to put new task", task);
-
-    await ProjectService.addNewProjectTask(projId, task);
-  } catch (err) {
-    //@ts-ignore
-    dispatch(postProjectError(err));
-    console.log(err);
-  } finally {
-    console.log("TASKS UPDATED");
-  }
-};
-
 export const NewTaskModal = (props: IProps) => {
-  const { isModalOpen, setIsModalOpen, setNewTask } = props;
+  const { projectId, modal, setModal, selectedTask, setSelectedTask } = props;
+  const dispatch = useDispatch();
+
+  const isNewTask = modal.type === MODAL_TYPE.CREATE;
+
   const {
     control,
-    register,
     handleSubmit,
     reset,
     setValue,
@@ -99,49 +101,80 @@ export const NewTaskModal = (props: IProps) => {
       id: undefined,
       name: "",
       description: "",
-      label: null,
+      label: [],
       priority: "",
     },
     resolver: yupResolver(schema),
   });
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
-    setTimeout(() => {
-      reset();
-    }, 500);
+  useEffect(() => {
+    if (selectedTask) {
+      setValue("id", selectedTask.id);
+      setValue("name", selectedTask.name);
+      setValue("description", selectedTask.description);
+      setValue("label", selectedTask.label);
+      setValue("priority", selectedTask.priority);
+    }
+  }, [selectedTask]);
+
+  const onClose = () => {
+    setModal({ open: false, type: MODAL_TYPE.CREATE });
+    setSelectedTask(null);
+    setTimeout(() => reset(), 500);
   };
 
-  const onSubmit = (data: any) => {
-    console.log(data);
-    // @ts-ignore
-    data && console.log(data.label[0].label);
+  const onSubmit = async (data: any) => {
+    try {
+      if (isNewTask) {
+        const task: ITask = {
+          ...data,
+          id: Date.now(),
+          projectId,
+          containerId: 1,
+          label: [
+            {
+              label: data.label[0].label,
+              value: data.label[0].value,
+              key: data.label[0].key,
+            },
+          ],
+        };
+        const res = await TasksService.addNewTask(task);
+        dispatch(tasksActions.setNewTask(res.data));
+        onClose();
+        dispatch(alertActions.success("Task created successfully!"));
+      } else {
+        const res = await TasksService.updateTask(data.id, data);
+        dispatch(tasksActions.setTask(res.data));
+        onClose();
+        dispatch(alertActions.success("Updated successfully!"));
+      }
+    } catch (err) {
+      dispatch(alertActions.error("Something went wrong!"));
+      console.log(err);
+    }
+  };
 
-    let task = {
-      ...data,
-      id: Date.now(),
-      label: [
-        {
-          label: data.label[0].label,
-          value: data.label[0].value,
-          key: data.label[0].key,
-        },
-      ],
-    };
-    data && setNewTask(task);
-
-    setIsModalOpen(false);
-    setTimeout(() => {
-      reset();
-    }, 500);
+  const onDelete = async () => {
+    if (selectedTask) {
+      try {
+        await TasksService.deleteTask(selectedTask.id);
+        dispatch(tasksActions.deleteTask(selectedTask.id));
+        onClose();
+        dispatch(alertActions.success("Task deleted successfully!"));
+      } catch (err) {
+        dispatch(alertActions.error("Something went wrong!"));
+        console.log(err);
+      }
+    }
   };
 
   return (
     <Modal
-      title="New Task"
-      open={isModalOpen}
+      title={isNewTask ? "New Task" : "Edit Task"}
+      open={modal.open}
       className="new-task-modal"
-      onCancel={handleCancel}
+      onCancel={onClose}
       width={700}
       footer={null}
     >
@@ -153,7 +186,6 @@ export const NewTaskModal = (props: IProps) => {
           render={({ field }) => <Input placeholder="Task name" {...field} />}
         />
         <p className="required-field-message">{errors.name?.message}</p>
-
         <p className="input-field-title">Description</p>
         <Controller
           name="description"
@@ -169,7 +201,6 @@ export const NewTaskModal = (props: IProps) => {
           )}
         />
         <p className="required-field-message">{errors.description?.message}</p>
-
         <p className="input-field-title">Label</p>
         <Controller
           name="label"
@@ -177,10 +208,9 @@ export const NewTaskModal = (props: IProps) => {
           render={({ field }) => (
             <Select
               mode="multiple"
-              showArrow
               tagRender={tagRender}
               defaultValue={null}
-              style={{ width: "100%" }}
+              style={{ width: "50%" }}
               options={labelOptions}
               {...field}
               optionFilterProp="label"
@@ -188,23 +218,27 @@ export const NewTaskModal = (props: IProps) => {
             />
           )}
         />
-
-        {/* <Input placeholder="Label" style={{ width: 150 }} {...register("label")} /> */}
-
         <p className="input-field-title">Priority</p>
         <Controller
           name="priority"
           control={control}
-          render={({ field }) => <Select showArrow style={{ width: "150px" }} options={priorityOptions} {...field} />}
+          render={({ field }) => <Select style={{ width: "150px" }} options={priorityOptions} {...field} />}
         />
-        {/* <Input placeholder="Priority" style={{ width: 150 }} {...register("priority")} /> */}
-
         <Divider />
         <div className="new-task-modal__buttons-wrapper">
-          <Button onClick={handleCancel}>Cancel</Button>
-          <Button type="primary" onClick={handleSubmit(onSubmit)} style={{ marginLeft: "20px" }}>
-            Submit
-          </Button>
+          <div className="new-task-modal__buttons-wrapper__left">
+            {selectedTask && (
+              <Button type="primary" danger onClick={onDelete}>
+                Delete
+              </Button>
+            )}
+          </div>
+          <div className="new-task-modal__buttons-wrapper__right">
+            <Button onClick={onClose}>Cancel</Button>
+            <Button type="primary" onClick={handleSubmit(onSubmit)} style={{ marginLeft: "20px" }}>
+              Submit
+            </Button>
+          </div>
         </div>
       </form>
     </Modal>

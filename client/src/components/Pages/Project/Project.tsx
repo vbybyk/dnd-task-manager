@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
@@ -11,14 +11,17 @@ import {
   TouchSensor,
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import { Layout, Row, Col, Button, Modal, Checkbox, Menu, Space } from "antd";
-import { arrayMove, insertAtIndex, removeAtIndex } from "../../Utils/utils";
+import { Layout, Row, Col, Button, Spin } from "antd";
 import useTasks from "../../Hooks/useTasks";
 import { Item } from "../../Common/Item/Item";
 import { Droppable } from "../../Common/Droppable/Droppable";
 import { NewTaskModal } from "../../Modals/NewTaskModal/NewTaskModal";
-import { ITask } from "../../Interfaces/tasks";
+import { CreateSectionModal } from "../../Modals/CreateSectionModal/CreateSectionModal";
+import { IContainer, ITask } from "../../Interfaces/tasks";
 import { IState } from "../../store/reducers";
+import { arrayMove, moveBetweenContainers } from "../../Utils/dnd";
+import { transformData, flattenData } from "../../Utils/project";
+import { MODAL_TYPE } from "../../constants/tasks";
 import "./project.scss";
 
 const { Content } = Layout;
@@ -27,52 +30,33 @@ type Params = {
 };
 
 export const Project: React.FC = () => {
-  const [items, setItems] = useState(null);
+  const [items, setItems] = useState<Record<number, ITask[]>>({});
   const [activeId, setActiveId] = useState(null);
   const [activeItem, setActiveItem] = useState<ITask | undefined>(undefined);
-  const [newTask, setNewTask] = useState<ITask | null>(null);
-  const { getProjects, updateProjectTasks, getProjectById } = useTasks();
-  const { project, isFetching, isUpdateModalOpen } = useSelector((state: IState) => state);
+  const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
+  const { updateProjectTasks, getProjectById, getProjectTasks, getProjectContainers } = useTasks();
+  const { project, isFetching: isProjectLoading } = useSelector((state: IState) => state.project);
+  const { tasks, isFetching: isTasksLoading } = useSelector((state: IState) => state.tasks);
+  const { containers, isFetching: isContainersLoading } = useSelector((state: IState) => state.containers);
   const { projId } = useParams<Params>() as Params;
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [taskModal, setTaskModal] = useState({ open: false, type: MODAL_TYPE.CREATE });
+  const [newContainerModal, setNewContainerModal] = useState(false);
 
-  console.log("project", project);
-
-  // console.log("newTask -----", newTask);
-  // console.log("update modal open", isUpdateModalOpen);
+  const loading = isProjectLoading || isTasksLoading || isContainersLoading;
 
   useEffect(() => {
     getProjectById(+projId);
+    getProjectTasks(+projId);
+    getProjectContainers(+projId);
   }, [projId]);
 
   useEffect(() => {
-    // @ts-ignore
-    !items && setItems(project?.containers);
-  }, [project]);
-
-  useEffect(() => {
-    // @ts-ignore
-    setItems(project?.containers);
-  }, [project]);
-
-  useEffect(() => {
-    // newTask && (newTask.id = Date.now());
-    // @ts-ignore
-    // items && items["todo"].push(newTask);
-    newTask &&
-      setItems((items) => {
-        if (items) {
-          const newTodo = [...items["todo"], newTask];
-          return {
-            // @ts-ignore
-            ...items,
-            ["todo"]: newTodo,
-          };
-        }
-      });
-    newTask && updateProjectTasks(+projId, items);
-  }, [newTask]);
+    if (tasks.length && containers.length > 0) {
+      const transformedData = transformData(tasks, containers);
+      setItems(transformedData);
+    }
+  }, [tasks, containers, projId]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -89,8 +73,8 @@ export const Project: React.FC = () => {
 
   const handleDragStart = ({ active }: { active: any }) => {
     const activeContainer = active.data.current.sortable.containerId;
-    // @ts-ignore
-    setActiveItem(items[activeContainer].filter((elem) => elem.id === active.id)[0]);
+
+    setActiveItem(items[activeContainer].find((elem) => elem.id === active.id));
     setActiveId(active.id);
   };
 
@@ -104,14 +88,14 @@ export const Project: React.FC = () => {
 
     const overId = over?.id;
 
-    if (!overId) {
+    if (!overId || !active.data.current || !over.data.current) {
       return;
     }
 
     const activeContainer = active.data.current.sortable.containerId;
     const overContainer = over.data.current?.sortable.containerId || over.id;
     const activeIndex = active.data.current.sortable.index;
-    // @ts-ignore
+
     const overIndex = over.id in items ? items[overContainer].length + 1 : over.data.current.sortable.index;
 
     if (activeContainer !== overContainer) {
@@ -136,12 +120,11 @@ export const Project: React.FC = () => {
       setActiveItem(undefined);
       return;
     }
-
     if (active.id !== over.id) {
       const activeContainer = active.data.current.sortable.containerId;
       const overContainer = over.data.current?.sortable.containerId || over.id;
       const activeIndex = active.data.current.sortable.index;
-      // @ts-ignore
+
       const overIndex = over.id in items ? items[overContainer].length + 1 : over.data.current.sortable.index;
 
       setItems((itemGroups: any) => {
@@ -162,36 +145,42 @@ export const Project: React.FC = () => {
             itemGroups[activeContainer][activeIndex]
           );
         }
+        for (let containerId in newItems) {
+          newItems[containerId].forEach((item: any, index: number) => {
+            item.sortId = index + 1;
+            item.containerId = +containerId;
+          });
+        }
         return newItems;
       });
     }
-    updateProjectTasks(+projId, items);
+
+    updateProjectTasks(+projId, flattenData(items));
     setActiveId(null);
     setActiveItem(undefined);
   };
 
-  const moveBetweenContainers = (
-    items: any,
-    activeContainer: any,
-    activeIndex: any,
-    overContainer: any,
-    overIndex: any,
-    item: any
-  ) => {
-    return {
-      ...items,
-      [activeContainer]: removeAtIndex(items[activeContainer], activeIndex),
-      [overContainer]: insertAtIndex(items[overContainer], overIndex, item),
-    };
+  const onClickTask = (task: ITask) => {
+    setSelectedTask(task);
+    setTaskModal({ open: true, type: MODAL_TYPE.EDIT });
   };
 
   return (
-    <Content className="project-page">
-      <div className="project-page__title">
-        <h2>{project?.name}</h2>
-        <Button type="primary" onClick={() => setIsModalOpen(true)} style={{ marginLeft: "80px" }}>
-          Create Task
-        </Button>
+    <Content className="Project-page">
+      <div className="Project-page__title">
+        {!isProjectLoading && (
+          <>
+            <h2>{project.name}</h2>
+            <Button
+              type="primary"
+              onClick={() => setTaskModal({ open: true, type: MODAL_TYPE.CREATE })}
+              style={{ marginLeft: "40px" }}
+            >
+              Create Task
+            </Button>
+          </>
+        )}
+        {isProjectLoading && <Spin size="small" className="loader" />}
       </div>
 
       <DndContext
@@ -202,19 +191,50 @@ export const Project: React.FC = () => {
         onDragEnd={handleDragEnd}
       >
         <div className="tasks-container">
-          <Row gutter={12}>
-            {items &&
-              Object.keys(items).map((group: any) => (
-                <Col key={group} xs={24} sm={12} md={6} lg={5}>
-                  <Droppable id={group} items={items[group]} name={group} activeId={activeId} key={group} />
-                </Col>
-              ))}
-          </Row>
+          {!loading && (
+            <Row gutter={12}>
+              {containers.length > 0 &&
+                containers.map((container: IContainer, index: number) => (
+                  <Fragment key={container._id}>
+                    <Col key={container._id} xs={24} sm={12} md={6}>
+                      <Droppable
+                        id={container.id}
+                        items={items[container.id] || []}
+                        name={container.name}
+                        activeId={activeId}
+                        key={container._id}
+                        onClickTask={onClickTask}
+                      />
+                    </Col>
+                    {index + 1 === containers.length && (
+                      <Button type="primary" className="add-section-button" onClick={() => setNewContainerModal(true)}>
+                        Add section
+                      </Button>
+                    )}
+                  </Fragment>
+                ))}
+            </Row>
+          )}
+          {loading && (
+            <div className="loader">
+              <Spin size="large" />
+            </div>
+          )}
         </div>
-        <DragOverlay>{activeId ? <Item id={activeId} tasks={activeItem} dragOverlay /> : null}</DragOverlay>
+        <DragOverlay>{activeId ? <Item id={activeId} task={activeItem} dragOverlay /> : null}</DragOverlay>
       </DndContext>
-      <NewTaskModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} setNewTask={setNewTask} />
-      <Modal title="New Task" open={isUpdateModalOpen}></Modal>
+      {taskModal.open && (
+        <NewTaskModal
+          projectId={+projId}
+          modal={taskModal}
+          setModal={setTaskModal}
+          selectedTask={selectedTask}
+          setSelectedTask={setSelectedTask}
+        />
+      )}
+      {newContainerModal && (
+        <CreateSectionModal projectId={+projId} open={newContainerModal} setModal={setNewContainerModal} />
+      )}
     </Content>
   );
 };
