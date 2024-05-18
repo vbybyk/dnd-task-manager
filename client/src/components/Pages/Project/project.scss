@@ -3,6 +3,8 @@
   &__title {
     padding-left: 20px;
     display: flex;
+    align-items: center;
+    min-height: 32px;
   }
 
   .tasks-container {
@@ -11,6 +13,13 @@
 
     .ant-row {
       flex-wrap: nowrap;
+      min-width: 995px;
+    }
+
+    .loader {
+      display: flex;
+      justify-content: center;
+      padding-top: 50px;
     }
   }
 

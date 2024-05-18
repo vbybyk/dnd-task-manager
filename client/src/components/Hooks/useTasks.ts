@@ -48,15 +48,11 @@ const useTasks = () => {
 
   const updateProjectTasks = async (projId: number, tasks: any) => {
     try {
-      dispatch(projectActions.postProjectRequest());
-      const { status } = await TasksService.updateProjectTasks(projId, tasks);
-      status === 200 && dispatch(projectActions.postProjectSuccess());
+      await TasksService.updateProjectTasks(projId, tasks);
     } catch (err) {
       //@ts-ignore
-      dispatch(projectActions.postProjectError(err));
+      dispatch(tasksActions.updateTasksError(err));
       console.log(err);
-    } finally {
-      console.log("PROJECT UPDATED");
     }
   };
 

@@ -18,6 +18,7 @@ export const tasks = (state = initialState, action: AnyAction): ITasksState => {
     case "PROJECT_TASKS_SUCCESS":
       return { ...state, isFetching: false, tasks: action.payload };
     case "PROJECT_TASKS_REQUEST_ERROR":
+    case "UPDATE_TASKS_ERROR":
       return { ...state, isFetching: false };
     case "SET_NEW_TASK":
       return { ...state, tasks: [...state.tasks, action.payload] };

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HeaderApp, Dashboard, Project } from "../index";
+import { AppLayout } from "./AppLayout/AppLayout";
 import { Provider } from "react-redux";
 import Toaster from "../Common/Toaster/Toaster";
 import store from "../store";
@@ -18,10 +19,12 @@ const APP: React.FC = () => {
     <BrowserRouter>
       <div className="App">
         <HeaderApp />
-        <Routes>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/projects/:projId" element={<Project />} />
-        </Routes>
+        <AppLayout>
+          <Routes>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/projects/:projId" element={<Project />} />
+          </Routes>
+        </AppLayout>
         <Toaster />
       </div>
     </BrowserRouter>

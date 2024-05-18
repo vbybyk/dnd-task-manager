@@ -11,7 +11,7 @@ import {
   TouchSensor,
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import { Layout, Row, Col, Button } from "antd";
+import { Layout, Row, Col, Button, Spin } from "antd";
 import useTasks from "../../Hooks/useTasks";
 import { Item } from "../../Common/Item/Item";
 import { Droppable } from "../../Common/Droppable/Droppable";
@@ -35,13 +35,15 @@ export const Project: React.FC = () => {
   const [activeItem, setActiveItem] = useState<ITask | undefined>(undefined);
   const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
   const { updateProjectTasks, getProjectById, getProjectTasks, getProjectContainers } = useTasks();
-  const { project } = useSelector((state: IState) => state.project);
-  const { tasks } = useSelector((state: IState) => state.tasks);
-  const { containers } = useSelector((state: IState) => state.containers);
+  const { project, isFetching: isProjectLoading } = useSelector((state: IState) => state.project);
+  const { tasks, isFetching: isTasksLoading } = useSelector((state: IState) => state.tasks);
+  const { containers, isFetching: isContainersLoading } = useSelector((state: IState) => state.containers);
   const { projId } = useParams<Params>() as Params;
 
   const [taskModal, setTaskModal] = useState({ open: false, type: MODAL_TYPE.CREATE });
   const [newContainerModal, setNewContainerModal] = useState(false);
+
+  const loading = isProjectLoading || isTasksLoading || isContainersLoading;
 
   useEffect(() => {
     getProjectById(+projId);
@@ -50,11 +52,11 @@ export const Project: React.FC = () => {
   }, [projId]);
 
   useEffect(() => {
-    if (tasks && containers.length > 0) {
+    if (tasks.length && containers.length > 0) {
       const transformedData = transformData(tasks, containers);
       setItems(transformedData);
     }
-  }, [tasks, containers]);
+  }, [tasks, containers, projId]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -165,15 +167,20 @@ export const Project: React.FC = () => {
 
   return (
     <Content className="Project-page">
-      <div className="project-page__title">
-        <h2>{project?.name}</h2>
-        <Button
-          type="primary"
-          onClick={() => setTaskModal({ open: true, type: MODAL_TYPE.CREATE })}
-          style={{ marginLeft: "80px" }}
-        >
-          Create Task
-        </Button>
+      <div className="Project-page__title">
+        {!isProjectLoading && (
+          <>
+            <h2>{project.name}</h2>
+            <Button
+              type="primary"
+              onClick={() => setTaskModal({ open: true, type: MODAL_TYPE.CREATE })}
+              style={{ marginLeft: "40px" }}
+            >
+              Create Task
+            </Button>
+          </>
+        )}
+        {isProjectLoading && <Spin size="small" className="loader" />}
       </div>
 
       <DndContext
@@ -184,28 +191,35 @@ export const Project: React.FC = () => {
         onDragEnd={handleDragEnd}
       >
         <div className="tasks-container">
-          <Row gutter={12}>
-            {containers.length > 0 &&
-              containers.map((container: IContainer, index: number) => (
-                <Fragment key={container._id}>
-                  <Col key={container._id} xs={24} sm={12} md={6}>
-                    <Droppable
-                      id={container.id}
-                      items={items[container.id] || []}
-                      name={container.name}
-                      activeId={activeId}
-                      key={container._id}
-                      onClickTask={onClickTask}
-                    />
-                  </Col>
-                  {index + 1 === containers.length && (
-                    <Button type="primary" className="add-section-button" onClick={() => setNewContainerModal(true)}>
-                      Add section
-                    </Button>
-                  )}
-                </Fragment>
-              ))}
-          </Row>
+          {!loading && (
+            <Row gutter={12}>
+              {containers.length > 0 &&
+                containers.map((container: IContainer, index: number) => (
+                  <Fragment key={container._id}>
+                    <Col key={container._id} xs={24} sm={12} md={6}>
+                      <Droppable
+                        id={container.id}
+                        items={items[container.id] || []}
+                        name={container.name}
+                        activeId={activeId}
+                        key={container._id}
+                        onClickTask={onClickTask}
+                      />
+                    </Col>
+                    {index + 1 === containers.length && (
+                      <Button type="primary" className="add-section-button" onClick={() => setNewContainerModal(true)}>
+                        Add section
+                      </Button>
+                    )}
+                  </Fragment>
+                ))}
+            </Row>
+          )}
+          {loading && (
+            <div className="loader">
+              <Spin size="large" />
+            </div>
+          )}
         </div>
         <DragOverlay>{activeId ? <Item id={activeId} task={activeItem} dragOverlay /> : null}</DragOverlay>
       </DndContext>

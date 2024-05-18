@@ -23,6 +23,12 @@ const getTasksError = (err: AxiosError) => {
     payload: err?.response?.data,
   };
 };
+const updateTasksError = (err: AxiosError) => {
+  return {
+    type: "UPDATE_TASKS_ERROR",
+    payload: err?.response?.data,
+  };
+};
 
 const setNewTask = (task: ITask) => {
   return {
@@ -53,4 +59,5 @@ export const tasksActions = {
   setNewTask,
   setTask,
   deleteTask,
+  updateTasksError,
 };

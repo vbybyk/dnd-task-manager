@@ -14,13 +14,12 @@ export const attachProjectRoutes = (app: Application) => {
   });
 
   app.get("/projects/:id", async (_req, res) => {
-    await ProjectModel.find({ id: _req.params.id }, (err: any, data: any) => {
-      if (err) {
-        res.send(err);
-      } else {
-        res.send(data);
-      }
-    }).clone();
+    try {
+      const project = await ProjectModel.findOne({ id: _req.params.id });
+      res.json(project);
+    } catch (error) {
+      throw new Error(`Failed to query project: ${error}`);
+    }
   });
 
   app.put("/projects/:id", async (_req, res) => {
