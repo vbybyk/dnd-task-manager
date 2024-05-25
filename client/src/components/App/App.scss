@@ -38,3 +38,8 @@ body {
   line-height: 18px;
   border: none;
 }
+
+.ant-modal-body {
+  max-height: 70vh;
+  overflow: auto;
+}
