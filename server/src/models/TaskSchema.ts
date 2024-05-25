@@ -4,7 +4,6 @@ import { Schema, Model, Types } from "mongoose";
 interface Label {
   label: string;
   value: string;
-  key: string;
 }
 
 export interface Task {
@@ -14,9 +13,9 @@ export interface Task {
   sortId: number;
   name: string;
   description: string;
-  label?: Types.DocumentArray<Label>;
+  labels?: Types.DocumentArray<Label>;
   priority: string;
-  img?: string;
+  images?: Types.DocumentArray<string>;
 }
 
 export const TaskSchema = new Schema<Task, Model<Task>>({
@@ -26,9 +25,9 @@ export const TaskSchema = new Schema<Task, Model<Task>>({
   sortId: { type: Number, required: false },
   name: { type: String, required: false },
   description: { type: String, required: false },
-  label: [{ label: String, value: String, key: String }],
+  labels: [{ label: String, value: String }],
   priority: { type: String, required: false },
-  img: { type: String, required: false },
+  images: [{ type: String, required: false }],
 });
 
 export const TaskModel = mongoose.model("tasks", TaskSchema);

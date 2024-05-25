@@ -1,24 +1,31 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { Input, Modal, Button, Divider, Select, Tag } from "antd";
-import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import cn from "classnames";
 import * as yup from "yup";
+import { useForm, Controller } from "react-hook-form";
+import { Input, Modal, Button, Divider, Select, Tag } from "antd";
+import { CheckSquareTwoTone } from "@ant-design/icons";
+import TextEditor from "../../Common/TextEditor/TextEditor";
+import { yupResolver } from "@hookform/resolvers/yup";
 import type { CustomTagProps } from "rc-select/lib/BaseSelect";
 import { requiredFieldMessage } from "../../Common/Constants/Constants";
 import { TasksService } from "../../API/TasksService";
 import { tasksActions } from "../../store/actions/tasks";
-import { ITask } from "../../Interfaces/tasks";
+import { ITask, IContainer } from "../../Interfaces/tasks";
+import { IState } from "../../store/reducers";
 import { MODAL_TYPE } from "../../constants/tasks";
 import { alertActions } from "../../store/actions/alert";
+import { uploadImage } from "../../Utils/img-upload";
 import "./newTaskModal.scss";
 
 interface IFormInputs {
   id?: number;
   name: string;
   description?: string;
-  label?: { label: string; value: string; key: string }[] | undefined | null;
+  labels?: { label: string; value: string; key: string }[] | undefined | null;
   priority: string;
+  containerId: number;
+  images?: string[];
 }
 
 interface IModal {
@@ -40,8 +47,8 @@ const { TextArea } = Input;
 const labelOptions = [
   { value: "gold", label: "FRONTEND" },
   { value: "lime", label: "DESIGN" },
-  { value: "green", label: "BACKEND" },
-  { value: "cyan", label: "INVESTIGATE" },
+  { value: "volcano", label: "BACKEND" },
+  { value: "purple", label: "INVESTIGATE" },
 ];
 
 const priorityOptions = [
@@ -56,11 +63,6 @@ const schema = yup
       .string()
       .min(2, "Please, add at least 2 symbols")
       .max(150, "Please, make it shorter than 50 symbols")
-      .required(requiredFieldMessage),
-    description: yup
-      .string()
-      .min(2, "Please, add at least 2 symbols")
-      .max(999, "Please, make it shorter than 1000 symbols")
       .required(requiredFieldMessage),
   })
   .required();
@@ -86,7 +88,12 @@ const tagRender = (props: CustomTagProps) => {
 
 export const NewTaskModal = (props: IProps) => {
   const { projectId, modal, setModal, selectedTask, setSelectedTask } = props;
+  const { containers } = useSelector((state: IState) => state.containers);
   const dispatch = useDispatch();
+
+  const [isFocused, setIsFocused] = useState(false);
+
+  const containersOptions = containers.map((container: IContainer) => ({ value: container.id, label: container.name }));
 
   const isNewTask = modal.type === MODAL_TYPE.CREATE;
 
@@ -95,14 +102,17 @@ export const NewTaskModal = (props: IProps) => {
     handleSubmit,
     reset,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<IFormInputs>({
     defaultValues: {
       id: undefined,
       name: "",
       description: "",
-      label: [],
+      labels: [],
       priority: "",
+      containerId: containersOptions[0].value,
+      images: [],
     },
     resolver: yupResolver(schema),
   });
@@ -112,8 +122,12 @@ export const NewTaskModal = (props: IProps) => {
       setValue("id", selectedTask.id);
       setValue("name", selectedTask.name);
       setValue("description", selectedTask.description);
-      setValue("label", selectedTask.label);
+      setValue("labels", selectedTask.labels);
       setValue("priority", selectedTask.priority);
+      setValue("containerId", selectedTask.containerId);
+      if (!!selectedTask?.images?.length) {
+        setValue("images", selectedTask.images);
+      }
     }
   }, [selectedTask]);
 
@@ -130,14 +144,8 @@ export const NewTaskModal = (props: IProps) => {
           ...data,
           id: Date.now(),
           projectId,
-          containerId: 1,
-          label: [
-            {
-              label: data.label[0].label,
-              value: data.label[0].value,
-              key: data.label[0].key,
-            },
-          ],
+          containerId: data.containerId,
+          labels: data.labels || null,
         };
         const res = await TasksService.addNewTask(task);
         dispatch(tasksActions.setNewTask(res.data));
@@ -169,62 +177,35 @@ export const NewTaskModal = (props: IProps) => {
     }
   };
 
+  const handleUpload = async (file: any) => {
+    try {
+      const url = await uploadImage(file);
+      const prevImages: string[] = watch("images") || [];
+      setValue("images", [...prevImages, url]);
+      return url;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Modal
-      title={isNewTask ? "New Task" : "Edit Task"}
+      title={
+        isNewTask ? (
+          "New Task"
+        ) : (
+          <div style={{ paddingLeft: "10px" }}>
+            <CheckSquareTwoTone twoToneColor="#1890ff" />
+            <span> - </span>
+            <span style={{ fontSize: "14px", fontWeight: "400" }}>{selectedTask?.id}</span>
+          </div>
+        )
+      }
       open={modal.open}
       className="new-task-modal"
       onCancel={onClose}
-      width={700}
-      footer={null}
-    >
-      <form onSubmit={handleSubmit(onSubmit)} className="new-task-modal__form">
-        <p className="input-field-title">Task name</p>
-        <Controller
-          name="name"
-          control={control}
-          render={({ field }) => <Input placeholder="Task name" {...field} />}
-        />
-        <p className="required-field-message">{errors.name?.message}</p>
-        <p className="input-field-title">Description</p>
-        <Controller
-          name="description"
-          control={control}
-          render={({ field }) => (
-            <TextArea
-              placeholder="Describe your task"
-              autoSize={{ minRows: 3, maxRows: 20 }}
-              maxLength={1000}
-              showCount={true}
-              {...field}
-            />
-          )}
-        />
-        <p className="required-field-message">{errors.description?.message}</p>
-        <p className="input-field-title">Label</p>
-        <Controller
-          name="label"
-          control={control}
-          render={({ field }) => (
-            <Select
-              mode="multiple"
-              tagRender={tagRender}
-              defaultValue={null}
-              style={{ width: "50%" }}
-              options={labelOptions}
-              {...field}
-              optionFilterProp="label"
-              labelInValue
-            />
-          )}
-        />
-        <p className="input-field-title">Priority</p>
-        <Controller
-          name="priority"
-          control={control}
-          render={({ field }) => <Select style={{ width: "150px" }} options={priorityOptions} {...field} />}
-        />
-        <Divider />
+      width={1000}
+      footer={
         <div className="new-task-modal__buttons-wrapper">
           <div className="new-task-modal__buttons-wrapper__left">
             {selectedTask && (
@@ -239,6 +220,69 @@ export const NewTaskModal = (props: IProps) => {
               Submit
             </Button>
           </div>
+        </div>
+      }
+    >
+      <form onSubmit={handleSubmit(onSubmit)} className="new-task-modal__form">
+        <div className="new-task-modal__left">
+          <Controller
+            name="name"
+            control={control}
+            render={({ field }) => (
+              <Input
+                placeholder="Task name"
+                {...field}
+                className={cn(!isNewTask && "hidden-input")}
+                style={{ fontSize: "16px", fontWeight: "600" }}
+              />
+            )}
+          />
+          <span className="input-field-title">Description</span>
+          <Controller
+            name="description"
+            control={control}
+            render={({ field }) => (
+              <TextEditor
+                value={field.value}
+                onChange={(value: string) => field.onChange(value)}
+                placeholder="Describe your task"
+                className={cn("new-task-modal__text-editor", !isNewTask && "hidden-editor", isFocused && "focused")}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
+                handleUpload={handleUpload}
+              />
+            )}
+          />
+        </div>
+        <div className="new-task-modal__right">
+          <span className="input-field-title">Section</span>
+          <Controller
+            name="containerId"
+            control={control}
+            render={({ field }) => <Select options={containersOptions} {...field} />}
+          />
+          <span className="input-field-title">Label</span>
+          <Controller
+            name="labels"
+            control={control}
+            render={({ field }) => (
+              <Select
+                mode="multiple"
+                tagRender={tagRender}
+                defaultValue={null}
+                options={labelOptions}
+                {...field}
+                optionFilterProp="label"
+                labelInValue
+              />
+            )}
+          />
+          <span className="input-field-title">Priority</span>
+          <Controller
+            name="priority"
+            control={control}
+            render={({ field }) => <Select options={priorityOptions} {...field} />}
+          />
         </div>
       </form>
     </Modal>

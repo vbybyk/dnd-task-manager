@@ -1,5 +1,5 @@
 import { ITask } from "../../Interfaces/tasks";
-import { Divider } from "antd";
+import { Divider, Tag } from "antd";
 import { CheckSquareTwoTone } from "@ant-design/icons";
 import { Dispatch } from "redux";
 import { useDispatch } from "react-redux";
@@ -9,18 +9,28 @@ import "./card.scss";
 export const Card = (props: any) => {
   const dispatch: Dispatch = useDispatch();
   const { id, task } = props;
-  const { name, label, img }: ITask = task;
+  const { name, labels, images }: ITask = task;
 
   return (
-    <div className="card" key={id} onClick={() => dispatch(tasksActions.toggleUpdateTaskModal())}>
-      {img && (
+    <div className="Card" key={id} onClick={() => dispatch(tasksActions.toggleUpdateTaskModal())}>
+      {!!images?.length && (
         <div>
-          <div className="card-img">img</div>
+          <div className="card-img">
+            <img src={images[0]} alt="task" />
+          </div>
           <Divider />
         </div>
       )}
       <span className="card-name">{name}</span>
-      {label && <div className="card-label">{label[0]?.label}</div>}
+      {!!labels?.length && (
+        <div className="flex">
+          {labels.map((label) => (
+            <Tag color={label.value} className="card-label" key={label.label}>
+              {label.label}
+            </Tag>
+          ))}
+        </div>
+      )}
       <span>
         <CheckSquareTwoTone twoToneColor="#1890ff" />
         <span> - </span>

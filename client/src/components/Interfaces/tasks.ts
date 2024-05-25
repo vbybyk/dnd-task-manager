@@ -18,7 +18,7 @@ export interface ITask {
   sortId?: number;
   name: string;
   description?: string;
-  img?: string;
-  label?: { label: string; value: string; key: string }[] | null;
+  images?: string[];
+  labels?: { label: string; value: string; key: string }[] | null;
   priority: string;
 }

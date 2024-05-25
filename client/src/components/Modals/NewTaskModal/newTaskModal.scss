@@ -1,19 +1,77 @@
 .new-task-modal {
   &__form {
+    display: grid;
+    column-gap: 40px;
+    grid-template-columns: 1fr 300px;
+    align-items: start;
+  }
+
+  &__left {
     display: flex;
     flex-direction: column;
   }
+
+  &__right {
+    display: grid;
+    row-gap: 16px;
+    grid-template-columns: 1fr 2fr;
+    grid-auto-rows: minmax(30px, auto);
+  }
+
   &__buttons-wrapper {
     display: flex;
     justify-content: space-between;
+    padding-top: 10px;
     &__right {
       display: flex;
       justify-content: flex-end;
     }
   }
-}
-.input-field-title {
-  font-size: 12px;
-  margin-top: 20px;
-  margin-bottom: 5px;
+
+  &__text-editor {
+    .ql-container {
+      min-height: 200px;
+    }
+  }
+
+  &__text-editor.hidden-editor {
+    .ql-toolbar {
+      display: none;
+    }
+    .ql-container {
+      border: none;
+      &:hover {
+        background-color: rgb(245 244 244);
+      }
+    }
+  }
+
+  &__text-editor.focused {
+    .ql-toolbar {
+      display: block;
+      border: 1px solid #ccc;
+    }
+    .ql-container {
+      border: 1px solid #ccc;
+      &:hover {
+        background-color: transparent;
+      }
+    }
+  }
+
+  .input-field-title {
+    font-size: 13px;
+    padding: 10px 0 3px 10px;
+    font-weight: 600;
+  }
+
+  .hidden-input {
+    border: none;
+    &:hover {
+      background-color: rgb(245 244 244);
+    }
+    &:focus {
+      background-color: transparent;
+    }
+  }
 }

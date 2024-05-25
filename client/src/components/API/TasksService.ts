@@ -8,4 +8,10 @@ export class TasksService {
   static updateTask = async (taskId: number, task: any) =>
     await Axios.put(`http://localhost:9000/tasks/${taskId}`, task);
   static deleteTask = async (taskId: number) => await Axios.delete(`http://localhost:9000/tasks/${taskId}`);
+  static uploadImage = async (formData: FormData) =>
+    await Axios.post(`http://localhost:9000/tasks/upload-image`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 }
