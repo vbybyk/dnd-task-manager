@@ -1,11 +1,6 @@
 import mongoose from "mongoose";
 import { Schema, Model, Types } from "mongoose";
-
-interface Label {
-  label: string;
-  value: string;
-}
-
+import { Label } from "./LabelSchema";
 export interface Task {
   id: number;
   projectId: number;

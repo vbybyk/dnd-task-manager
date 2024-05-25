@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import { attachProjectRoutes } from "./routes/projects";
 import { attachContainerRoutes } from "./routes/containers";
 import { attachTaskRoutes } from "./routes/tasks";
+import { attachLabelRoutes } from "./routes/labels";
 
 const port = process.env.PORT || 9000;
 const user = process.env.DB_USER;
@@ -24,6 +25,7 @@ const mount = async (app: Application) => {
   attachProjectRoutes(app);
   attachContainerRoutes(app);
   attachTaskRoutes(app);
+  attachLabelRoutes(app);
 
   // const startServer = async () => {
   //   await server.start();
