@@ -22,3 +22,10 @@ export interface ITask {
   labels?: { label: string; value: string; key: string }[] | null;
   priority: string;
 }
+
+export interface ILabel {
+  id: number;
+  projectId: number;
+  label: string;
+  value: string;
+}

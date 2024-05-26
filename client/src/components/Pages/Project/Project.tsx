@@ -34,7 +34,7 @@ export const Project: React.FC = () => {
   const [activeId, setActiveId] = useState(null);
   const [activeItem, setActiveItem] = useState<ITask | undefined>(undefined);
   const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
-  const { updateProjectTasks, getProjectById, getProjectTasks, getProjectContainers } = useTasks();
+  const { updateProjectTasks, getProjectById, getProjectTasks, getProjectContainers, getLabels } = useTasks();
   const { project, isFetching: isProjectLoading } = useSelector((state: IState) => state.project);
   const { tasks, isFetching: isTasksLoading } = useSelector((state: IState) => state.tasks);
   const { containers, isFetching: isContainersLoading } = useSelector((state: IState) => state.containers);
@@ -49,6 +49,7 @@ export const Project: React.FC = () => {
     getProjectById(+projId);
     getProjectTasks(+projId);
     getProjectContainers(+projId);
+    getLabels(+projId);
   }, [projId]);
 
   useEffect(() => {

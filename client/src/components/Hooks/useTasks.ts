@@ -1,11 +1,13 @@
+import { Dispatch } from "redux";
+import { useDispatch } from "react-redux";
 import { ProjectService } from "../API/ProjectService";
 import { TasksService } from "../API/TasksService";
 import { ContainersService } from "../API/ContainersService";
-import { Dispatch } from "redux";
-import { useDispatch } from "react-redux";
+import { LabelsService } from "../API/LabelsService";
 import { projectActions } from "../store/actions/projects";
 import { containersActions } from "../store/actions/containers";
 import { tasksActions } from "../store/actions/tasks";
+import { labelsActions } from "../store/actions/labels";
 
 const useTasks = () => {
   const dispatch: Dispatch = useDispatch();
@@ -68,6 +70,18 @@ const useTasks = () => {
     }
   };
 
-  return { getProjects, updateProjectTasks, getProjectById, getProjectTasks, getProjectContainers };
+  const getLabels = async (projId: number) => {
+    try {
+      dispatch(labelsActions.getLabelsRequest());
+      const { status, data } = await LabelsService.getProjectLabels(projId);
+      status === 200 && dispatch(labelsActions.getLabelsSuccess(data));
+    } catch (err) {
+      //@ts-ignore
+      dispatch(labelsActions.getLabelsError(err));
+      console.log(err);
+    }
+  };
+
+  return { getProjects, updateProjectTasks, getProjectById, getProjectTasks, getProjectContainers, getLabels };
 };
 export default useTasks;
