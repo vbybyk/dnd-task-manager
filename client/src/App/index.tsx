@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ConfigProvider } from "antd";
-import { HeaderApp, Dashboard, Project } from "../index";
+import { HeaderApp, Dashboard, Project } from "../Components/index";
 import { AppLayout } from "./AppLayout/AppLayout";
-import Toaster from "../Common/Toaster/Toaster";
-import store from "../store";
+import Toaster from "../Components/Common/Toaster/Toaster";
+import store from "../Store";
 import useTasks from "../Hooks/useTasks";
 import "./App.scss";
 

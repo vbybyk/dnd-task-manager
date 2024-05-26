@@ -12,16 +12,16 @@ import {
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { Layout, Row, Col, Button, Spin } from "antd";
-import useTasks from "../../../Hooks/useTasks";
-import { Item } from "../../Common/Item/Item";
-import { Droppable } from "../../Common/Droppable/Droppable";
-import { NewTaskModal } from "../../../Modals/NewTaskModal/NewTaskModal";
-import { CreateSectionModal } from "../../../Modals/CreateSectionModal/CreateSectionModal";
-import { IContainer, ITask } from "../../../Interfaces/tasks";
-import { IState } from "../../../Store/reducers";
-import { arrayMove, moveBetweenContainers } from "../../../Utils/dnd";
-import { transformData, flattenData } from "../../../Utils/project";
-import { MODAL_TYPE } from "../../../Constants/tasks";
+import useTasks from "../../Hooks/useTasks";
+import { Item } from "../../Components/Common/Item/Item";
+import { Droppable } from "../../Components/Common/Droppable/Droppable";
+import { NewTaskModal } from "../../Modals/NewTaskModal/NewTaskModal";
+import { CreateSectionModal } from "../../Modals/CreateSectionModal/CreateSectionModal";
+import { IContainer, ITask } from "../../Interfaces/tasks";
+import { IState } from "../../Store/reducers";
+import { arrayMove, moveBetweenContainers } from "../../Utils/dnd";
+import { transformData, flattenData } from "../../Utils/project";
+import { MODAL_TYPE } from "../../Constants/tasks";
 import "./project.scss";
 
 const { Content } = Layout;

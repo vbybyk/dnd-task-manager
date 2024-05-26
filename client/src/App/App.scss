@@ -43,3 +43,18 @@ body {
   max-height: 70vh;
   overflow: auto;
 }
+
+.icon-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.54);
+  transition: color 0.3s, background-color 0.3s;
+  &:hover {
+    color: rgba(0, 0, 0, 0.88) !important;
+    background-color: rgba(0, 0, 0, 0.06) !important;
+    text-decoration: none;
+  }
+}

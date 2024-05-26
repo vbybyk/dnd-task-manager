@@ -1,9 +1,9 @@
-import { ITask } from "../../Interfaces/tasks";
+import { ITask } from "../../../Interfaces/tasks";
 import { Divider, Tag } from "antd";
 import { CheckSquareTwoTone } from "@ant-design/icons";
 import { Dispatch } from "redux";
 import { useDispatch } from "react-redux";
-import { tasksActions } from "../../store/actions/tasks";
+import { tasksActions } from "../../../Store/actions/tasks";
 import "./card.scss";
 
 export const Card = (props: any) => {

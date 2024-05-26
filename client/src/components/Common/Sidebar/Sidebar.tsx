@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { HomeOutlined, CarryOutOutlined, ProjectOutlined } from "@ant-design/icons";
 import { Divider } from "antd";
-import { IProject } from "../../Interfaces/tasks";
+import { IProject } from "../../../Interfaces/tasks";
 import "./Sidebar.scss";
 
 export const Sidebar = () => {

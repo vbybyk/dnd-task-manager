@@ -5,18 +5,18 @@ import * as yup from "yup";
 import { useForm, Controller } from "react-hook-form";
 import { Input, Modal, Button, Divider, Select, Tag } from "antd";
 import { CheckSquareTwoTone, EditOutlined } from "@ant-design/icons";
-import TextEditor from "../../Common/TextEditor/TextEditor";
-import { Popover } from "../../Common/Popover/Popover";
+import TextEditor from "../../Components/Common/TextEditor/TextEditor";
+import { Popover } from "../../Components/Common/Popover/Popover";
 import { yupResolver } from "@hookform/resolvers/yup";
 import type { CustomTagProps } from "rc-select/lib/BaseSelect";
-import { requiredFieldMessage } from "../../Common/Constants/Constants";
-import { TasksService } from "../../../API/TasksService";
-import { tasksActions } from "../../../Store/actions/tasks";
-import { ITask, IContainer } from "../../../Interfaces/tasks";
-import { IState } from "../../../Store/reducers";
-import { MODAL_TYPE } from "../../../Constants/tasks";
-import { alertActions } from "../../../Store/actions/alert";
-import { uploadImage } from "../../../Utils/img-upload";
+import { requiredFieldMessage } from "../../Components/Common/Constants/Constants";
+import { TasksService } from "../../API/TasksService";
+import { tasksActions } from "../../Store/actions/tasks";
+import { ITask, IContainer } from "../../Interfaces/tasks";
+import { IState } from "../../Store/reducers";
+import { MODAL_TYPE } from "../../Constants/tasks";
+import { alertActions } from "../../Store/actions/alert";
+import { uploadImage } from "../../Utils/img-upload";
 import "./newTaskModal.scss";
 
 interface IFormInputs {

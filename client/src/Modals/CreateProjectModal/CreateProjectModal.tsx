@@ -4,12 +4,12 @@ import { Input, Modal, Button, Divider } from "antd";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { requiredFieldMessage } from "../../Common/Constants/Constants";
-import { projectActions } from "../../../Store/actions/projects";
-import { ProjectService } from "../../../API/ProjectService";
-import { IProject } from "../../../Interfaces/tasks";
-import { alertActions } from "../../../Store/actions/alert";
-import { MODAL_TYPE } from "../../../Constants/tasks";
+import { requiredFieldMessage } from "../../Components/Common/Constants/Constants";
+import { projectActions } from "../../Store/actions/projects";
+import { ProjectService } from "../../API/ProjectService";
+import { IProject } from "../../Interfaces/tasks";
+import { alertActions } from "../../Store/actions/alert";
+import { MODAL_TYPE } from "../../Constants/tasks";
 import { useEffect } from "react";
 
 interface IFormInputs {

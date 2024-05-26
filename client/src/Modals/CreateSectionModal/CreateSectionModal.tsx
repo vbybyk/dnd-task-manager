@@ -4,10 +4,10 @@ import { Input, Modal, Button, Divider } from "antd";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { requiredFieldMessage } from "../../Common/Constants/Constants";
-import { ContainersService } from "../../../API/ContainersService";
-import { containersActions } from "../../../Store/actions/containers";
-import { alertActions } from "../../../Store/actions/alert";
+import { requiredFieldMessage } from "../../Components/Common/Constants/Constants";
+import { ContainersService } from "../../API/ContainersService";
+import { containersActions } from "../../Store/actions/containers";
+import { alertActions } from "../../Store/actions/alert";
 import "./CreateSectionModal.scss";
 
 interface IFormInputs {

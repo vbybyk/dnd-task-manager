@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { Alert } from "antd";
 import { AlertProps } from "antd";
 import { notification } from "antd";
-import { alertActions } from "../../store/actions/alert";
-import { IState } from "../../store/reducers";
+import { alertActions } from "../../../Store/actions/alert";
+import { IState } from "../../../Store/reducers";
 import "./Toaster.scss";
 
 const AlertMessage = ({ type, message, description }: AlertProps) => {

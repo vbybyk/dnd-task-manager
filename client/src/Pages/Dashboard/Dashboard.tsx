@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Layout, Button, List, Card } from "antd";
 import { EditOutlined } from "@ant-design/icons";
-import { CreateProjectModal } from "../../../Modals/CreateProjectModal/CreateProjectModal";
-import useTasks from "../../../Hooks/useTasks";
-import { IState } from "../../../Store/reducers";
-import { IProject } from "../../../Interfaces/tasks";
-import { MODAL_TYPE } from "../../../Constants/tasks";
+import { CreateProjectModal } from "../../Modals/CreateProjectModal/CreateProjectModal";
+import useTasks from "../../Hooks/useTasks";
+import { IState } from "../../Store/reducers";
+import { IProject } from "../../Interfaces/tasks";
+import { MODAL_TYPE } from "../../Constants/tasks";
 import "./dashboard.scss";
 
 const { Content } = Layout;

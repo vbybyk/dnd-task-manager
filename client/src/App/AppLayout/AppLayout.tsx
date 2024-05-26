@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { Sidebar } from "../../Common/Sidebar/Sidebar";
+import { Sidebar } from "../../Components/Common/Sidebar/Sidebar";
 import "./AppLayout.scss";
 
 export const AppLayout = ({ children }: { children: React.ReactNode }) => {

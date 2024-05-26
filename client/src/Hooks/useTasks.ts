@@ -1,13 +1,13 @@
 import { Dispatch } from "redux";
 import { useDispatch } from "react-redux";
-import { ProjectService } from "../../API/ProjectService";
-import { TasksService } from "../../API/TasksService";
-import { ContainersService } from "../../API/ContainersService";
-import { LabelsService } from "../../API/LabelsService";
-import { projectActions } from "../../Store/actions/projects";
-import { containersActions } from "../../Store/actions/containers";
-import { tasksActions } from "../../Store/actions/tasks";
-import { labelsActions } from "../../Store/actions/labels";
+import { ProjectService } from "../API/ProjectService";
+import { TasksService } from "../API/TasksService";
+import { ContainersService } from "../API/ContainersService";
+import { LabelsService } from "../API/LabelsService";
+import { projectActions } from "../Store/actions/projects";
+import { containersActions } from "../Store/actions/containers";
+import { tasksActions } from "../Store/actions/tasks";
+import { labelsActions } from "../Store/actions/labels";
 
 const useTasks = () => {
   const dispatch: Dispatch = useDispatch();
