@@ -25,7 +25,7 @@ export const Card = (props: any) => {
       {!!labels?.length && (
         <div className="flex">
           {labels.map((label) => (
-            <Tag color={label.value} className="card-label" key={label.label}>
+            <Tag key={label.id} color={label.value} className="card-label" style={{ color: label.color }}>
               {label.label}
             </Tag>
           ))}

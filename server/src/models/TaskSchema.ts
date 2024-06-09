@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { Schema, Model, Types } from "mongoose";
-import { Label } from "./LabelSchema";
+import { Label, LabelSchema } from "./LabelSchema";
 export interface Task {
   id: number;
   projectId: number;
@@ -20,7 +20,7 @@ export const TaskSchema = new Schema<Task, Model<Task>>({
   sortId: { type: Number, required: false },
   name: { type: String, required: false },
   description: { type: String, required: false },
-  labels: [{ label: String, value: String }],
+  labels: { type: [LabelSchema], required: false },
   priority: { type: String, required: false },
   images: [{ type: String, required: false }],
 });

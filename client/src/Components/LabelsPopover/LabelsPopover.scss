@@ -1,0 +1,12 @@
+.color-palette {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 10px;
+  max-width: 200px;
+  justify-content: center;
+}
+
+.labels-popover-content {
+  display: flex;
+  flex-direction: column;
+}

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Provider } from "react-redux";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ConfigProvider } from "antd";
 import { HeaderApp } from "../Components/Header";
 import { Dashboard } from "../Pages/Dashboard/Dashboard";
@@ -26,6 +26,7 @@ const APP: React.FC = () => {
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/projects/:projId" element={<Project />} />
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
         </AppLayout>
         <Toaster />

@@ -37,6 +37,9 @@ body {
 .ant-tag {
   line-height: 18px;
   border: none;
+  .ant-tag-close-icon {
+    color: inherit !important;
+  }
 }
 
 .ant-modal-body {

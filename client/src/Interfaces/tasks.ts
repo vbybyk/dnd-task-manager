@@ -19,7 +19,7 @@ export interface ITask {
   name: string;
   description?: string;
   images?: string[];
-  labels?: { label: string; value: string; key: string }[] | null;
+  labels?: ILabel[] | null;
   priority: string;
 }
 
@@ -28,4 +28,6 @@ export interface ILabel {
   projectId: number;
   label: string;
   value: string;
+  color: string;
+  border: string;
 }

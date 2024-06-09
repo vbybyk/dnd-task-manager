@@ -18,6 +18,18 @@ const getLabelsError = (err: AxiosError) => {
     payload: err?.response?.data,
   };
 };
+const updateLabel = (label: ILabel) => {
+  return {
+    type: "UPDATE_LABEL",
+    payload: label,
+  };
+};
+const updateLabels = (labels: ILabel[]) => {
+  return {
+    type: "UPDATE_LABELS",
+    payload: labels,
+  };
+};
 const addLabel = (label: ILabel) => {
   return {
     type: "ADD_LABEL",
@@ -29,5 +41,7 @@ export const labelsActions = {
   getLabelsRequest,
   getLabelsSuccess,
   getLabelsError,
+  updateLabels,
   addLabel,
+  updateLabel,
 };

@@ -35,6 +35,23 @@ export const attachLabelRoutes = (app: Application) => {
     }
   });
 
+  app.put("/projects/:projectId/labels", async (_req, res) => {
+    try {
+      const { projectId } = _req.params;
+      const updatedLabels = await Promise.all(
+        _req.body.map(async (label: any) => {
+          const updatedLabel = await LabelModel.findOneAndUpdate({ id: label.id, projectId }, label, {
+            returnOriginal: false,
+          });
+          return updatedLabel;
+        })
+      );
+      res.json(updatedLabels);
+    } catch (err) {
+      res.status(500).send(`Error updating labels: ${err}`);
+    }
+  });
+
   app.delete("/projects/:projectId/labels/:labelId", async (_req, res) => {
     try {
       await LabelModel.findOneAndDelete({ id: _req.params.labelId, projectId: _req.params.projectId });

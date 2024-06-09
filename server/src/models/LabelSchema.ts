@@ -6,6 +6,8 @@ export interface Label {
   projectId: number;
   label: string;
   value: string;
+  color: string;
+  border: string;
 }
 
 export const LabelSchema = new Schema<Label, Model<Label>>({
@@ -13,6 +15,8 @@ export const LabelSchema = new Schema<Label, Model<Label>>({
   projectId: { type: Number, required: true },
   label: { type: String, required: true },
   value: { type: String, required: true },
+  color: { type: String, required: true },
+  border: { type: String, required: true },
 });
 
 export const LabelModel = mongoose.model("labels", LabelSchema);

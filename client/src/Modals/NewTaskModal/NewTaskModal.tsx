@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import cn from "classnames";
 import * as yup from "yup";
@@ -6,13 +6,13 @@ import { useForm, Controller } from "react-hook-form";
 import { Input, Modal, Button, Divider, Select, Tag } from "antd";
 import { CheckSquareTwoTone, EditOutlined } from "@ant-design/icons";
 import TextEditor from "../../Components/Common/TextEditor/TextEditor";
-import { Popover } from "../../Components/Common/Popover/Popover";
+import { LabelsPopover } from "../../Components/LabelsPopover/LabelsPopover";
 import { yupResolver } from "@hookform/resolvers/yup";
 import type { CustomTagProps } from "rc-select/lib/BaseSelect";
 import { requiredFieldMessage } from "../../Components/Common/Constants/Constants";
 import { TasksService } from "../../API/TasksService";
 import { tasksActions } from "../../Store/actions/tasks";
-import { ITask, IContainer } from "../../Interfaces/tasks";
+import { ITask, IContainer, ILabel } from "../../Interfaces/tasks";
 import { IState } from "../../Store/reducers";
 import { MODAL_TYPE } from "../../Constants/tasks";
 import { alertActions } from "../../Store/actions/alert";
@@ -23,7 +23,7 @@ interface IFormInputs {
   id?: number;
   name: string;
   description?: string;
-  labels?: { label: string; value: string; key: string }[] | undefined | null;
+  labels?: ILabel[] | undefined | null;
   priority: string;
   containerId: number;
   images?: string[];
@@ -43,15 +43,6 @@ interface IProps {
   setSelectedTask: (task: ITask | null) => void;
 }
 
-const { TextArea } = Input;
-
-const labelOptions = [
-  { value: "gold", label: "FRONTEND" },
-  { value: "lime", label: "DESIGN" },
-  { value: "volcano", label: "BACKEND" },
-  { value: "purple", label: "INVESTIGATE" },
-];
-
 const priorityOptions = [
   { value: "low", label: "Low" },
   { value: "medium", label: "Medium" },
@@ -68,19 +59,22 @@ const schema = yup
   })
   .required();
 
-const tagRender = (props: CustomTagProps) => {
-  const { label, value, closable, onClose } = props;
+const tagRender = (props: CustomTagProps & { labelsDict: Record<string, any> }) => {
+  const { label, value: id, closable, onClose, labelsDict } = props;
+  const { value: color, color: fontColor } = labelsDict[id] || {};
   const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
     event.preventDefault();
     event.stopPropagation();
   };
+
   return (
     <Tag
-      color={value}
+      key={id}
+      color={color}
       onMouseDown={onPreventMouseDown}
       closable={closable}
       onClose={onClose}
-      style={{ marginRight: 3 }}
+      style={{ marginRight: 3, color: fontColor }}
     >
       {label}
     </Tag>
@@ -90,6 +84,7 @@ const tagRender = (props: CustomTagProps) => {
 export const NewTaskModal = (props: IProps) => {
   const { projectId, modal, setModal, selectedTask, setSelectedTask } = props;
   const { containers } = useSelector((state: IState) => state.containers);
+  const { labels } = useSelector((state: IState) => state.labels);
   const dispatch = useDispatch();
 
   const [isOpenLabelsModal, setIsOpenLabelsModal] = useState(false);
@@ -133,6 +128,14 @@ export const NewTaskModal = (props: IProps) => {
     }
   }, [selectedTask]);
 
+  const labelsDict = useMemo(() => {
+    const dict: Record<number, ILabel> = {};
+    labels.forEach((label: ILabel) => {
+      dict[label.id] = label;
+    });
+    return dict;
+  }, [labels]);
+
   const onClose = () => {
     setModal({ open: false, type: MODAL_TYPE.CREATE });
     setSelectedTask(null);
@@ -147,14 +150,17 @@ export const NewTaskModal = (props: IProps) => {
           id: Date.now(),
           projectId,
           containerId: data.containerId,
-          labels: data.labels || null,
+          labels: labels?.filter((label) => data.labels?.find((l: ILabel) => l.id === label.id)) || [],
         };
         const res = await TasksService.addNewTask(task);
         dispatch(tasksActions.setNewTask(res.data));
         onClose();
         dispatch(alertActions.success("Task created successfully!"));
       } else {
-        const res = await TasksService.updateTask(data.id, data);
+        const res = await TasksService.updateTask(data.id, {
+          ...data,
+          labels: labels?.filter((label) => data.labels?.find((l: any) => l.value === label.id)) || [],
+        });
         dispatch(tasksActions.setTask(res.data));
         onClose();
         dispatch(alertActions.success("Updated successfully!"));
@@ -277,9 +283,9 @@ export const NewTaskModal = (props: IProps) => {
               render={({ field }) => (
                 <Select
                   mode="multiple"
-                  tagRender={tagRender}
+                  tagRender={(props) => tagRender({ ...props, labelsDict })}
                   defaultValue={null}
-                  options={labelOptions}
+                  options={labels.map(({ id, label }) => ({ value: id, label }))}
                   {...field}
                   optionFilterProp="label"
                   labelInValue
@@ -287,7 +293,12 @@ export const NewTaskModal = (props: IProps) => {
                 />
               )}
             />
-            {/* <Popover open={isOpenLabelsModal} onOpen={setIsOpenLabelsModal} trigger="click">
+            <LabelsPopover
+              open={isOpenLabelsModal}
+              onOpen={setIsOpenLabelsModal}
+              placement="bottomRight"
+              labels={labels || []}
+            >
               <Button
                 type="primary"
                 icon={<EditOutlined />}
@@ -298,7 +309,7 @@ export const NewTaskModal = (props: IProps) => {
                 className="icon-button"
                 style={{ marginLeft: "10px", width: "42px" }}
               />
-            </Popover> */}
+            </LabelsPopover>
           </div>
         </div>
       </form>

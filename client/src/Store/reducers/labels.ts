@@ -19,8 +19,20 @@ export const labels = (state = initialState, action: AnyAction): ILabelState => 
       return { ...state, isFetching: false, labels: action.payload };
     case "PROJECT_LABELS_REQUEST_ERROR":
       return { ...state, isFetching: false };
+    case "UPDATE_LABELS":
+      return { ...state, labels: action.payload };
     case "ADD_LABEL":
       return { ...state, labels: [...state.labels, action.payload] };
+    case "UPDATE_LABEL":
+      return {
+        ...state,
+        labels: state.labels.map((label) => {
+          if (label.id === action.payload.id) {
+            return action.payload;
+          }
+          return label;
+        }),
+      };
     default:
       return state;
   }
