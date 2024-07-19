@@ -7,6 +7,7 @@
     "@dnd-kit/core": "^3.1.1",
     "@dnd-kit/sortable": "^3.1.0",
     "@hookform/resolvers": "^2.9.10",
+    "@phosphor-icons/react": "^2.1.5",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
