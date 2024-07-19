@@ -7,6 +7,7 @@ import { attachProjectRoutes } from "./routes/projects";
 import { attachContainerRoutes } from "./routes/containers";
 import { attachTaskRoutes } from "./routes/tasks";
 import { attachLabelRoutes } from "./routes/labels";
+import { attachUserRoutes } from "./routes/users";
 
 const port = process.env.PORT || 9000;
 const user = process.env.DB_USER;
@@ -26,6 +27,7 @@ const mount = async (app: Application) => {
   attachContainerRoutes(app);
   attachTaskRoutes(app);
   attachLabelRoutes(app);
+  attachUserRoutes(app);
 
   // const startServer = async () => {
   //   await server.start();

@@ -12,10 +12,11 @@ import useTasks from "../Hooks/useTasks";
 import "./App.scss";
 
 const APP: React.FC = () => {
-  const { getProjects } = useTasks();
+  const { getProjects, getUser } = useTasks();
 
   useEffect(() => {
     getProjects();
+    getUser(1);
   }, []);
 
   return (

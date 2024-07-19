@@ -4,10 +4,12 @@ import { ProjectService } from "../API/ProjectService";
 import { TasksService } from "../API/TasksService";
 import { ContainersService } from "../API/ContainersService";
 import { LabelsService } from "../API/LabelsService";
+import { UsersService } from "../API/UsersService";
 import { projectActions } from "../Store/actions/projects";
 import { containersActions } from "../Store/actions/containers";
 import { tasksActions } from "../Store/actions/tasks";
 import { labelsActions } from "../Store/actions/labels";
+import { usersActions } from "../Store/actions/users";
 
 const useTasks = () => {
   const dispatch: Dispatch = useDispatch();
@@ -82,6 +84,18 @@ const useTasks = () => {
     }
   };
 
-  return { getProjects, updateProjectTasks, getProjectById, getProjectTasks, getProjectContainers, getLabels };
+  const getUser = async (userId: number) => {
+    try {
+      dispatch(usersActions.getUserRequest());
+      const { status, data } = await UsersService.getUser(userId);
+      status === 200 && dispatch(usersActions.getUserSuccess(data));
+    } catch (err) {
+      //@ts-ignore
+      dispatch(usersActions.getUserError(err));
+      console.log(err);
+    }
+  };
+
+  return { getProjects, updateProjectTasks, getProjectById, getProjectTasks, getProjectContainers, getLabels, getUser };
 };
 export default useTasks;

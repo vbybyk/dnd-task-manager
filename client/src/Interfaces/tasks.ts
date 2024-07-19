@@ -31,3 +31,16 @@ export interface ILabel {
   color: string;
   border: string;
 }
+
+export interface IUser {
+  _id: string;
+  id: number;
+  name: string;
+  email?: string;
+  password?: string;
+  profileImage?: string;
+  job_title?: string;
+  company?: string;
+  location?: string;
+  about?: string;
+}
