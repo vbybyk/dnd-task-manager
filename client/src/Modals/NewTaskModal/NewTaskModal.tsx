@@ -23,7 +23,7 @@ interface IFormInputs {
   id?: number;
   name: string;
   description?: string;
-  labels?: ILabel[] | undefined | null;
+  labels?: { value: number; label: string }[];
   priority: string;
   containerId: number;
   images?: string[];
@@ -119,7 +119,10 @@ export const NewTaskModal = (props: IProps) => {
       setValue("id", selectedTask.id);
       setValue("name", selectedTask.name);
       setValue("description", selectedTask.description);
-      setValue("labels", selectedTask.labels);
+      setValue(
+        "labels",
+        selectedTask.labels?.map(({ id, label }) => ({ value: id, label }))
+      );
       setValue("priority", selectedTask.priority);
       setValue("containerId", selectedTask.containerId);
       if (!!selectedTask?.images?.length) {

@@ -9,6 +9,7 @@ const { Header } = Layout;
 
 export const HeaderApp: React.FC = () => {
   const { projects } = useSelector((state: any) => state.project);
+  const { user } = useSelector((state: any) => state.users);
 
   const userMenu = [
     {
@@ -46,7 +47,7 @@ export const HeaderApp: React.FC = () => {
               overlayClassName="user-menu-dropdown"
             >
               <div>
-                <Avatar icon={<UserOutlined />} />
+                <Avatar icon={<UserOutlined />} src={user?.profileImage} />
                 <DownOutlined style={{ color: "grey", fontSize: "10px", marginLeft: "3px" }} />
               </div>
             </Dropdown>

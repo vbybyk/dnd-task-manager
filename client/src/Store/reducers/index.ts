@@ -4,6 +4,7 @@ import { alert } from "./alert";
 import { containers } from "./containers";
 import { tasks } from "./tasks";
 import { labels } from "./labels";
+import { users } from "./users";
 
 export interface IState {
   project: ReturnType<typeof project>;
@@ -11,6 +12,7 @@ export interface IState {
   containers: ReturnType<typeof containers>;
   tasks: ReturnType<typeof tasks>;
   labels: ReturnType<typeof labels>;
+  users: ReturnType<typeof users>;
 }
 
 const rootReducer = combineReducers({
@@ -19,6 +21,7 @@ const rootReducer = combineReducers({
   containers,
   tasks,
   labels,
+  users,
 });
 
 export default rootReducer;
