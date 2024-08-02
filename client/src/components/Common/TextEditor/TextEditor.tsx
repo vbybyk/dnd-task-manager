@@ -1,11 +1,17 @@
 import { useState, useCallback, useRef } from "react";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
+
+interface TextEditorProps {
+  value?: string;
+  onChange?: (value: string) => void;
+  handleUpload: (file: File) => Promise<string>;
+}
 
 const modules = {
   toolbar: [
-    [{ header: 1 }, { header: 2 }],
-    [{ size: [] }],
+    [{ header: 2 }, { header: 3 }],
+    [{ color: [] }],
     ["bold", "italic", "underline", "strike"],
     ["blockquote", "code-block"],
     [{ list: "ordered" }, { list: "bullet" }],
@@ -14,7 +20,7 @@ const modules = {
   ],
 };
 
-const TextEditor = (props: any) => {
+const TextEditor = (props: TextEditorProps) => {
   const [value, setValue] = useState("");
   const reactQuillRef = useRef<ReactQuill>(null);
 
@@ -29,7 +35,7 @@ const TextEditor = (props: any) => {
         const url = await props.handleUpload(file);
         const quill = reactQuillRef.current;
         if (quill) {
-          const range = quill.getEditorSelection();
+          const range = quill.getEditor().getSelection();
           range && quill.getEditor().insertEmbed(range.index, "image", url);
         }
       }
