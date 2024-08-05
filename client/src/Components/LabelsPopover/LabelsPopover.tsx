@@ -4,9 +4,9 @@ import { Input, Button, Spin } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { Popover } from "../Common/Popover/Popover";
 import useTasks from "../../Hooks/useTasks";
+import { useAlertContext } from "../../Context/AlertContext";
 import { colorPalette } from "../../Constants/labels";
 import { LabelsService } from "../../API/LabelsService";
-import { alertActions } from "../../Store/actions/alert";
 import { labelsActions } from "../../Store/actions/labels";
 import type { Placement } from "@rc-component/trigger/lib/interface";
 import { IState } from "../../Store/reducers";
@@ -26,6 +26,7 @@ interface IProps {
 export const LabelsPopover: React.FC<IProps> = (props: IProps) => {
   const { children, open, onOpen, className, placement } = props;
   const { getLabels } = useTasks();
+  const { setAlert } = useAlertContext();
 
   const { project } = useSelector((state: IState) => state.project);
   const { labels: allLabels } = useSelector((state: IState) => state.labels);
@@ -105,16 +106,17 @@ export const LabelsPopover: React.FC<IProps> = (props: IProps) => {
         dispatch(labelsActions.addLabel(response.data));
         setIsUpdating(false);
         setSelectedLabel(null);
-        dispatch(alertActions.success("Updated successfully!"));
+        setAlert({ type: "success", message: "Updated successfully!" });
       } else {
         const response = await LabelsService.updateProjectLabel(project?.id, selectedLabel);
         dispatch(labelsActions.updateLabel(response.data));
         setIsUpdating(false);
         setSelectedLabel(null);
-        dispatch(alertActions.success("Updated successfully!"));
+        setAlert({ type: "success", message: "Updated successfully!" });
       }
     } catch (err) {
-      dispatch(alertActions.error("Something went wrong!"));
+      setIsUpdating(false);
+      setAlert({ type: "error", message: "Something went wrong!" });
       console.error(err);
     }
   };

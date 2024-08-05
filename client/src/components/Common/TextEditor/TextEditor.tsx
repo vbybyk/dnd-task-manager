@@ -6,6 +6,10 @@ interface TextEditorProps {
   value?: string;
   onChange?: (value: string) => void;
   handleUpload: (file: File) => Promise<string>;
+  placeholder?: string;
+  className?: string;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }
 
 const modules = {
