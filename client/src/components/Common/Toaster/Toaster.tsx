@@ -1,46 +1,34 @@
 import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Alert } from "antd";
-import { AlertProps } from "antd";
-import { notification } from "antd";
-import { alertActions } from "../../../Store/actions/alert";
-import { IState } from "../../../Store/reducers";
+import { message } from "antd";
+import { useAlertContext } from "../../../Context/AlertContext";
 import "./Toaster.scss";
 
-const AlertMessage = ({ type, message, description }: AlertProps) => {
-  return (
-    <Alert message={message} description={description} type={type} showIcon closable style={{ padding: "15px" }} />
-  );
-};
-
 const Toaster = () => {
-  const alert = useSelector((state: IState) => state.alert);
-  const dispatch = useDispatch();
+  const { alert, setAlert } = useAlertContext();
+  const [messageApi, contextHolder] = message.useMessage();
 
   const handleClose = (_: unknown, reason: string) => {
     if (reason === "clickaway") {
       return;
     }
-    dispatch(alertActions.clear());
+    setAlert({});
   };
 
   useEffect(() => {
     if (alert.message) {
-      notification.open({
+      messageApi.open({
         key: "uniqueKey",
-        message: <AlertMessage type={alert.type} message={alert.message} description="" />,
-        description: "",
+        type: alert.type,
+        content: alert.message,
         duration: 3,
         //@ts-ignore
         onClose: handleClose,
-        closeIcon: false,
-        className: "alert-notification",
         placement: "top",
       });
     }
   }, [alert]);
 
-  return null;
+  return contextHolder;
 };
 
 export default Toaster;

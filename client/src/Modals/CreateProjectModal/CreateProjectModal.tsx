@@ -1,16 +1,15 @@
-// import { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Input, Modal, Button, Divider } from "antd";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useAlertContext } from "../../Context/AlertContext";
 import { requiredFieldMessage } from "../../Components/Common/Constants/Constants";
 import { projectActions } from "../../Store/actions/projects";
 import { ProjectService } from "../../API/ProjectService";
 import { IProject } from "../../Interfaces/tasks";
-import { alertActions } from "../../Store/actions/alert";
 import { MODAL_TYPE } from "../../Constants/tasks";
-import { useEffect } from "react";
 
 interface IFormInputs {
   id: number;
@@ -42,6 +41,7 @@ const schema = yup
 
 export const CreateProjectModal = (props: IProps) => {
   const { modal, setModal, selectedProject } = props;
+  const { setAlert } = useAlertContext();
   const dispatch = useDispatch();
 
   const {
@@ -72,20 +72,20 @@ export const CreateProjectModal = (props: IProps) => {
         const res = await ProjectService.createProject(data);
         const newProject: IProject = res.data;
         dispatch(projectActions.addProject(newProject));
+        setAlert({ type: "success", message: "Project created successfully!" });
         setModal({ open: false, type: MODAL_TYPE.CREATE });
-        dispatch(alertActions.success("Project created successfully!"));
       }
       if (modal.type === MODAL_TYPE.EDIT) {
         const res = await ProjectService.updateProject(data);
         const updatedProject: IProject = res.data;
         dispatch(projectActions.updateProject(updatedProject));
+        setAlert({ type: "success", message: "Project updated successfully!" });
         setModal({ open: false, type: MODAL_TYPE.CREATE });
-        dispatch(alertActions.success("Project updated successfully!"));
       }
     } catch (error) {
       console.error(error);
-      modal.type === MODAL_TYPE.CREATE && dispatch(alertActions.error("Could not create project"));
-      modal.type === MODAL_TYPE.EDIT && dispatch(alertActions.error("Could not update project"));
+      modal.type === MODAL_TYPE.CREATE && setAlert({ type: "error", message: "Could not create project" });
+      modal.type === MODAL_TYPE.EDIT && setAlert({ type: "error", message: "Could not update project" });
     }
   };
 

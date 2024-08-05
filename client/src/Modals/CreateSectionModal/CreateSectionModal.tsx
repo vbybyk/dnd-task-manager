@@ -1,13 +1,13 @@
 // import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Input, Modal, Button, Divider } from "antd";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, set } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useAlertContext } from "../../Context/AlertContext";
 import { requiredFieldMessage } from "../../Components/Common/Constants/Constants";
 import { ContainersService } from "../../API/ContainersService";
 import { containersActions } from "../../Store/actions/containers";
-import { alertActions } from "../../Store/actions/alert";
 import "./CreateSectionModal.scss";
 
 interface IFormInputs {
@@ -34,6 +34,7 @@ const schema = yup
 
 export const CreateSectionModal = (props: IProps) => {
   const { projectId, open, setModal } = props;
+  const { setAlert } = useAlertContext();
   const dispatch = useDispatch();
 
   const {
@@ -53,11 +54,11 @@ export const CreateSectionModal = (props: IProps) => {
     try {
       await ContainersService.addNewContainer(data);
       dispatch(containersActions.addContainer(data));
+      setAlert({ type: "success", message: "Section added successfully!" });
       setModal(false);
-      dispatch(alertActions.success("Section added successfully!"));
     } catch (error) {
       console.error(error);
-      dispatch(alertActions.error("Something went wrong"));
+      setAlert({ type: "error", message: "Failed to add new section" });
     }
   };
 

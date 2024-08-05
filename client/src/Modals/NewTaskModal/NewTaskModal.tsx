@@ -15,7 +15,7 @@ import { tasksActions } from "../../Store/actions/tasks";
 import { ITask, IContainer, ILabel } from "../../Interfaces/tasks";
 import { IState } from "../../Store/reducers";
 import { MODAL_TYPE } from "../../Constants/tasks";
-import { alertActions } from "../../Store/actions/alert";
+import { useAlertContext } from "../../Context/AlertContext";
 import { uploadImage } from "../../Utils/img-upload";
 import "./newTaskModal.scss";
 
@@ -85,6 +85,7 @@ export const NewTaskModal = (props: IProps) => {
   const { projectId, modal, setModal, selectedTask, setSelectedTask } = props;
   const { containers } = useSelector((state: IState) => state.containers);
   const { labels } = useSelector((state: IState) => state.labels);
+  const { setAlert } = useAlertContext();
   const dispatch = useDispatch();
 
   const [isOpenLabelsModal, setIsOpenLabelsModal] = useState(false);
@@ -153,23 +154,23 @@ export const NewTaskModal = (props: IProps) => {
           id: Date.now(),
           projectId,
           containerId: data.containerId,
-          labels: labels?.filter((label) => data.labels?.find((l: ILabel) => l.id === label.id)) || [],
+          labels: labels?.filter((label) => data.labels?.find((l: any) => l.value === label.id)) || [],
         };
         const res = await TasksService.addNewTask(task);
         dispatch(tasksActions.setNewTask(res.data));
+        setAlert({ type: "success", message: "Task created successfully!" });
         onClose();
-        dispatch(alertActions.success("Task created successfully!"));
       } else {
         const res = await TasksService.updateTask(data.id, {
           ...data,
           labels: labels?.filter((label) => data.labels?.find((l: any) => l.value === label.id)) || [],
         });
         dispatch(tasksActions.setTask(res.data));
+        setAlert({ type: "success", message: "Updated successfully!" });
         onClose();
-        dispatch(alertActions.success("Updated successfully!"));
       }
     } catch (err) {
-      dispatch(alertActions.error("Something went wrong!"));
+      setAlert({ type: "error", message: "Something went wrong!" });
       console.log(err);
     }
   };
@@ -179,10 +180,10 @@ export const NewTaskModal = (props: IProps) => {
       try {
         await TasksService.deleteTask(selectedTask.id);
         dispatch(tasksActions.deleteTask(selectedTask.id));
+        setAlert({ type: "success", message: "Task deleted successfully!" });
         onClose();
-        dispatch(alertActions.success("Task deleted successfully!"));
       } catch (err) {
-        dispatch(alertActions.error("Something went wrong!"));
+        setAlert({ type: "error", message: "Something went wrong!" });
         console.log(err);
       }
     }

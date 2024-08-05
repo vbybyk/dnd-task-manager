@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ConfigProvider } from "antd";
+import AppContext from "../Context/AppContext";
 import { HeaderApp } from "../Components/Header";
 import { Dashboard } from "../Pages/Dashboard/Dashboard";
 import { Project } from "../Pages/Project/Project";
@@ -37,17 +38,19 @@ const APP: React.FC = () => {
 };
 export const App: React.FC = (props: any) => {
   return (
-    <Provider store={store}>
-      <ConfigProvider
-        theme={{
-          hashed: false,
-          token: {
-            fontFamily: "Rubik, sans-serif",
-          },
-        }}
-      >
-        <APP {...props} />
-      </ConfigProvider>
-    </Provider>
+    <AppContext>
+      <Provider store={store}>
+        <ConfigProvider
+          theme={{
+            hashed: false,
+            token: {
+              fontFamily: "Rubik, sans-serif",
+            },
+          }}
+        >
+          <APP {...props} />
+        </ConfigProvider>
+      </Provider>
+    </AppContext>
   );
 };
