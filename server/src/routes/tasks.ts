@@ -63,7 +63,7 @@ export const attachTaskRoutes = (app: Application) => {
 
   app.post("/tasks/upload-image", multer().single("file"), async (req, res) => {
     try {
-      const result = await uploadImage(req.file?.buffer);
+      const result = await uploadImage(req.file?.buffer, "tasks");
       res.json(result);
     } catch (err) {
       res.status(500).send(`Error uploading image: ${err}`);

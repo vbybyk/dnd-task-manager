@@ -6,6 +6,7 @@ import AppContext from "../Context/AppContext";
 import { HeaderApp } from "../Components/Header";
 import { Dashboard } from "../Pages/Dashboard/Dashboard";
 import { Project } from "../Pages/Project/Project";
+import { ProfilePage } from "../Pages/ProfilePage/ProfilePage";
 import { AppLayout } from "./AppLayout/AppLayout";
 import Toaster from "../Components/Common/Toaster/Toaster";
 import store from "../Store";
@@ -28,6 +29,7 @@ const APP: React.FC = () => {
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/projects/:projId" element={<Project />} />
+            <Route path="/users/:userId" element={<ProfilePage />} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
         </AppLayout>

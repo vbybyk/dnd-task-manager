@@ -18,6 +18,7 @@ export const users = (state = initialState, action: AnyAction): IUserState => {
     case "USER_REQUEST":
       return { ...state, isFetching: true };
     case "USER_SUCCESS":
+    case "SET_USER":
       return { ...state, isFetching: false, user: action.payload };
     case "USER_REQUEST_ERROR":
       return { ...state, isFetching: false };

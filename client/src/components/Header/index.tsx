@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { Layout, Menu, Avatar, Dropdown, Divider } from "antd";
 import { UserCircle, Gear } from "@phosphor-icons/react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { UserOutlined, DownOutlined, SettingOutlined } from "@ant-design/icons";
 import "./header.scss";
 
@@ -14,9 +14,9 @@ export const HeaderApp: React.FC = () => {
   const userMenu = [
     {
       label: (
-        <div className="menu-item">
+        <NavLink to={`/users/${user?.id}`} className="menu-item">
           <UserCircle size={20} /> <span>Profile</span>
-        </div>
+        </NavLink>
       ),
       key: "profile",
     },

@@ -1,6 +1,6 @@
 import { v2 as cloudinary } from "cloudinary";
 
-export const uploadImage = async (file: any) => {
+export const uploadImage = async (file: any, path: string) => {
   cloudinary.config({
     cloud_name: process.env.CLOUDINARY_NAME,
     api_key: process.env.CLOUDINARY_KEY,
@@ -8,7 +8,7 @@ export const uploadImage = async (file: any) => {
   });
 
   return new Promise((resolve, reject) => {
-    const stream = cloudinary.uploader.upload_stream({ public_id: `tasks/${Date.now()}` }, (error, result) => {
+    const stream = cloudinary.uploader.upload_stream({ public_id: `${path}/${Date.now()}` }, (error, result) => {
       if (error) reject(error);
       else resolve(result?.url);
     });

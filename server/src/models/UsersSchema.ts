@@ -7,9 +7,11 @@ export interface IUser {
   id: number;
   name: string;
   email?: string;
+  phone?: string;
   password?: string;
   profileImage?: string;
   job_title?: string;
+  team?: string;
   company?: string;
   location?: string;
   about?: string;
@@ -19,9 +21,11 @@ export const UserSchema = new Schema<IUser, Model<IUser>>({
   id: { type: Number, required: true },
   name: { type: String, required: true },
   email: { type: String, required: false },
+  phone: { type: String, required: false },
   password: { type: String, required: false },
   profileImage: { type: String, required: false },
   job_title: { type: String, required: false },
+  team: { type: String, required: false },
   company: { type: String, required: false },
   location: { type: String, required: false },
   about: { type: String, required: false },

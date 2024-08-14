@@ -33,10 +33,9 @@ export interface ILabel {
 }
 
 export interface IUser {
-  _id: string;
-  id: number;
+  id?: number;
   name: string;
-  email?: string;
+  email: string;
   password?: string;
   profileImage?: string;
   job_title?: string;

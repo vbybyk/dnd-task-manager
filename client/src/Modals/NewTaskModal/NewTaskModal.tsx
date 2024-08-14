@@ -16,7 +16,7 @@ import { ITask, IContainer, ILabel } from "../../Interfaces/tasks";
 import { IState } from "../../Store/reducers";
 import { MODAL_TYPE } from "../../Constants/tasks";
 import { useAlertContext } from "../../Context/AlertContext";
-import { uploadImage } from "../../Utils/img-upload";
+import { uploadTaskImage } from "../../Utils/img-upload";
 import "./newTaskModal.scss";
 
 interface IFormInputs {
@@ -191,7 +191,7 @@ export const NewTaskModal = (props: IProps) => {
 
   const handleUpload = async (file: any) => {
     try {
-      const url = await uploadImage(file);
+      const url = await uploadTaskImage(file);
       const prevImages: string[] = watch("images") || [];
       setValue("images", [...prevImages, url]);
       return url;

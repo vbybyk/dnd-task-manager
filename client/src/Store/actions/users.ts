@@ -18,9 +18,16 @@ const getUserError = (err: AxiosError) => {
     payload: err?.response?.data,
   };
 };
+const setUser = (user: IUser) => {
+  return {
+    type: "SET_USER",
+    payload: user,
+  };
+};
 
 export const usersActions = {
   getUserRequest,
   getUserSuccess,
   getUserError,
+  setUser,
 };

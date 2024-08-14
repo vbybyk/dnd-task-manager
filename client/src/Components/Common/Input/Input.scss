@@ -1,0 +1,20 @@
+.Input {
+  .input-label {
+    display: inline-block;
+    color: #6d6e6f;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 18px;
+    margin-bottom: 5px;
+    &.required::after {
+      color: #d4272b;
+      content: "*";
+      margin-left: 0.2em;
+    }
+  }
+  .field-error {
+    color: red;
+    font-size: 11px;
+    margin-top: 5px;
+  }
+}
