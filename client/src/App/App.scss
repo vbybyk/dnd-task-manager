@@ -2,6 +2,13 @@
 
 :root {
   --primary-text-color: #323338;
+  --primary-button-color: #0a66e4;
+  --primary-button-color-hover: #0055cc;
+  --button-grey-color: #f1f2f4;
+  --button-grey-color-hover: #dddfe4;
+  --dark-grey-text-color: #172b4d;
+  --red-color: #c9372c;
+  --red-color-hover: #b72f23;
 }
 
 * {
@@ -26,8 +33,35 @@ body {
 }
 
 .ant-btn-primary {
-  background-color: #3532cd;
-  border-color: #3532cd;
+  background: var(--primary-button-color);
+  border-color: var(--primary-button-color);
+}
+
+.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+  background: var(--primary-button-color-hover);
+  border-color: var(--primary-button-color-hover);
+}
+
+.ant-btn-default {
+  background: var(--button-grey-color);
+  border-color: var(--button-grey-color);
+  color: var(--dark-grey-text-color);
+}
+
+.ant-btn-default:not(:disabled):not(.ant-btn-disabled):hover {
+  background: var(--button-grey-color-hover);
+  border-color: var(--button-grey-color-hover);
+  color: var(--dark-grey-text-color);
+}
+
+.ant-btn-primary.ant-btn-dangerous {
+  background: var(--red-color);
+  border-color: var(--red-color);
+}
+
+.ant-btn-primary.ant-btn-dangerous:not(:disabled):not(.ant-btn-disabled):hover {
+  background: var(--red-color-hover);
+  border-color: var(--red-color-hover);
 }
 .required-field-message {
   color: red;

@@ -208,7 +208,7 @@ export const Project: React.FC = () => {
                       />
                     </Col>
                     {index + 1 === containers.length && (
-                      <Button type="primary" className="add-section-button" onClick={() => setNewContainerModal(true)}>
+                      <Button className="add-section-button" onClick={() => setNewContainerModal(true)}>
                         Add section
                       </Button>
                     )}

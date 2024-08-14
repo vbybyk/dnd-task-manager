@@ -10,6 +10,7 @@ import { projectActions } from "../../Store/actions/projects";
 import { ProjectService } from "../../API/ProjectService";
 import { IProject } from "../../Interfaces/tasks";
 import { MODAL_TYPE } from "../../Constants/tasks";
+import "./CreateProjectModal.scss";
 
 interface IFormInputs {
   id: number;
