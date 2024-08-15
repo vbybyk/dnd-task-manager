@@ -1,9 +1,10 @@
-import { ITask } from "../../../Interfaces/tasks";
 import { Divider, Tag } from "antd";
 import { CheckSquareTwoTone } from "@ant-design/icons";
 import { Dispatch } from "redux";
 import { useDispatch } from "react-redux";
+import { PriorityIcon } from "../PriorityIcon/PriorityIcon";
 import { tasksActions } from "../../../Store/actions/tasks";
+import { ITask } from "../../../Interfaces/tasks";
 import "./card.scss";
 
 export const Card = (props: any) => {
@@ -31,11 +32,14 @@ export const Card = (props: any) => {
           ))}
         </div>
       )}
-      <span>
-        <CheckSquareTwoTone twoToneColor="#1890ff" />
-        <span> - </span>
-        {id}
-      </span>
+      <footer>
+        <span>
+          <CheckSquareTwoTone twoToneColor="#1890ff" />
+          <span> - </span>
+          {id}
+        </span>
+        <PriorityIcon priority={task.priority} />
+      </footer>
     </div>
   );
 };

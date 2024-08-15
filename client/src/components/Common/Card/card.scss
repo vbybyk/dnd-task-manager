@@ -25,4 +25,9 @@
     object-fit: cover;
     border-radius: 3px;
   }
+  footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
