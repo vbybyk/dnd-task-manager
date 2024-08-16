@@ -101,7 +101,7 @@ export const NewTaskModal = (props: IProps) => {
     reset,
     setValue,
     watch,
-    formState: { errors },
+    formState: { errors, isDirty, isValid },
   } = useForm<IFormInputs>({
     defaultValues: {
       id: undefined,
@@ -113,6 +113,7 @@ export const NewTaskModal = (props: IProps) => {
       images: [],
     },
     resolver: yupResolver(schema),
+    mode: "all",
   });
 
   useEffect(() => {
@@ -228,7 +229,12 @@ export const NewTaskModal = (props: IProps) => {
           </div>
           <div className="new-task-modal__buttons-wrapper__right">
             <Button onClick={onClose}>Cancel</Button>
-            <Button type="primary" onClick={handleSubmit(onSubmit)} style={{ marginLeft: "20px" }}>
+            <Button
+              type="primary"
+              onClick={handleSubmit(onSubmit)}
+              style={{ marginLeft: "20px" }}
+              disabled={!isDirty || !isValid}
+            >
               Submit
             </Button>
           </div>

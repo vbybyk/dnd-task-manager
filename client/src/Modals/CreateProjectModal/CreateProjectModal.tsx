@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Input, Modal, Button, Divider } from "antd";
+import { Input as AntdInput, Modal, Button, Divider } from "antd";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { Input } from "../../Components/Common/Input/Input";
 import { useAlertContext } from "../../Context/AlertContext";
 import { requiredFieldMessage } from "../../Components/Common/Constants/Constants";
 import { projectActions } from "../../Store/actions/projects";
@@ -24,7 +25,7 @@ interface IProps {
   selectedProject: IProject | null;
 }
 
-const { TextArea } = Input;
+const { TextArea } = AntdInput;
 
 const schema = yup
   .object({
@@ -49,7 +50,7 @@ export const CreateProjectModal = (props: IProps) => {
     control,
     handleSubmit,
     setValue,
-    formState: { errors },
+    formState: { errors, isDirty, isValid },
   } = useForm<IFormInputs>({
     defaultValues: {
       id: undefined,
@@ -57,6 +58,7 @@ export const CreateProjectModal = (props: IProps) => {
       description: "",
     },
     resolver: yupResolver(schema),
+    mode: "all",
   });
 
   useEffect(() => {
@@ -100,34 +102,49 @@ export const CreateProjectModal = (props: IProps) => {
       footer={null}
     >
       <form onSubmit={handleSubmit(onSubmit)} className="new-project-modal__form">
-        <p className="input-field-title">Project name</p>
         <Controller
           name="name"
           control={control}
-          render={({ field }) => <Input required placeholder="Project name" {...field} />}
+          render={({ field, fieldState: { error } }) => (
+            <Input
+              field={field}
+              label="Project name"
+              htmlFor="name"
+              required
+              placeholder="Project name"
+              error={error}
+              style={{ marginBottom: "20px" }}
+            />
+          )}
         />
-        <p className="required-field-message">{errors.name?.message}</p>
-        <p className="input-field-title">Description</p>
         <Controller
           name="description"
           control={control}
           render={({ field }) => (
-            <TextArea
-              placeholder="Describe your project"
-              autoSize={{ minRows: 3, maxRows: 20 }}
-              maxLength={550}
-              showCount={true}
-              required
-              {...field}
-            />
+            <div className="Input" style={{ marginBottom: "20px" }}>
+              <label className="input-label required">Description</label>
+              <TextArea
+                placeholder="Describe your project"
+                autoSize={{ minRows: 3, maxRows: 20 }}
+                maxLength={550}
+                showCount={true}
+                required
+                {...field}
+              />
+              {errors.description?.message && <p className="required-field-message">{errors.description?.message}</p>}
+            </div>
           )}
         />
-        <p className="required-field-message">{errors.description?.message}</p>
         <Divider />
         <div className="new-project-modal__buttons-wrapper">
           <div className="new-project-modal__buttons-wrapper__right">
             <Button onClick={() => setModal({ open: false, type: MODAL_TYPE.CREATE })}>Cancel</Button>
-            <Button type="primary" onClick={handleSubmit(onSubmit)} style={{ marginLeft: "20px" }}>
+            <Button
+              type="primary"
+              onClick={handleSubmit(onSubmit)}
+              style={{ marginLeft: "20px" }}
+              disabled={!isDirty || !isValid}
+            >
               {modal.type === MODAL_TYPE.CREATE ? "Create" : "Edit"}
             </Button>
           </div>

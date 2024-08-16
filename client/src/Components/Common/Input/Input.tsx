@@ -11,12 +11,13 @@ interface IInput {
   required?: boolean;
   disabled?: boolean;
   error?: any;
+  style?: any;
 }
 
 export const Input = (props: IInput) => {
-  const { field, label, htmlFor, className = "", placeholder, required, disabled, error } = props;
+  const { field, label, htmlFor, className = "", placeholder, required, disabled, error, style } = props;
   return (
-    <div className={cn("Input", className)}>
+    <div className={cn("Input", className)} style={style}>
       <label htmlFor={htmlFor} className={cn("input-label", required && "required")}>
         {label}
       </label>

@@ -77,6 +77,10 @@ body {
   }
 }
 
+.ant-modal-header {
+  margin-bottom: 20px !important;
+}
+
 .ant-modal-body {
   max-height: 70vh;
   overflow: auto;

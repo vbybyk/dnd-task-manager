@@ -1,9 +1,9 @@
-// import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { Input, Modal, Button, Divider } from "antd";
-import { useForm, Controller, set } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useDispatch } from "react-redux";
+import { Modal, Button, Divider } from "antd";
+import { Input } from "../../Components/Common/Input/Input";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useAlertContext } from "../../Context/AlertContext";
 import { requiredFieldMessage } from "../../Components/Common/Constants/Constants";
 import { ContainersService } from "../../API/ContainersService";
@@ -40,7 +40,7 @@ export const CreateSectionModal = (props: IProps) => {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid, isDirty },
   } = useForm<IFormInputs>({
     defaultValues: {
       id: undefined,
@@ -48,6 +48,7 @@ export const CreateSectionModal = (props: IProps) => {
       projectId,
     },
     resolver: yupResolver(schema),
+    mode: "all",
   });
 
   const onSubmit = async (data: IFormInputs) => {
@@ -72,18 +73,30 @@ export const CreateSectionModal = (props: IProps) => {
       footer={null}
     >
       <form onSubmit={handleSubmit(onSubmit)} className="new-section-modal__form">
-        <p className="input-field-title">Section name</p>
         <Controller
           name="name"
           control={control}
-          render={({ field }) => <Input placeholder="Section name" {...field} />}
+          render={({ field, fieldState: { error } }) => (
+            <Input
+              placeholder="Section name"
+              field={field}
+              label="Section name"
+              htmlFor="name"
+              required
+              error={error}
+            />
+          )}
         />
-        <p className="required-field-message">{errors.name?.message}</p>
         <Divider />
         <div className="new-section-modal__buttons-wrapper">
           <div className="new-section-modal__buttons-wrapper__right">
             <Button onClick={() => setModal(false)}>Cancel</Button>
-            <Button type="primary" onClick={handleSubmit(onSubmit)} style={{ marginLeft: "20px" }}>
+            <Button
+              type="primary"
+              onClick={handleSubmit(onSubmit)}
+              style={{ marginLeft: "20px" }}
+              disabled={!isDirty || !isValid}
+            >
               Submit
             </Button>
           </div>
