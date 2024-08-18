@@ -5,6 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Input } from "../../Components/Common/Input/Input";
+import { UploadAvatar } from "../../Components/Common/UploadAvatar/UploadAvatar";
 import { useAlertContext } from "../../Context/AlertContext";
 import { requiredFieldMessage } from "../../Components/Common/Constants/Constants";
 import { projectActions } from "../../Store/actions/projects";
@@ -17,6 +18,7 @@ interface IFormInputs {
   id: number;
   name: string;
   description: string;
+  imageUrl: string;
 }
 
 interface IProps {
@@ -56,6 +58,7 @@ export const CreateProjectModal = (props: IProps) => {
       id: undefined,
       name: "",
       description: "",
+      imageUrl: "",
     },
     resolver: yupResolver(schema),
     mode: "all",
@@ -66,6 +69,7 @@ export const CreateProjectModal = (props: IProps) => {
       setValue("id", selectedProject?.id);
       setValue("name", selectedProject?.name || "");
       setValue("description", selectedProject?.description || "");
+      setValue("imageUrl", selectedProject?.imageUrl || "");
     }
   }, [selectedProject]);
 
@@ -132,6 +136,21 @@ export const CreateProjectModal = (props: IProps) => {
                 {...field}
               />
               {errors.description?.message && <p className="required-field-message">{errors.description?.message}</p>}
+            </div>
+          )}
+        />
+        <Controller
+          name="imageUrl"
+          control={control}
+          render={({ field }) => (
+            <div className="Input" style={{ marginBottom: "20px" }}>
+              <label className="input-label">Project image</label>
+              <UploadAvatar
+                imageUrl={field.value}
+                setImageUrl={(url) => setValue("imageUrl", url, { shouldDirty: true })}
+                cropAspectRatio={2 / 1}
+                type="cover"
+              />
             </div>
           )}
         />

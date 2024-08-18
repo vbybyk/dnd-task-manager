@@ -112,7 +112,7 @@ export const ProfilePage = () => {
           <Controller
             name="profileImage"
             control={control}
-            render={({ field }) => <UploadAvatar imageUrl={field.value} setImageUrl={onUpdateImage} />}
+            render={({ field }) => <UploadAvatar imageUrl={field.value} setImageUrl={onUpdateImage} type="avatar" />}
           />
           <h2>{userName}</h2>
         </div>

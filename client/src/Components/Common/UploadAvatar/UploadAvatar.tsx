@@ -1,4 +1,5 @@
 import { useState } from "react";
+import cn from "classnames";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { message, Upload, Avatar } from "antd";
 import ImgCrop from "antd-img-crop";
@@ -8,17 +9,13 @@ import { uploadUserImage } from "../../../Utils/img-upload";
 import "./UploadAvatar.scss";
 
 interface IUploadAvatar {
+  type?: "avatar" | "cover";
   imageUrl: string;
   setImageUrl: (url: string) => void;
+  cropAspectRatio?: number;
 }
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
-
-const getBase64 = (img: FileType, callback: (url: string) => void) => {
-  const reader = new FileReader();
-  reader.addEventListener("load", () => callback(reader.result as string));
-  reader.readAsDataURL(img);
-};
 
 const beforeUpload = (file: FileType) => {
   const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
@@ -33,7 +30,7 @@ const beforeUpload = (file: FileType) => {
 };
 
 export const UploadAvatar = (props: IUploadAvatar) => {
-  const { imageUrl, setImageUrl } = props;
+  const { imageUrl, setImageUrl, cropAspectRatio } = props;
   const [loading, setLoading] = useState(false);
 
   const onPreview = async (file: UploadFile) => {
@@ -84,19 +81,25 @@ export const UploadAvatar = (props: IUploadAvatar) => {
     </button>
   );
 
+  const isCover = props.type === "cover";
+
   return (
-    <ImgCrop rotationSlider>
+    <ImgCrop rotationSlider aspect={cropAspectRatio}>
       <Upload
         name="avatar"
-        listType="picture-circle"
-        className="avatar-uploader"
+        listType={isCover ? "picture-card" : "picture-circle"}
+        className={cn("avatar-uploader", isCover && "cover")}
         showUploadList={false}
         customRequest={customRequest}
         beforeUpload={beforeUpload}
         onChange={handleChange}
         onPreview={onPreview}
       >
-        {imageUrl ? <Avatar icon={<UserOutlined />} src={imageUrl} size={100} /> : uploadButton}
+        {imageUrl ? (
+          <Avatar shape={isCover ? "square" : "circle"} icon={<UserOutlined />} src={imageUrl} size={100} />
+        ) : (
+          uploadButton
+        )}
       </Upload>
     </ImgCrop>
   );

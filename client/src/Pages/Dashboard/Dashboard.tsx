@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Layout, Button, List, Card } from "antd";
-import { EditOutlined } from "@ant-design/icons";
+import { ProjectCard } from "../../Components/Common/ProjectCard/ProjectCard";
 import { CreateProjectModal } from "../../Modals/CreateProjectModal/CreateProjectModal";
 import useTasks from "../../Hooks/useTasks";
 import { IState } from "../../Store/reducers";
@@ -29,6 +30,11 @@ export const Dashboard: React.FC = () => {
     }
   }, []);
 
+  const onClickEdit = (item: IProject) => {
+    setModal({ open: true, type: MODAL_TYPE.EDIT });
+    setSelectedProject(item);
+  };
+
   return (
     <Content className="Dashboard">
       <div className="dashboard-title-wrapper">
@@ -51,32 +57,11 @@ export const Dashboard: React.FC = () => {
           renderItem={(item: IProject) => (
             <List.Item>
               {projects && (
-                <Card
-                  title={
-                    <div style={{ display: "flex", justifyContent: "space-between" }}>
-                      {item?.name}
-                      <Button
-                        type="primary"
-                        icon={<EditOutlined />}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setModal({ open: true, type: MODAL_TYPE.EDIT });
-                          setSelectedProject(item);
-                        }}
-                        className="icon-button"
-                      />
-                    </div>
-                  }
-                  bordered={false}
-                  className="dashboard-project-card"
-                  onClick={() => {
-                    window.location.href = `/projects/${item.id}`;
-                  }}
-                >
-                  <p>{item.description}</p>
-                  <p>Open tasks</p>
-                  <p>Closed tasks</p>
-                </Card>
+                <>
+                  <NavLink to={`/projects/${item.id}`}>
+                    <ProjectCard item={item} onClickEdit={onClickEdit} />
+                  </NavLink>
+                </>
               )}
             </List.Item>
           )}

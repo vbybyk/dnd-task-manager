@@ -7,4 +7,13 @@
       object-fit: cover;
     }
   }
+
+  &.cover {
+    .ant-upload.ant-upload-select {
+      width: 202px;
+    }
+    .ant-avatar {
+      width: 200px !important;
+    }
+  }
 }
