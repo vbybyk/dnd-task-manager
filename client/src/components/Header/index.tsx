@@ -7,7 +7,7 @@ import "./header.scss";
 
 const { Header } = Layout;
 
-export const HeaderApp: React.FC = () => {
+const HeaderApp: React.FC = () => {
   const { projects } = useSelector((state: any) => state.project);
   const { user } = useSelector((state: any) => state.users);
 
@@ -41,6 +41,7 @@ export const HeaderApp: React.FC = () => {
           </div>
           <div className="header-user flex">
             <Dropdown
+              // @ts-ignore
               menu={{ items: userMenu }}
               trigger={["click"]}
               className="flex"
@@ -57,3 +58,5 @@ export const HeaderApp: React.FC = () => {
     </Layout>
   );
 };
+
+export default HeaderApp;
