@@ -1,6 +1,7 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 import cors from "cors";
+import path from "path";
 import express, { Application } from "express";
 import mongoose from "mongoose";
 import { attachProjectRoutes } from "./routes/projects";
@@ -36,6 +37,13 @@ const mount = async (app: Application) => {
   // startServer();
   app.listen(port);
   console.log(`App is listening on port ${port}`);
+
+  if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, "../client/build")));
+    app.get("*", (req, res) => {
+      res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+    });
+  }
 };
 
 mount(express());

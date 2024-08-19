@@ -32,7 +32,8 @@
     "typescript": "^4.6.4"
   },
   "scripts": {
-    "start": "nodemon ./src/index.ts",
+    "start": "node ./build/index.js",
+    "start:dev": "nodemon ./src/index.ts",
     "build": "tsc -p ./"
   }
 }
