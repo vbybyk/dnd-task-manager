@@ -34,6 +34,7 @@
   "scripts": {
     "start": "node ./build/index.js",
     "start:dev": "nodemon ./src/index.ts",
+    "heroku-postbuild": "cd ../client && npm install && npm run build",
     "build": "tsc -p ./"
   }
 }
