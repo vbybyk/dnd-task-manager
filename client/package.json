@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": "18.20.4"
+  },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.5",
     "antd": "^5.17.0",
