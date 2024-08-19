@@ -8,7 +8,7 @@ import { Dashboard } from "../Pages/Dashboard/Dashboard";
 import { Project } from "../Pages/Project/Project";
 import { ProfilePage } from "../Pages/ProfilePage/ProfilePage";
 import { AppLayout } from "./AppLayout/AppLayout";
-import Toaster from "../Components/Common/Toaster/Toaster";
+import { Toaster } from "../Components/Common/Toaster/Toaster";
 import store from "../Store";
 import useTasks from "../Hooks/useTasks";
 import "./App.scss";

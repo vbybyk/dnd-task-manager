@@ -3,7 +3,7 @@ import { message } from "antd";
 import { useAlertContext } from "../../../Context/AlertContext";
 import "./Toaster.scss";
 
-const Toaster: React.FC = () => {
+export const Toaster: React.FC = () => {
   const { alert, setAlert } = useAlertContext();
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -30,5 +30,3 @@ const Toaster: React.FC = () => {
 
   return contextHolder;
 };
-
-export default Toaster;
