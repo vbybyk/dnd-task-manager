@@ -3,7 +3,7 @@
   grid-template-columns: 255px minmax(0, 1fr);
   column-gap: 20px;
   background-color: #eceff8;
-  height: 100vh;
+  min-height: 100vh;
 
   .Main {
     background-color: #ffffff;

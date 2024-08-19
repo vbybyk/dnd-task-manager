@@ -1,15 +1,15 @@
 import Axios from "axios";
+import { BACKEND_URL } from "../config";
 
 export class TasksService {
-  static getProjectTasks = async (projId: number) => await Axios.get(`http://localhost:9000/projects/${projId}/tasks`);
+  static getProjectTasks = async (projId: number) => await Axios.get(`${BACKEND_URL}/projects/${projId}/tasks`);
   static updateProjectTasks = async (projId: number, tasks: any) =>
-    await Axios.put(`http://localhost:9000/projects/${projId}/tasks`, tasks);
-  static addNewTask = async (task: any) => await Axios.post(`http://localhost:9000/tasks/create`, task);
-  static updateTask = async (taskId: number, task: any) =>
-    await Axios.put(`http://localhost:9000/tasks/${taskId}`, task);
-  static deleteTask = async (taskId: number) => await Axios.delete(`http://localhost:9000/tasks/${taskId}`);
+    await Axios.put(`${BACKEND_URL}/projects/${projId}/tasks`, tasks);
+  static addNewTask = async (task: any) => await Axios.post(`${BACKEND_URL}/tasks/create`, task);
+  static updateTask = async (taskId: number, task: any) => await Axios.put(`${BACKEND_URL}/tasks/${taskId}`, task);
+  static deleteTask = async (taskId: number) => await Axios.delete(`${BACKEND_URL}/tasks/${taskId}`);
   static uploadImage = async (formData: FormData) =>
-    await Axios.post(`http://localhost:9000/tasks/upload-image`, formData, {
+    await Axios.post(`${BACKEND_URL}/tasks/upload-image`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
