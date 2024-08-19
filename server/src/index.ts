@@ -1,11 +1,14 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 import cors from "cors";
+import path from "path";
 import express, { Application } from "express";
 import mongoose from "mongoose";
 import { attachProjectRoutes } from "./routes/projects";
 import { attachContainerRoutes } from "./routes/containers";
 import { attachTaskRoutes } from "./routes/tasks";
+import { attachLabelRoutes } from "./routes/labels";
+import { attachUserRoutes } from "./routes/users";
 
 const port = process.env.PORT || 9000;
 const user = process.env.DB_USER;
@@ -24,6 +27,8 @@ const mount = async (app: Application) => {
   attachProjectRoutes(app);
   attachContainerRoutes(app);
   attachTaskRoutes(app);
+  attachLabelRoutes(app);
+  attachUserRoutes(app);
 
   // const startServer = async () => {
   //   await server.start();
@@ -32,6 +37,13 @@ const mount = async (app: Application) => {
   // startServer();
   app.listen(port);
   console.log(`App is listening on port ${port}`);
+
+  if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, "../client/build")));
+    app.get("*", (req, res) => {
+      res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+    });
+  }
 };
 
 mount(express());

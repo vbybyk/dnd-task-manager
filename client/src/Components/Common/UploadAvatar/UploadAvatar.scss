@@ -1,0 +1,19 @@
+.avatar-uploader {
+  .ant-upload {
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &.cover {
+    .ant-upload.ant-upload-select {
+      width: 202px;
+    }
+    .ant-avatar {
+      width: 200px !important;
+    }
+  }
+}

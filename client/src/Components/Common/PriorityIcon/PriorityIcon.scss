@@ -1,0 +1,8 @@
+.priority-tooltip {
+  font-size: 10px;
+  text-transform: uppercase;
+  .ant-tooltip-inner {
+    min-height: auto;
+    background-color: rgb(68, 84, 111);
+  }
+}

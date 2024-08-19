@@ -1,0 +1,40 @@
+.Project-page {
+  padding: 20px 20px;
+  &__title {
+    padding-left: 20px;
+    display: flex;
+    align-items: center;
+    min-height: 32px;
+  }
+
+  .tasks-container {
+    padding: 20px 0;
+    overflow-x: scroll;
+
+    .ant-row {
+      flex-wrap: nowrap;
+      min-width: 995px;
+    }
+
+    .loader {
+      display: flex;
+      justify-content: center;
+      padding-top: 50px;
+    }
+  }
+
+  .add-section-button {
+    margin-left: 20px;
+    margin-top: 10px;
+    // background-color: transparent;
+    // color: rgba(0, 0, 0, 0.85);
+    // border: 1px solid grey;
+    border-radius: 5px;
+    padding: 0 35px;
+    height: 28px;
+    // opacity: 0.6;
+    // &:hover {
+    //   opacity: 1;
+    // }
+  }
+}

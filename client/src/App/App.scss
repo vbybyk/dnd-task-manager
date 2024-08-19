@@ -1,0 +1,102 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik&display=swap");
+
+:root {
+  --primary-text-color: #323338;
+  --primary-button-color: #0a66e4;
+  --primary-button-color-hover: #0055cc;
+  --button-grey-color: #f1f2f4;
+  --button-grey-color-hover: #dddfe4;
+  --dark-grey-text-color: #172b4d;
+  --red-color: #c9372c;
+  --red-color-hover: #b72f23;
+  --dark-orange-color: #d46b08;
+}
+
+* {
+  box-sizing: border-box;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+  }
+}
+
+body {
+  font-family: "Rubik", sans-serif;
+}
+
+.App {
+  color: var(--primary-text-color);
+}
+
+.ant-btn-primary {
+  background: var(--primary-button-color);
+  border-color: var(--primary-button-color);
+}
+
+.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+  background: var(--primary-button-color-hover);
+  border-color: var(--primary-button-color-hover);
+}
+
+.ant-btn-default {
+  background: var(--button-grey-color);
+  border-color: var(--button-grey-color);
+  color: var(--dark-grey-text-color);
+}
+
+.ant-btn-default:not(:disabled):not(.ant-btn-disabled):hover {
+  background: var(--button-grey-color-hover);
+  border-color: var(--button-grey-color-hover);
+  color: var(--dark-grey-text-color);
+}
+
+.ant-btn-primary.ant-btn-dangerous {
+  background: var(--red-color);
+  border-color: var(--red-color);
+}
+
+.ant-btn-primary.ant-btn-dangerous:not(:disabled):not(.ant-btn-disabled):hover {
+  background: var(--red-color-hover);
+  border-color: var(--red-color-hover);
+}
+.required-field-message {
+  color: red;
+  font-size: 11px;
+}
+
+.ant-tag {
+  line-height: 18px;
+  border: none;
+  .ant-tag-close-icon {
+    color: inherit !important;
+  }
+}
+
+.ant-modal-header {
+  margin-bottom: 20px !important;
+}
+
+.ant-modal-body {
+  max-height: 70vh;
+  overflow: auto;
+}
+
+.icon-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.54);
+  transition: color 0.3s, background-color 0.3s;
+  &:hover {
+    color: rgba(0, 0, 0, 0.88) !important;
+    background-color: rgba(0, 0, 0, 0.06) !important;
+    text-decoration: none;
+  }
+}

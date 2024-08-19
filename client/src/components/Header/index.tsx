@@ -1,23 +1,36 @@
-import { Layout, Menu } from "antd";
-import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { Layout, Menu, Avatar, Dropdown, Divider } from "antd";
+import { UserCircle, Gear } from "@phosphor-icons/react";
+import { NavLink } from "react-router-dom";
+import { UserOutlined, DownOutlined, SettingOutlined } from "@ant-design/icons";
 import "./header.scss";
 
 const { Header } = Layout;
 
 export const HeaderApp: React.FC = () => {
   const { projects } = useSelector((state: any) => state.project);
+  const { user } = useSelector((state: any) => state.users);
 
-  // const items = [
-  //   { label: <Link to={"/dashboard"}>Dashboard</Link>, key: "/dashboard" },
-  //   {
-  //     label: "Projects",
-  //     key: "/projects",
-  //     children: projects?.map((item: any) => {
-  //       return { label: <Link to={`/projects/${item.id}`}>{item?.name}</Link>, key: `/project-${item.id}` };
-  //     }),
-  //   },
-  // ];
+  const userMenu = [
+    {
+      label: (
+        <NavLink to={`/users/${user?.id}`} className="menu-item">
+          <UserCircle size={20} /> <span>Profile</span>
+        </NavLink>
+      ),
+      key: "profile",
+    },
+    {
+      label: (
+        <div className="menu-item">
+          <Gear size={20} /> <span>Settings</span>
+        </div>
+      ),
+      key: "settings",
+    },
+    { label: <Divider style={{ margin: 0 }} />, key: "divider", type: "divider" },
+    { label: "Logout", key: "logout" },
+  ];
 
   return (
     <Layout>
@@ -26,7 +39,19 @@ export const HeaderApp: React.FC = () => {
           <div className="header-title">
             <h2>Task Manager</h2>
           </div>
-          {/* <Menu mode="horizontal" selectable={false} className="menu" items={items} /> */}
+          <div className="header-user flex">
+            <Dropdown
+              menu={{ items: userMenu }}
+              trigger={["click"]}
+              className="flex"
+              overlayClassName="user-menu-dropdown"
+            >
+              <div>
+                <Avatar icon={<UserOutlined />} src={user?.profileImage} />
+                <DownOutlined style={{ color: "grey", fontSize: "10px", marginLeft: "3px" }} />
+              </div>
+            </Dropdown>
+          </div>
         </div>
       </Header>
     </Layout>

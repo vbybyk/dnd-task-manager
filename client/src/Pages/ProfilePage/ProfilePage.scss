@@ -1,0 +1,27 @@
+.ProfilePage {
+  padding: 20px;
+
+  .profile-title {
+    padding-left: 20px;
+    margin-bottom: 20px;
+  }
+
+  .profile-form {
+    max-width: 50%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+
+    .avatar-wrapper {
+      display: flex;
+      align-items: center;
+      column-gap: 20px;
+    }
+
+    .save-button {
+      width: 100px;
+      align-self: flex-end;
+      margin-top: 40px;
+    }
+  }
+}

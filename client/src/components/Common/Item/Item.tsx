@@ -1,4 +1,4 @@
-import { ITask } from "../../Interfaces/tasks";
+import { ITask } from "../../../Interfaces/tasks";
 import { Card } from "../Card/Card";
 import "./item.scss";
 

@@ -3,27 +3,9 @@
   background-color: #ffffff;
   border-radius: 5px;
   padding: 10px;
-  ul {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    li {
-      padding: 10px 20px;
-      border-radius: 5px;
-      font-size: 14px;
-      cursor: pointer;
-      &:hover {
-        background-color: #eceff8;
-      }
-      a {
-        color: #323338;
-        text-decoration: none;
-      }
-    }
-    .title {
-      font-size: 16px;
-      font-weight: 600;
-      padding: 10px 20px;
-    }
+
+  .ant-menu-item-selected {
+    background-color: #eceff8;
+    color: var(--primary-button-color);
   }
 }

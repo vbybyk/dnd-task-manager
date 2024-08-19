@@ -1,11 +1,14 @@
 .header {
+  padding-right: 20px;
   height: 50px;
   line-height: 50px;
   background: #eceff8;
   color: var(--primary-text-color);
+
   .header-container {
     display: flex;
-    justify-content: start;
+    justify-content: space-between;
+    align-items: center;
     height: inherit;
 
     h2 {
@@ -13,25 +16,21 @@
       font-weight: 600;
     }
   }
-  .ant-menu-item a {
-    // color: white;
-  }
-  .ant-menu-item:hover {
-    opacity: 1;
-    color: #1272cc;
-  }
-  .ant-menu-title-content {
-    // color: white;
-  }
-  .ant-menu-overflow-item span:hover {
-    opacity: 1;
-    color: #1272cc;
+
+  .header-user {
+    span {
+      cursor: pointer;
+    }
   }
 }
-.menu {
-  width: 250px;
-  padding: 0 20px;
-  line-height: 63px;
-  border: 0;
-  background: transparent;
+
+.user-menu-dropdown {
+  min-width: 150px !important;
+  .menu-item {
+    display: flex;
+    align-items: center;
+    span {
+      margin-left: 10px;
+    }
+  }
 }

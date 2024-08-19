@@ -1,0 +1,12 @@
+.AppLayout {
+  display: grid;
+  grid-template-columns: 255px minmax(0, 1fr);
+  column-gap: 20px;
+  background-color: #eceff8;
+  min-height: 100vh;
+
+  .Main {
+    background-color: #ffffff;
+    border-radius: 5px;
+  }
+}

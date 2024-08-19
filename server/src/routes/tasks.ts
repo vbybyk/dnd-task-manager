@@ -1,6 +1,8 @@
 import { Application } from "express";
+import multer from "multer";
 import { TaskModel } from "../models/TaskSchema";
 import { updateTasks } from "../commands/Tasks";
+import { uploadImage } from "../commands/ImgUpload";
 
 export const attachTaskRoutes = (app: Application) => {
   app.post("/tasks/create", async (req, res) => {
@@ -56,6 +58,15 @@ export const attachTaskRoutes = (app: Application) => {
       res.send(tasks);
     } catch (err) {
       res.status(500).send(`Error getting tasks: ${err}`);
+    }
+  });
+
+  app.post("/tasks/upload-image", multer().single("file"), async (req, res) => {
+    try {
+      const result = await uploadImage(req.file?.buffer, "tasks");
+      res.json(result);
+    } catch (err) {
+      res.status(500).send(`Error uploading image: ${err}`);
     }
   });
 };

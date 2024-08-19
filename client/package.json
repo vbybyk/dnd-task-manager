@@ -2,29 +2,21 @@
   "name": "dnd-task-manager-client",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
-    "@ant-design/icons": "^5.3.6",
-    "@dnd-kit/core": "^3.1.1",
-    "@dnd-kit/sortable": "^3.1.0",
-    "@hookform/resolvers": "^2.9.10",
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.11.43",
-    "@types/react": "^18.0.15",
-    "@types/react-dom": "^18.0.6",
+    "@phosphor-icons/react": "^2.1.5",
     "antd": "^5.17.0",
+    "antd-img-crop": "^4.22.0",
     "axios": "^1.2.0",
+    "classnames": "^2.5.1",
     "concurrently": "^7.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.40.0",
+    "react-quill-new": "^3.2.2",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.3.0",
-    "react-scripts": "5.0.1",
     "redux": "^4.2.0",
-    "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.4.2",
     "sass": "^1.55.0",
     "typescript": "^4.7.4",
@@ -32,10 +24,10 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "vite",
+    "build": "vite build",
+    "test": "vite test",
+    "eject": "vite eject"
   },
   "eslintConfig": {
     "extends": [
@@ -56,6 +48,22 @@
     ]
   },
   "devDependencies": {
-    "json-server": "^0.17.1"
+    "@ant-design/icons": "^5.3.6",
+    "@dnd-kit/core": "^3.1.1",
+    "@dnd-kit/sortable": "^3.1.0",
+    "@hookform/resolvers": "^2.9.10",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^20.14.10",
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
+    "@vitejs/plugin-react": "^4.3.1",
+    "json-server": "^0.17.1",
+    "redux-devtools-extension": "^2.13.9",
+    "vite": "^5.3.3",
+    "vite-plugin-node-polyfills": "^0.22.0",
+    "vite-tsconfig-paths": "^4.3.2"
   }
 }
