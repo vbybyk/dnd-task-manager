@@ -34,6 +34,7 @@
     "start:dev": "vite",
     "build": "vite build --emptyOutDir",
     "start": "vite",
+    "heroku-postbuild": "npm run build",
     "test": "vite test",
     "eject": "vite eject"
   },
