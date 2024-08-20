@@ -25,12 +25,14 @@
     "sass": "^1.55.0",
     "typescript": "^4.7.4",
     "vite": "^5.3.3",
+    "vite-plugin-node-polyfills": "^0.22.0",
+    "vite-tsconfig-paths": "^4.3.2",
     "web-vitals": "^2.1.4",
     "yup": "^0.32.11"
   },
   "scripts": {
     "start:dev": "vite",
-    "build": "vite build",
+    "build": "vite build --emptyOutDir",
     "start": "vite preview",
     "heroku-postbuild": "npm run build",
     "test": "vite test",
@@ -67,8 +69,6 @@
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "json-server": "^0.17.1",
-    "redux-devtools-extension": "^2.13.9",
-    "vite-plugin-node-polyfills": "^0.22.0",
-    "vite-tsconfig-paths": "^4.3.2"
+    "redux-devtools-extension": "^2.13.9"
   }
 }
