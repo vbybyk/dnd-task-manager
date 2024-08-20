@@ -33,8 +33,7 @@
   "scripts": {
     "start:dev": "vite",
     "build": "vite build --emptyOutDir",
-    "start": "vite preview",
-    "heroku-postbuild": "npm run build",
+    "start": "vite",
     "test": "vite test",
     "eject": "vite eject"
   },
