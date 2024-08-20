@@ -25,7 +25,7 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       port: 3005,
-      open: true,
+      open: false,
     },
   };
 });
