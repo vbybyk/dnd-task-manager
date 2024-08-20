@@ -24,7 +24,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
-      port: 3005,
+      port: process.env.PORT || 3005,
       open: false,
     },
   };
