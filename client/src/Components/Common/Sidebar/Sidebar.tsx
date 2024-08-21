@@ -26,7 +26,7 @@ export const Sidebar = () => {
     {
       key: "/mywork",
       icon: <CarryOutOutlined />,
-      label: <NavLink to="/">My Work</NavLink>,
+      label: <NavLink to="/">All Tasks</NavLink>,
     },
     {
       key: "divider",
