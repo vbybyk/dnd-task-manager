@@ -11,7 +11,7 @@ import {
   TouchSensor,
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import { Layout, Row, Col, Button, Spin } from "antd";
+import { Layout, Row, Col, Button, Skeleton } from "antd";
 import useTasks from "../../Hooks/useTasks";
 import { Item } from "../../Components/Common/Item/Item";
 import { Droppable } from "../../Components/Common/Droppable/Droppable";
@@ -169,7 +169,7 @@ export const Project: React.FC = () => {
   return (
     <Content className="Project-page">
       <div className="Project-page__title">
-        {!isProjectLoading && (
+        {!isProjectLoading && project ? (
           <>
             <h2>{project.name}</h2>
             <Button
@@ -180,8 +180,9 @@ export const Project: React.FC = () => {
               Create Task
             </Button>
           </>
+        ) : (
+          <Skeleton.Input style={{ width: 300 }} active />
         )}
-        {isProjectLoading && <Spin size="small" className="loader" />}
       </div>
 
       <DndContext
@@ -217,8 +218,16 @@ export const Project: React.FC = () => {
             </Row>
           )}
           {loading && (
-            <div className="loader">
-              <Spin size="large" />
+            <div className="skeleton-container">
+              <Row gutter={22}>
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <Col key={index} xs={24} sm={12} md={6} style={{ maxWidth: "250px" }}>
+                    <div className="skeleton-column">
+                      <Skeleton.Button active style={{ minWidth: "100%", height: "70vh" }} />
+                    </div>
+                  </Col>
+                ))}
+              </Row>
             </div>
           )}
         </div>

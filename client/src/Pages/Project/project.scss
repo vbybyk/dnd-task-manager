@@ -26,15 +26,17 @@
   .add-section-button {
     margin-left: 20px;
     margin-top: 10px;
-    // background-color: transparent;
-    // color: rgba(0, 0, 0, 0.85);
-    // border: 1px solid grey;
     border-radius: 5px;
     padding: 0 35px;
     height: 28px;
-    // opacity: 0.6;
-    // &:hover {
-    //   opacity: 1;
-    // }
+  }
+
+  .skeleton-container {
+    padding-top: 30px;
+    .skeleton-column {
+      .ant-skeleton {
+        width: 100%;
+      }
+    }
   }
 }
