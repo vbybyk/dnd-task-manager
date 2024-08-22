@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Layout, Button, List, Card } from "antd";
+import { Layout, Button, List } from "antd";
 import { ProjectCard } from "../../Components/Common/ProjectCard/ProjectCard";
+import { ProjectCardSkeleton } from "../../Components/Common/ProjectCard/ProjectCardSkeleton";
 import { CreateProjectModal } from "../../Modals/CreateProjectModal/CreateProjectModal";
-import useTasks from "../../Hooks/useTasks";
 import { IState } from "../../Store/reducers";
 import { IProject } from "../../Interfaces/tasks";
 import { MODAL_TYPE } from "../../Constants/tasks";
@@ -22,14 +22,6 @@ export const Dashboard: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<IProject | null>(null);
   const [modal, setModal] = useState<IModal>({ open: false, type: MODAL_TYPE.CREATE });
 
-  const { getProjects } = useTasks();
-
-  useEffect(() => {
-    if (projects.length === 0) {
-      getProjects();
-    }
-  }, []);
-
   const onClickEdit = (item: IProject) => {
     setModal({ open: true, type: MODAL_TYPE.EDIT });
     setSelectedProject(item);
@@ -45,27 +37,34 @@ export const Dashboard: React.FC = () => {
       </div>
       <div className="dashboard-projects__wrapper">
         <h3 className="dashboard-projects__title">Open Projects</h3>
-        <List
-          grid={{
-            column: 4,
-            gutter: 16,
-            xs: 1,
-            sm: 3,
-            lg: 3,
-          }}
-          dataSource={projects}
-          renderItem={(item: IProject) => (
-            <List.Item>
-              {projects && (
-                <>
-                  <NavLink to={`/projects/${item.id}`}>
-                    <ProjectCard item={item} onClickEdit={onClickEdit} />
-                  </NavLink>
-                </>
-              )}
-            </List.Item>
-          )}
-        />
+        {projects && !isFetching ? (
+          <List
+            grid={{ column: 4, gutter: 16, xs: 1, sm: 3, lg: 4 }}
+            dataSource={projects}
+            renderItem={(item: IProject) => (
+              <List.Item>
+                {projects && (
+                  <>
+                    <NavLink to={`/projects/${item.id}`}>
+                      <ProjectCard item={item} onClickEdit={onClickEdit} />
+                    </NavLink>
+                  </>
+                )}
+              </List.Item>
+            )}
+            loading={isFetching}
+          />
+        ) : (
+          <List
+            grid={{ column: 4, gutter: 16, xs: 1, sm: 3, lg: 4 }}
+            dataSource={[1, 2, 3]}
+            renderItem={() => (
+              <List.Item>
+                <ProjectCardSkeleton />
+              </List.Item>
+            )}
+          />
+        )}
       </div>
       {modal.open && <CreateProjectModal modal={modal} setModal={setModal} selectedProject={selectedProject} />}
     </Content>
