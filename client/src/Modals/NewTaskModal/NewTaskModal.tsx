@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import cn from "classnames";
 import * as yup from "yup";
 import { useForm, Controller } from "react-hook-form";
-import { Input, Modal, Button, Divider, Select, Tag } from "antd";
+import { Input, Modal, Button, Select, Tag } from "antd";
 import { CheckSquareTwoTone, EditOutlined } from "@ant-design/icons";
 import TextEditor from "../../Components/Common/TextEditor/TextEditor";
 import { LabelsPopover } from "../../Components/LabelsPopover/LabelsPopover";
@@ -15,6 +15,7 @@ import { tasksActions } from "../../Store/actions/tasks";
 import { ITask, IContainer, ILabel } from "../../Interfaces/tasks";
 import { IState } from "../../Store/reducers";
 import { MODAL_TYPE } from "../../Constants/tasks";
+import { usePopupContext } from "../../Context/PopupContext";
 import { useAlertContext } from "../../Context/AlertContext";
 import { uploadTaskImage } from "../../Utils/img-upload";
 import "./newTaskModal.scss";
@@ -86,6 +87,7 @@ export const NewTaskModal = (props: IProps) => {
   const { containers } = useSelector((state: IState) => state.containers);
   const { labels } = useSelector((state: IState) => state.labels);
   const { setAlert } = useAlertContext();
+  const { setPopup } = usePopupContext();
   const dispatch = useDispatch();
 
   const [isOpenLabelsModal, setIsOpenLabelsModal] = useState(false);
@@ -217,12 +219,24 @@ export const NewTaskModal = (props: IProps) => {
       open={modal.open}
       className="new-task-modal"
       onCancel={onClose}
-      width={1000}
+      centered
+      width={900}
       footer={
         <div className="new-task-modal__buttons-wrapper">
           <div className="new-task-modal__buttons-wrapper__left">
             {selectedTask && (
-              <Button type="primary" danger onClick={onDelete}>
+              <Button
+                type="primary"
+                danger
+                onClick={() =>
+                  setPopup({
+                    open: true,
+                    title: "Delete task",
+                    content: "Are you sure you want to delete this task?",
+                    buttons: [{ text: "Delete", type: "primary", danger: true, onClick: onDelete }],
+                  })
+                }
+              >
                 Delete
               </Button>
             )}

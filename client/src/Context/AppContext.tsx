@@ -1,8 +1,12 @@
-import React from "react";
 import AlertContext from "./AlertContext";
+import PopupContext from "./PopupContext";
 
 const AppContext = ({ children }: any) => {
-  return <AlertContext>{children}</AlertContext>;
+  return (
+    <AlertContext>
+      <PopupContext>{children}</PopupContext>
+    </AlertContext>
+  );
 };
 
 export default AppContext;
