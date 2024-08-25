@@ -13,6 +13,15 @@ export const attachUserRoutes = (app: Application) => {
     }
   });
 
+  app.get("/users", async (_req, res) => {
+    try {
+      const users = await UserModel.find();
+      res.json(users);
+    } catch (err) {
+      res.status(500).send(`Error getting users: ${err}`);
+    }
+  });
+
   app.put("/users/:id", async (_req, res) => {
     try {
       const { id } = _req.params;

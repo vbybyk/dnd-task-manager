@@ -84,18 +84,6 @@ const useTasks = () => {
     }
   };
 
-  const getUser = async (userId: number) => {
-    try {
-      dispatch(usersActions.getUserRequest());
-      const { status, data } = await UsersService.getUser(userId);
-      status === 200 && dispatch(usersActions.getUserSuccess(data));
-    } catch (err) {
-      //@ts-ignore
-      dispatch(usersActions.getUserError(err));
-      console.log(err);
-    }
-  };
-
-  return { getProjects, updateProjectTasks, getProjectById, getProjectTasks, getProjectContainers, getLabels, getUser };
+  return { getProjects, updateProjectTasks, getProjectById, getProjectTasks, getProjectContainers, getLabels };
 };
 export default useTasks;

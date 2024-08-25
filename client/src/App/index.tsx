@@ -12,14 +12,17 @@ import { Toaster } from "../Components/Common/Toaster/Toaster";
 import { Popup } from "../Components/Common/Popup/Popup";
 import store from "../Store";
 import useTasks from "../Hooks/useTasks";
+import useUsers from "../Hooks/useUsers";
 import "./App.scss";
 
 const APP: React.FC = () => {
-  const { getProjects, getUser } = useTasks();
+  const { getProjects } = useTasks();
+  const { getUser, getUsers } = useUsers();
 
   useEffect(() => {
     getProjects();
     getUser(1);
+    getUsers();
   }, []);
 
   return (

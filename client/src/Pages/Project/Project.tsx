@@ -11,15 +11,17 @@ import {
   TouchSensor,
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import { Layout, Row, Col, Button, Skeleton } from "antd";
+import { Layout, Row, Col, Button, Skeleton, Avatar, Tooltip } from "antd";
 import useTasks from "../../Hooks/useTasks";
 import { Item } from "../../Components/Common/Item/Item";
 import { Droppable } from "../../Components/Common/Droppable/Droppable";
+import { AvatarGroup } from "../../Components/Common/AvatarGroup/AvatarGroup";
 import { NewTaskModal } from "../../Modals/NewTaskModal/NewTaskModal";
 import { CreateSectionModal } from "../../Modals/CreateSectionModal/CreateSectionModal";
 import { IContainer, ITask } from "../../Interfaces/tasks";
 import { IState } from "../../Store/reducers";
 import { arrayMove, moveBetweenContainers } from "../../Utils/dnd";
+import { generateColor } from "../../Utils/color-generator";
 import { transformData, flattenData } from "../../Utils/project";
 import { MODAL_TYPE } from "../../Constants/tasks";
 import "./project.scss";
@@ -38,6 +40,7 @@ export const Project: React.FC = () => {
   const { project, isFetching: isProjectLoading } = useSelector((state: IState) => state.project);
   const { tasks, isFetching: isTasksLoading } = useSelector((state: IState) => state.tasks);
   const { containers, isFetching: isContainersLoading } = useSelector((state: IState) => state.containers);
+  const { users } = useSelector((state: IState) => state.users);
   const { projId } = useParams<Params>() as Params;
 
   const [taskModal, setTaskModal] = useState({ open: false, type: MODAL_TYPE.CREATE });
@@ -179,6 +182,7 @@ export const Project: React.FC = () => {
             >
               Create Task
             </Button>
+            <AvatarGroup users={users} />
           </>
         ) : (
           <Skeleton.Input style={{ width: 300 }} active />
