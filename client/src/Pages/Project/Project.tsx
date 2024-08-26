@@ -35,6 +35,7 @@ export const Project: React.FC = () => {
   const [activeId, setActiveId] = useState(null);
   const [activeItem, setActiveItem] = useState<ITask | undefined>(undefined);
   const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
+  const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
   const { updateProjectTasks, getProjectById, getProjectTasks, getProjectContainers, getLabels } = useTasks();
   const { project, isFetching: isProjectLoading } = useSelector((state: IState) => state.project);
   const { tasks, isFetching: isTasksLoading } = useSelector((state: IState) => state.tasks);
@@ -65,7 +66,7 @@ export const Project: React.FC = () => {
     useSensor(PointerSensor, {
       activationConstraint: {
         tolerance: 5,
-        delay: 300,
+        delay: 100,
       },
     }),
     useSensor(TouchSensor),
@@ -123,40 +124,39 @@ export const Project: React.FC = () => {
       setActiveItem(undefined);
       return;
     }
-    if (active.id !== over.id) {
-      const activeContainer = active.data.current.sortable.containerId;
-      const overContainer = over.data.current?.sortable.containerId || over.id;
-      const activeIndex = active.data.current.sortable.index;
 
-      const overIndex = over.id in items ? items[overContainer].length + 1 : over.data.current.sortable.index;
+    const activeContainer = active.data.current.sortable.containerId;
+    const overContainer = over.data.current?.sortable.containerId || over.id;
+    const activeIndex = active.data.current.sortable.index;
 
-      setItems((itemGroups: any) => {
-        let newItems;
+    const overIndex = over.id in items ? items[overContainer].length + 1 : over.data.current.sortable.index;
 
-        if (activeContainer === overContainer) {
-          newItems = {
-            ...itemGroups,
-            [overContainer]: arrayMove(itemGroups[overContainer], activeIndex, overIndex),
-          };
-        } else {
-          newItems = moveBetweenContainers(
-            itemGroups,
-            activeContainer,
-            activeIndex,
-            overContainer,
-            overIndex,
-            itemGroups[activeContainer][activeIndex]
-          );
-        }
-        for (let containerId in newItems) {
-          newItems[containerId].forEach((item: any, index: number) => {
-            item.sortId = index + 1;
-            item.containerId = +containerId;
-          });
-        }
-        return newItems;
-      });
-    }
+    setItems((itemGroups: any) => {
+      let newItems;
+
+      if (activeContainer === overContainer) {
+        newItems = {
+          ...itemGroups,
+          [overContainer]: arrayMove(itemGroups[overContainer], activeIndex, overIndex),
+        };
+      } else {
+        newItems = moveBetweenContainers(
+          itemGroups,
+          activeContainer,
+          activeIndex,
+          overContainer,
+          overIndex,
+          itemGroups[activeContainer][activeIndex]
+        );
+      }
+      for (let containerId in newItems) {
+        newItems[containerId].forEach((item: any, index: number) => {
+          item.sortId = index + 1;
+          item.containerId = +containerId;
+        });
+      }
+      return newItems;
+    });
 
     updateProjectTasks(+projId, flattenData(items));
     setActiveId(null);
@@ -181,7 +181,7 @@ export const Project: React.FC = () => {
             >
               Create Task
             </Button>
-            <AvatarGroup users={users} />
+            <AvatarGroup users={users} selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />
           </>
         ) : (
           <Skeleton.Input style={{ width: 300 }} active />
@@ -204,7 +204,13 @@ export const Project: React.FC = () => {
                     <Col key={container._id} xs={24} sm={12} md={6}>
                       <Droppable
                         id={container.id}
-                        items={items[container.id] || []}
+                        items={
+                          selectedUsers.length
+                            ? items[container.id].filter(
+                                (task) => task?.assigneeId && selectedUsers.includes(task?.assigneeId)
+                              )
+                            : items[container.id] || []
+                        }
                         name={container.name}
                         activeId={activeId}
                         key={container._id}
