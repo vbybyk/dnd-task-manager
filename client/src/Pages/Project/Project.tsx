@@ -21,7 +21,6 @@ import { CreateSectionModal } from "../../Modals/CreateSectionModal/CreateSectio
 import { IContainer, ITask } from "../../Interfaces/tasks";
 import { IState } from "../../Store/reducers";
 import { arrayMove, moveBetweenContainers } from "../../Utils/dnd";
-import { generateColor } from "../../Utils/color-generator";
 import { transformData, flattenData } from "../../Utils/project";
 import { MODAL_TYPE } from "../../Constants/tasks";
 import "./project.scss";

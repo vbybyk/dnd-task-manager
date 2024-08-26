@@ -7,6 +7,7 @@ import { Input, Modal, Button, Select, Tag } from "antd";
 import { CheckSquareTwoTone, EditOutlined } from "@ant-design/icons";
 import TextEditor from "../../Components/Common/TextEditor/TextEditor";
 import { LabelsPopover } from "../../Components/LabelsPopover/LabelsPopover";
+import { AssigneesDropdown } from "../../Components/Common/AssigneesDropdown/AssigneesDropdown";
 import { yupResolver } from "@hookform/resolvers/yup";
 import type { CustomTagProps } from "rc-select/lib/BaseSelect";
 import { requiredFieldMessage } from "../../Components/Common/Constants/Constants";
@@ -28,6 +29,7 @@ interface IFormInputs {
   priority: string;
   containerId: number;
   images?: string[];
+  assigneeId?: number;
 }
 
 interface IModal {
@@ -113,6 +115,7 @@ export const NewTaskModal = (props: IProps) => {
       priority: "",
       containerId: containersOptions[0].value,
       images: [],
+      assigneeId: undefined,
     },
     resolver: yupResolver(schema),
     mode: "all",
@@ -132,6 +135,7 @@ export const NewTaskModal = (props: IProps) => {
       if (!!selectedTask?.images?.length) {
         setValue("images", selectedTask.images);
       }
+      setValue("assigneeId", selectedTask.assigneeId);
     }
   }, [selectedTask]);
 
@@ -335,6 +339,12 @@ export const NewTaskModal = (props: IProps) => {
               />
             </LabelsPopover>
           </div>
+          <span className="input-field-title">Assignee</span>
+          <Controller
+            name="assigneeId"
+            control={control}
+            render={({ field }) => <AssigneesDropdown value={field.value} onChange={field.onChange} />}
+          />
         </div>
       </form>
     </Modal>

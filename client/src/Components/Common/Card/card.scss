@@ -29,5 +29,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    .footer-right {
+      display: flex;
+      align-items: center;
+    }
   }
 }

@@ -22,6 +22,7 @@ export interface ITask {
   images?: string[];
   labels?: ILabel[] | null;
   priority: string;
+  assigneeId?: number;
 }
 
 export interface ILabel {
@@ -34,7 +35,7 @@ export interface ILabel {
 }
 
 export interface IUser {
-  id?: number;
+  id: number;
   name: string;
   email: string;
   password?: string;
