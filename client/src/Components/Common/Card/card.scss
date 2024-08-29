@@ -21,9 +21,12 @@
   }
   .card-img > img {
     width: 100%;
-    max-height: 300px;
-    object-fit: cover;
+    max-height: 200px;
+    object-fit: contain;
     border-radius: 3px;
+  }
+  .ant-divider {
+    margin: 10px 0;
   }
   footer {
     display: flex;

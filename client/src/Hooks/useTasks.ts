@@ -4,12 +4,10 @@ import { ProjectService } from "../API/ProjectService";
 import { TasksService } from "../API/TasksService";
 import { ContainersService } from "../API/ContainersService";
 import { LabelsService } from "../API/LabelsService";
-import { UsersService } from "../API/UsersService";
 import { projectActions } from "../Store/actions/projects";
 import { containersActions } from "../Store/actions/containers";
 import { tasksActions } from "../Store/actions/tasks";
 import { labelsActions } from "../Store/actions/labels";
-import { usersActions } from "../Store/actions/users";
 
 const useTasks = () => {
   const dispatch: Dispatch = useDispatch();
@@ -84,6 +82,19 @@ const useTasks = () => {
     }
   };
 
-  return { getProjects, updateProjectTasks, getProjectById, getProjectTasks, getProjectContainers, getLabels };
+  const resetProject = () => {
+    dispatch(tasksActions.getTasksSuccess([]));
+    dispatch(containersActions.getContainersSuccess([]));
+  };
+
+  return {
+    getProjects,
+    updateProjectTasks,
+    getProjectById,
+    getProjectTasks,
+    getProjectContainers,
+    getLabels,
+    resetProject,
+  };
 };
 export default useTasks;

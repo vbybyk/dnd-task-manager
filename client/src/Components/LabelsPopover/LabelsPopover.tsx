@@ -49,11 +49,19 @@ export const LabelsPopover: React.FC<IProps> = (props: IProps) => {
   }, [allLabels]);
 
   useEffect(() => {
+    return () => {
+      if (!open) {
+        setSelectedLabel(null);
+        setLabels(allLabels);
+      }
+    };
+  }, [open]);
+
+  useEffect(() => {
     function handleClickOutside(event: any) {
       // @ts-ignore
       if (paletteRef.current && !paletteRef.current.contains(event.target)) {
         setSelectedLabel(null);
-        setLabels(allLabels);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -97,23 +105,13 @@ export const LabelsPopover: React.FC<IProps> = (props: IProps) => {
     }
   };
 
-  const onUpdateLabel = async () => {
+  const onUpdateLabels = async () => {
     setIsUpdating(true);
-    const isNewLabel = !allLabels.find((label) => label.id === selectedLabel?.id);
     try {
-      if (isNewLabel) {
-        const response = await LabelsService.addNewProjectLabel(project?.id, selectedLabel);
-        dispatch(labelsActions.addLabel(response.data));
-        setIsUpdating(false);
-        setSelectedLabel(null);
-        setAlert({ type: "success", message: "Updated successfully!" });
-      } else {
-        const response = await LabelsService.updateProjectLabel(project?.id, selectedLabel);
-        dispatch(labelsActions.updateLabel(response.data));
-        setIsUpdating(false);
-        setSelectedLabel(null);
-        setAlert({ type: "success", message: "Updated successfully!" });
-      }
+      const response = await LabelsService.updateProjectLabels(project?.id, labels);
+      dispatch(labelsActions.updateLabels(response.data));
+      setIsUpdating(false);
+      setAlert({ type: "success", message: "Updated successfully!" });
     } catch (err) {
       setIsUpdating(false);
       setAlert({ type: "error", message: "Something went wrong!" });
@@ -161,14 +159,15 @@ export const LabelsPopover: React.FC<IProps> = (props: IProps) => {
           ]);
         }}
         className="icon-button"
-        style={{ marginLeft: "auto", marginRight: "3px", marginBottom: "10px", width: "25px", height: "25px" }}
-      />
+      >
+        {labels.length === 0 && "Add Label"}
+      </Button>
       {
         <>
           {selectedLabel && (
             <div style={{ display: "flex", justifyContent: "center", flexDirection: "column" }} ref={paletteRef}>
               <ColorPalette />
-              <Button type="text" style={{ marginTop: "20px" }} onClick={onUpdateLabel}>
+              <Button type="text" style={{ marginTop: "20px" }} onClick={onUpdateLabels}>
                 {!isUpdating ? "Update" : <Spin size="small" className="loader" />}
               </Button>
             </div>
@@ -179,7 +178,15 @@ export const LabelsPopover: React.FC<IProps> = (props: IProps) => {
   );
 
   return (
-    <Popover content={content} open={open} onOpen={onOpen} trigger="click" className={className} placement={placement}>
+    <Popover
+      content={content}
+      open={open}
+      onOpen={onOpen}
+      trigger="click"
+      className={className}
+      placement={placement}
+      destroyTooltipOnHide
+    >
       {children}
     </Popover>
   );

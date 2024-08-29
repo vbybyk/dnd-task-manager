@@ -36,7 +36,8 @@ export const Project: React.FC = () => {
   const [activeItem, setActiveItem] = useState<ITask | undefined>(undefined);
   const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
   const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
-  const { updateProjectTasks, getProjectById, getProjectTasks, getProjectContainers, getLabels } = useTasks();
+  const { updateProjectTasks, getProjectById, getProjectTasks, getProjectContainers, getLabels, resetProject } =
+    useTasks();
   const { project, isFetching: isProjectLoading } = useSelector((state: IState) => state.project);
   const { tasks, isFetching: isTasksLoading } = useSelector((state: IState) => state.tasks);
   const { containers, isFetching: isContainersLoading } = useSelector((state: IState) => state.containers);
@@ -49,6 +50,9 @@ export const Project: React.FC = () => {
   const loading = isProjectLoading || isTasksLoading || isContainersLoading;
 
   useEffect(() => {
+    resetProject();
+    setItems({});
+
     getProjectById(+projId);
     getProjectTasks(+projId);
     getProjectContainers(+projId);
@@ -60,7 +64,7 @@ export const Project: React.FC = () => {
       const transformedData = transformData(tasks, containers);
       setItems(transformedData);
     }
-  }, [tasks, containers, projId]);
+  }, [tasks, containers]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -168,6 +172,19 @@ export const Project: React.FC = () => {
     setTaskModal({ open: true, type: MODAL_TYPE.EDIT });
   };
 
+  const addSectionButton =
+    containers.length < 3 ? (
+      <Button className="add-section-button" onClick={() => setNewContainerModal(true)}>
+        Add section
+      </Button>
+    ) : (
+      <Tooltip title="Add section" key={"add-section-tooltip"} placement="top">
+        <Button className="add-section-button plus" onClick={() => setNewContainerModal(true)}>
+          +
+        </Button>
+      </Tooltip>
+    );
+
   return (
     <Content className="Project-page">
       <div className="Project-page__title">
@@ -201,7 +218,7 @@ export const Project: React.FC = () => {
               {containers.length > 0 &&
                 containers.map((container: IContainer, index: number) => (
                   <Fragment key={container._id}>
-                    <Col key={container._id} xs={24} sm={12} md={6}>
+                    <Col key={container._id} xs={24} sm={12} md={6} style={{ paddingBottom: "40px" }}>
                       <Droppable
                         id={container.id}
                         items={
@@ -217,11 +234,7 @@ export const Project: React.FC = () => {
                         onClickTask={onClickTask}
                       />
                     </Col>
-                    {index + 1 === containers.length && (
-                      <Button className="add-section-button" onClick={() => setNewContainerModal(true)}>
-                        Add section
-                      </Button>
-                    )}
+                    {index + 1 === containers.length && addSectionButton}
                   </Fragment>
                 ))}
             </Row>

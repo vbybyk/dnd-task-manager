@@ -1,14 +1,13 @@
 .droppable-container {
-  // color: isOver ? "green" : undefined,
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 10px;
   padding: 10px;
   min-height: 300px;
+  height: 100%;
   min-width: 245px;
   border-radius: 5px;
-  background: rgb(55, 50, 136);
   background: linear-gradient(
     135deg,
     rgba(55, 50, 136, 0.1) 0%,

@@ -2,14 +2,15 @@
   padding: 20px 20px;
   &__title {
     padding-left: 20px;
+    margin-bottom: 16px;
     display: flex;
     align-items: center;
     min-height: 32px;
   }
 
   .tasks-container {
-    padding: 20px 0;
-    overflow-x: scroll;
+    overflow: auto;
+    height: calc(100vh - 102px);
 
     .ant-row {
       flex-wrap: nowrap;
@@ -29,6 +30,10 @@
     border-radius: 5px;
     padding: 0 35px;
     height: 28px;
+
+    &.plus {
+      padding: 0 10px;
+    }
   }
 
   .skeleton-container {
