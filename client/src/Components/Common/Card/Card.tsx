@@ -51,11 +51,11 @@ export const Card = (props: any) => {
         </div>
       )}
       <footer>
-        <span>
+        <div className="footer-left">
           <CheckSquareTwoTone twoToneColor="#1890ff" />
           <span> - </span>
-          {id}
-        </span>
+          <span>{id}</span>
+        </div>
         <div className="footer-right">
           <PriorityIcon priority={task.priority} />
           <div onClick={(event) => event.stopPropagation()} style={{ marginLeft: "8px" }}>

@@ -32,6 +32,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    .footer-left {
+      font-size: 12px;
+    }
     .footer-right {
       display: flex;
       align-items: center;

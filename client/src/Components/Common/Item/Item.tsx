@@ -8,8 +8,8 @@ export const Item = ({
   id,
   onClickTask,
 }: {
-  task?: ITask | undefined;
-  dragOverlay?: any | undefined;
+  task?: ITask;
+  dragOverlay?: any;
   id: number;
   onClickTask?: (task: ITask) => void;
 }) => {
@@ -19,7 +19,6 @@ export const Item = ({
   return (
     <div style={style} className="item" onClick={() => task && onClickTask && onClickTask(task)}>
       {task && <Card id={id} task={task} />}
-      {/* <span>Task name: {tasks?.name}</span> */}
     </div>
   );
 };
