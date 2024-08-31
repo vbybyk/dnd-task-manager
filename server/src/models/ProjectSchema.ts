@@ -1,19 +1,28 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
+import { TaskModel } from "./TaskSchema";
+import { ContainerModel } from "./ContainerSchema";
+import { LabelModel } from "./LabelSchema";
 
-interface Project {
+interface Project extends Document {
   id?: number;
   name: string;
   description: string;
   imageUrl?: string;
 }
 
-const ProjectSchema = new mongoose.Schema<Project>({
+const ProjectSchema = new Schema<Project>({
   id: { type: Number, required: false },
   name: { type: String, required: true },
   description: { type: String, required: true },
   imageUrl: { type: String, required: false },
 });
 
-export const ProjectModel = mongoose.model("projects", ProjectSchema);
+ProjectSchema.pre("remove", async function(next) {
+  const doc = this as any;
+  await TaskModel.deleteMany({ projectId: doc.id });
+  await ContainerModel.deleteMany({ projectId: doc.id });
+  await LabelModel.deleteMany({ projectId: doc.id });
+  next();
+});
 
-// module.exports = ProjectModel;
+export const ProjectModel = mongoose.model("Project", ProjectSchema);

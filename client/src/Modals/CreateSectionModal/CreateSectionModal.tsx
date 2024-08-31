@@ -9,6 +9,7 @@ import { requiredFieldMessage } from "../../Components/Common/Constants/Constant
 import { ContainersService } from "../../API/ContainersService";
 import { containersActions } from "../../Store/actions/containers";
 import "./CreateSectionModal.scss";
+import { IContainer } from "../../Interfaces/tasks";
 
 interface IFormInputs {
   id: number;
@@ -53,8 +54,9 @@ export const CreateSectionModal = (props: IProps) => {
 
   const onSubmit = async (data: IFormInputs) => {
     try {
-      await ContainersService.addNewContainer(data);
-      dispatch(containersActions.addContainer(data));
+      const res = await ContainersService.addNewContainer(data);
+      const newContainer: IContainer = res.data;
+      dispatch(containersActions.addContainer(newContainer));
       setAlert({ type: "success", message: "Section added successfully!" });
       setModal(false);
     } catch (error) {

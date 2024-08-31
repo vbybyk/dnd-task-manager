@@ -7,6 +7,7 @@ import * as yup from "yup";
 import { Input } from "../../Components/Common/Input/Input";
 import { UploadAvatar } from "../../Components/Common/UploadAvatar/UploadAvatar";
 import { useAlertContext } from "../../Context/AlertContext";
+import { usePopupContext } from "../../Context/PopupContext";
 import { requiredFieldMessage } from "../../Components/Common/Constants/Constants";
 import { projectActions } from "../../Store/actions/projects";
 import { ProjectService } from "../../API/ProjectService";
@@ -46,6 +47,7 @@ const schema = yup
 export const CreateProjectModal = (props: IProps) => {
   const { modal, setModal, selectedProject } = props;
   const { setAlert } = useAlertContext();
+  const { setPopup } = usePopupContext();
   const dispatch = useDispatch();
 
   const {
@@ -93,6 +95,20 @@ export const CreateProjectModal = (props: IProps) => {
       console.error(error);
       modal.type === MODAL_TYPE.CREATE && setAlert({ type: "error", message: "Could not create project" });
       modal.type === MODAL_TYPE.EDIT && setAlert({ type: "error", message: "Could not update project" });
+    }
+  };
+
+  const onDelete = async () => {
+    if (selectedProject) {
+      try {
+        await ProjectService.deleteProject(selectedProject.id);
+        dispatch(projectActions.deleteProject(selectedProject.id));
+        setAlert({ type: "success", message: "Project deleted successfully!" });
+        setModal({ open: false, type: MODAL_TYPE.CREATE });
+      } catch (err) {
+        setAlert({ type: "error", message: "Something went wrong!" });
+        console.log(err);
+      }
     }
   };
 
@@ -156,6 +172,24 @@ export const CreateProjectModal = (props: IProps) => {
         />
         <Divider />
         <div className="new-project-modal__buttons-wrapper">
+          <div className="new-task-modal__buttons-wrapper__left">
+            {selectedProject && (
+              <Button
+                type="primary"
+                danger
+                onClick={() =>
+                  setPopup({
+                    open: true,
+                    title: "Delete project",
+                    content: "Are you sure you want to delete this project?",
+                    buttons: [{ text: "Delete", type: "primary", danger: true, onClick: onDelete }],
+                  })
+                }
+              >
+                Delete
+              </Button>
+            )}
+          </div>
           <div className="new-project-modal__buttons-wrapper__right">
             <Button onClick={() => setModal({ open: false, type: MODAL_TYPE.CREATE })}>Cancel</Button>
             <Button

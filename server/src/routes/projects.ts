@@ -47,4 +47,17 @@ export const attachProjectRoutes = (app: Application) => {
       throw new Error(`Failed to create project: ${error}`);
     }
   });
+
+  app.delete("/projects/:id", async (req, res) => {
+    try {
+      const project = await ProjectModel.findOne({ id: req.params.id });
+      if (!project) {
+        return res.status(404).send("Project not found");
+      }
+      await project.remove();
+      res.send("Project deleted");
+    } catch (error) {
+      throw new Error(`Failed to delete project: ${error}`);
+    }
+  });
 };
