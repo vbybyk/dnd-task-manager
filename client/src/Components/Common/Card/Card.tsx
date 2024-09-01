@@ -10,10 +10,14 @@ import { ITask } from "../../../Interfaces/tasks";
 import { useAlertContext } from "../../../Context/AlertContext";
 import "./card.scss";
 
-export const Card = (props: any) => {
+interface ICard {
+  task: ITask;
+}
+
+export const Card = (props: ICard) => {
   const dispatch: Dispatch = useDispatch();
   const { setAlert } = useAlertContext();
-  const { id, task } = props;
+  const { task } = props;
   const { name, labels, images, assigneeId }: ITask = task;
 
   const onChangeAssignee = async (assigneeId: number) => {
@@ -31,7 +35,7 @@ export const Card = (props: any) => {
   };
 
   return (
-    <div className="Card" key={id} onClick={() => dispatch(tasksActions.toggleUpdateTaskModal())}>
+    <div className="Card" key={task.id} onClick={() => dispatch(tasksActions.toggleUpdateTaskModal())}>
       {!!images?.length && (
         <div>
           <div className="card-img">
@@ -54,7 +58,7 @@ export const Card = (props: any) => {
         <div className="footer-left">
           <CheckSquareTwoTone twoToneColor="#1890ff" />
           <span> - </span>
-          <span>{id}</span>
+          <span>{task.id}</span>
         </div>
         <div className="footer-right">
           <PriorityIcon priority={task.priority} />

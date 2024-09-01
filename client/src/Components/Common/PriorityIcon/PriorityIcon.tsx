@@ -2,11 +2,12 @@ import { CaretDown, Equals, CaretDoubleUp } from "@phosphor-icons/react";
 import { Tooltip } from "antd";
 import "./PriorityIcon.scss";
 
-interface IPriority {
-  priority: "low" | "medium" | "high";
+export type IPriority = "low" | "medium" | "high";
+interface IPriorityIcon {
+  priority: IPriority;
 }
 
-export const PriorityIcon = (props: IPriority) => {
+export const PriorityIcon = (props: IPriorityIcon) => {
   const { priority } = props;
   const icon = {
     low: <CaretDown size={16} color="#0a66e4" weight="bold" />,

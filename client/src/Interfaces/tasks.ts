@@ -1,3 +1,5 @@
+import { IPriority } from "../Components/Common/PriorityIcon/PriorityIcon";
+
 export interface IProject {
   id: number;
   name: string;
@@ -13,6 +15,7 @@ export interface IContainer {
   sortId?: number;
 }
 export interface ITask {
+  _id: string;
   id: number;
   projectId: number;
   containerId: number;
@@ -21,7 +24,7 @@ export interface ITask {
   description?: string;
   images?: string[];
   labels?: ILabel[] | null;
-  priority: string;
+  priority: IPriority;
   assigneeId?: number;
 }
 

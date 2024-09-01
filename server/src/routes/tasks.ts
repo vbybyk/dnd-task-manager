@@ -8,14 +8,15 @@ export const attachTaskRoutes = (app: Application) => {
   app.post("/tasks/create", async (req, res) => {
     try {
       const tasks = await TaskModel.find({ containerId: 1, projectId: req.body.projectId });
-
       tasks.sort((a, b) => a.sortId - b.sortId);
-
       const lastSortId = tasks.length > 0 ? tasks[tasks.length - 1].sortId : 0;
-
       const newSortId = lastSortId + 1;
 
-      const newTask = await TaskModel.create({ ...req.body, sortId: newSortId });
+      const allTasks = await TaskModel.find({ projectId: req.body.projectId });
+      const lastTaskId = allTasks.length > 0 ? allTasks[allTasks.length - 1].id : 0;
+      const newTaskId = lastTaskId + 1;
+
+      const newTask = await TaskModel.create({ ...req.body, id: newTaskId, sortId: newSortId });
 
       res.json(newTask);
     } catch (err) {

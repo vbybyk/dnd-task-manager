@@ -13,8 +13,8 @@ export const SortableItem = (props: any) => {
   };
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <Item id={props.id} task={props.task} onClickTask={props.onClickTask} />
+    <div id={props.id} ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      <Item task={props.task} onClickTask={props.onClickTask} />
     </div>
   );
 };

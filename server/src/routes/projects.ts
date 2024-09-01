@@ -34,10 +34,12 @@ export const attachProjectRoutes = (app: Application) => {
 
   app.post("/projects/create", async (req, res) => {
     try {
-      const count = await ProjectModel.countDocuments({});
+      const projects = await ProjectModel.find();
+      const lastProjectId = projects.length > 0 ? projects[projects.length - 1].id : 0;
+
       const newProject = new ProjectModel({
         ...req.body,
-        id: count + 1,
+        id: lastProjectId + 1,
       });
       await newProject.save();
       await ContainerModel.create({ projectId: newProject.id, id: 1, name: "TO DO" });

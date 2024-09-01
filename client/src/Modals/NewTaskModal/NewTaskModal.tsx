@@ -158,7 +158,6 @@ export const NewTaskModal = (props: IProps) => {
       if (isNewTask) {
         const task: ITask = {
           ...data,
-          id: Date.now(),
           projectId,
           containerId: data.containerId,
           labels: labels?.filter((label) => data.labels?.find((l: any) => l.value === label.id)) || [],

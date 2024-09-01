@@ -23,11 +23,11 @@ export const Sidebar = () => {
       icon: <HomeOutlined />,
       label: <NavLink to="/dashboard">Dashboard</NavLink>,
     },
-    {
-      key: "/mywork",
-      icon: <CarryOutOutlined />,
-      label: <NavLink to="/">All Tasks</NavLink>,
-    },
+    // {
+    //   key: "/mywork",
+    //   icon: <CarryOutOutlined />,
+    //   label: <NavLink to="/">All Tasks</NavLink>,
+    // },
     {
       key: "divider",
       disabled: true,

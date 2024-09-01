@@ -82,7 +82,7 @@ export const Project: React.FC = () => {
   const handleDragStart = ({ active }: { active: any }) => {
     const activeContainer = active.data.current.sortable.containerId;
 
-    setActiveItem(items[activeContainer].find((elem) => elem.id === active.id));
+    setActiveItem(items[activeContainer].find((elem) => elem._id === active.id));
     setActiveId(active.id);
   };
 
@@ -220,7 +220,7 @@ export const Project: React.FC = () => {
                   <Fragment key={container._id}>
                     <Col key={container._id} xs={24} sm={12} md={6} style={{ paddingBottom: "40px" }}>
                       <Droppable
-                        id={container.id}
+                        id={container.id.toString()}
                         items={
                           selectedUsers.length
                             ? items[container.id].filter(
@@ -253,7 +253,7 @@ export const Project: React.FC = () => {
             </div>
           )}
         </div>
-        <DragOverlay>{activeId ? <Item id={activeId} task={activeItem} dragOverlay /> : null}</DragOverlay>
+        <DragOverlay>{activeId ? <Item task={activeItem} dragOverlay /> : null}</DragOverlay>
       </DndContext>
       {taskModal.open && (
         <NewTaskModal

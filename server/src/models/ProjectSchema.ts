@@ -4,7 +4,7 @@ import { ContainerModel } from "./ContainerSchema";
 import { LabelModel } from "./LabelSchema";
 
 interface Project extends Document {
-  id?: number;
+  id: number;
   name: string;
   description: string;
   imageUrl?: string;
