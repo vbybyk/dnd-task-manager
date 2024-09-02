@@ -252,7 +252,7 @@ export const NewTaskModal = (props: IProps) => {
               style={{ marginLeft: "20px" }}
               disabled={!isDirty || !isValid}
             >
-              Submit
+              Save
             </Button>
           </div>
         </div>
