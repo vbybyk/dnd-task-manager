@@ -218,7 +218,7 @@ export const Project: React.FC = () => {
               {containers.length > 0 &&
                 containers.map((container: IContainer, index: number) => (
                   <Fragment key={container._id}>
-                    <Col key={container._id} xs={24} sm={12} md={6} style={{ paddingBottom: "40px" }}>
+                    <Col key={container._id} xs={24} sm={12} md={6} style={{ paddingBottom: "20px" }}>
                       <Droppable
                         id={container.id.toString()}
                         items={
