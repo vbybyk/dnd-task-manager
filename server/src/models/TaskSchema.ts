@@ -11,6 +11,7 @@ export interface Task {
   labels?: Types.DocumentArray<Label>;
   priority: string;
   images?: Types.DocumentArray<string>;
+  assigneeId?: number;
 }
 
 export const TaskSchema = new Schema<Task, Model<Task>>({
@@ -23,6 +24,7 @@ export const TaskSchema = new Schema<Task, Model<Task>>({
   labels: { type: [LabelSchema], required: false },
   priority: { type: String, required: false },
   images: [{ type: String, required: false }],
+  assigneeId: { type: Number, required: false },
 });
 
 export const TaskModel = mongoose.model("tasks", TaskSchema);

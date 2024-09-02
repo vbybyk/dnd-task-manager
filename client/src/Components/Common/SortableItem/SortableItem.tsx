@@ -6,16 +6,15 @@ export const SortableItem = (props: any) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: props.id });
 
   const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
+    transform: CSS.Translate.toString(transform),
+    transition: transition || "",
     opacity: isDragging ? 0.5 : 1,
     width: "100%",
   };
 
   return (
-    // @ts-ignore
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <Item id={props.id} task={props.task} onClickTask={props.onClickTask} />
+    <div id={props.id} ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      <Item task={props.task} onClickTask={props.onClickTask} />
     </div>
   );
 };

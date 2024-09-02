@@ -25,9 +25,30 @@ const setUser = (user: IUser) => {
   };
 };
 
+const getUsersRequest = () => {
+  return {
+    type: "GET_USERS_REQUEST",
+  };
+};
+const getUsersSuccess = (users: IUser[]) => {
+  return {
+    type: "GET_USERS_SUCCESS",
+    payload: users,
+  };
+};
+const getUsersError = (err: AxiosError) => {
+  return {
+    type: "GET_USERS_ERROR",
+    payload: err?.response?.data,
+  };
+};
+
 export const usersActions = {
   getUserRequest,
   getUserSuccess,
   getUserError,
   setUser,
+  getUsersRequest,
+  getUsersSuccess,
+  getUsersError,
 };

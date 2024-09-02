@@ -3,10 +3,12 @@
   grid-template-columns: 255px minmax(0, 1fr);
   column-gap: 20px;
   background-color: #eceff8;
-  min-height: 100vh;
+  height: calc(100vh - 50px);
+  overflow: hidden;
 
   .Main {
     background-color: #ffffff;
     border-radius: 5px;
+    overflow: scroll;
   }
 }

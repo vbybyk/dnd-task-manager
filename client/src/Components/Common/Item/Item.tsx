@@ -5,12 +5,10 @@ import "./item.scss";
 export const Item = ({
   task,
   dragOverlay,
-  id,
   onClickTask,
 }: {
-  task?: ITask | undefined;
-  dragOverlay?: any | undefined;
-  id: number;
+  task?: ITask;
+  dragOverlay?: any;
   onClickTask?: (task: ITask) => void;
 }) => {
   const style = {
@@ -18,8 +16,7 @@ export const Item = ({
   };
   return (
     <div style={style} className="item" onClick={() => task && onClickTask && onClickTask(task)}>
-      {task && <Card id={id} task={task} />}
-      {/* <span>Task name: {tasks?.name}</span> */}
+      {task && <Card task={task} />}
     </div>
   );
 };

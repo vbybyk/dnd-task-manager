@@ -11,10 +11,11 @@ interface IPopover {
   className?: string;
   style?: React.CSSProperties;
   placement?: Placement;
+  destroyTooltipOnHide?: boolean;
 }
 
 export const Popover = (props: IPopover) => {
-  const { content, title, trigger, open, onOpen, children, className, style, placement } = props;
+  const { content, title, trigger, open, onOpen, children, className, style, placement, destroyTooltipOnHide } = props;
 
   return (
     <AntdPopover
@@ -26,6 +27,7 @@ export const Popover = (props: IPopover) => {
       className={className}
       style={style}
       placement={placement}
+      destroyTooltipOnHide={destroyTooltipOnHide}
     >
       {children}
     </AntdPopover>

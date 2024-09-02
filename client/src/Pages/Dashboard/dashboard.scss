@@ -14,7 +14,13 @@
   }
   .dashboard-projects__wrapper {
     padding: 20px;
-    background-color: rgb(248, 246, 246);
+    background: linear-gradient(
+      135deg,
+      rgba(55, 50, 136, 0.1) 0%,
+      rgba(45, 45, 189, 0.1) 61%,
+      rgba(48, 150, 208, 0.1) 97%
+    );
+    border-radius: 5px;
     .dashboard-projects__title {
       margin-bottom: 25px;
     }

@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import cn from "classnames";
 import * as yup from "yup";
 import { useForm, Controller } from "react-hook-form";
-import { Input, Modal, Button, Divider, Select, Tag } from "antd";
+import { Input, Modal, Button, Select, Tag } from "antd";
 import { CheckSquareTwoTone, EditOutlined } from "@ant-design/icons";
 import TextEditor from "../../Components/Common/TextEditor/TextEditor";
 import { LabelsPopover } from "../../Components/LabelsPopover/LabelsPopover";
+import { AssigneesDropdown } from "../../Components/Common/AssigneesDropdown/AssigneesDropdown";
 import { yupResolver } from "@hookform/resolvers/yup";
 import type { CustomTagProps } from "rc-select/lib/BaseSelect";
 import { requiredFieldMessage } from "../../Components/Common/Constants/Constants";
@@ -15,6 +16,7 @@ import { tasksActions } from "../../Store/actions/tasks";
 import { ITask, IContainer, ILabel } from "../../Interfaces/tasks";
 import { IState } from "../../Store/reducers";
 import { MODAL_TYPE } from "../../Constants/tasks";
+import { usePopupContext } from "../../Context/PopupContext";
 import { useAlertContext } from "../../Context/AlertContext";
 import { uploadTaskImage } from "../../Utils/img-upload";
 import "./newTaskModal.scss";
@@ -27,6 +29,7 @@ interface IFormInputs {
   priority: string;
   containerId: number;
   images?: string[];
+  assigneeId?: number;
 }
 
 interface IModal {
@@ -86,6 +89,7 @@ export const NewTaskModal = (props: IProps) => {
   const { containers } = useSelector((state: IState) => state.containers);
   const { labels } = useSelector((state: IState) => state.labels);
   const { setAlert } = useAlertContext();
+  const { setPopup } = usePopupContext();
   const dispatch = useDispatch();
 
   const [isOpenLabelsModal, setIsOpenLabelsModal] = useState(false);
@@ -111,6 +115,7 @@ export const NewTaskModal = (props: IProps) => {
       priority: "",
       containerId: containersOptions[0].value,
       images: [],
+      assigneeId: undefined,
     },
     resolver: yupResolver(schema),
     mode: "all",
@@ -130,6 +135,7 @@ export const NewTaskModal = (props: IProps) => {
       if (!!selectedTask?.images?.length) {
         setValue("images", selectedTask.images);
       }
+      setValue("assigneeId", selectedTask.assigneeId);
     }
   }, [selectedTask]);
 
@@ -152,7 +158,6 @@ export const NewTaskModal = (props: IProps) => {
       if (isNewTask) {
         const task: ITask = {
           ...data,
-          id: Date.now(),
           projectId,
           containerId: data.containerId,
           labels: labels?.filter((label) => data.labels?.find((l: any) => l.value === label.id)) || [],
@@ -217,12 +222,24 @@ export const NewTaskModal = (props: IProps) => {
       open={modal.open}
       className="new-task-modal"
       onCancel={onClose}
-      width={1000}
+      centered
+      width={900}
       footer={
         <div className="new-task-modal__buttons-wrapper">
           <div className="new-task-modal__buttons-wrapper__left">
             {selectedTask && (
-              <Button type="primary" danger onClick={onDelete}>
+              <Button
+                type="primary"
+                danger
+                onClick={() =>
+                  setPopup({
+                    open: true,
+                    title: "Delete task",
+                    content: "Are you sure you want to delete this task?",
+                    buttons: [{ text: "Delete", type: "primary", danger: true, onClick: onDelete }],
+                  })
+                }
+              >
                 Delete
               </Button>
             )}
@@ -321,6 +338,12 @@ export const NewTaskModal = (props: IProps) => {
               />
             </LabelsPopover>
           </div>
+          <span className="input-field-title">Assignee</span>
+          <Controller
+            name="assigneeId"
+            control={control}
+            render={({ field }) => <AssigneesDropdown value={field.value} onChange={field.onChange} />}
+          />
         </div>
       </form>
     </Modal>

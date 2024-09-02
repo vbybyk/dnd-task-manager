@@ -42,6 +42,7 @@ export const attachLabelRoutes = (app: Application) => {
         _req.body.map(async (label: any) => {
           const updatedLabel = await LabelModel.findOneAndUpdate({ id: label.id, projectId }, label, {
             returnOriginal: false,
+            upsert: true,
           });
           return updatedLabel;
         })

@@ -29,6 +29,8 @@ export const project = (state = initialState, action: AnyAction): IProjectState 
         ...state,
         projects: state.projects.map((project) => (project.id === action.payload.id ? action.payload : project)),
       };
+    case "DELETE_PROJECT":
+      return { ...state, projects: state.projects.filter((project) => project.id !== action.payload) };
     case "PROJECTS_REQUEST_ERROR":
     case "PROJECT_REQUEST_ERROR":
       return { ...state, isFetching: false };

@@ -37,7 +37,7 @@ const HeaderApp: React.FC = () => {
       <Header className="header">
         <div className="header-container">
           <div className="header-title">
-            <h2>Task Manager</h2>
+            <h2>DND Task Manager</h2>
           </div>
           <div className="header-user flex">
             <Dropdown

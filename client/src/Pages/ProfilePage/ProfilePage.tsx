@@ -7,7 +7,7 @@ import * as yup from "yup";
 import { Layout, Button, Input as InputAntd } from "antd";
 import { Input } from "../../Components/Common/Input/Input";
 import { UploadAvatar } from "../../Components/Common/UploadAvatar/UploadAvatar";
-import useTasks from "../../Hooks/useTasks";
+import useUsers from "../../Hooks/useUsers";
 import { useAlertContext } from "../../Context/AlertContext";
 import { requiredFieldMessage } from "../../Components/Common/Constants/Constants";
 import { usersActions } from "../../Store/actions/users";
@@ -43,7 +43,7 @@ const { TextArea } = InputAntd;
 
 export const ProfilePage = () => {
   const { userId } = useParams<{ userId: string }>();
-  const { getUser } = useTasks();
+  const { getUser } = useUsers();
   const { setAlert } = useAlertContext();
   const { user } = useSelector((state: any) => state.users);
   const dispatch = useDispatch();

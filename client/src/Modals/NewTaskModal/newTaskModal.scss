@@ -1,4 +1,10 @@
 .new-task-modal {
+  .input-field-title {
+    font-size: 13px;
+    padding: 10px 0 3px 10px;
+    font-weight: 600;
+  }
+
   &__form {
     display: grid;
     column-gap: 40px;
@@ -14,8 +20,12 @@
   &__right {
     display: grid;
     row-gap: 16px;
+    align-items: center;
     grid-template-columns: 1fr 2fr;
     grid-auto-rows: minmax(30px, auto);
+    .input-field-title {
+      padding: 0;
+    }
   }
 
   &__buttons-wrapper {
@@ -57,12 +67,6 @@
         background-color: transparent;
       }
     }
-  }
-
-  .input-field-title {
-    font-size: 13px;
-    padding: 10px 0 3px 10px;
-    font-weight: 600;
   }
 
   .hidden-input {

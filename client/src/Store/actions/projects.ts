@@ -66,6 +66,13 @@ const updateProject = (project: IProject) => {
   };
 };
 
+const deleteProject = (id: number) => {
+  return {
+    type: "DELETE_PROJECT",
+    payload: id,
+  };
+};
+
 export const projectActions = {
   getProjectsRequest,
   getProjectsSuccess,
@@ -78,4 +85,5 @@ export const projectActions = {
   getProjectError,
   addProject,
   updateProject,
+  deleteProject,
 };
