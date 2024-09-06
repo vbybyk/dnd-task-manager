@@ -84,6 +84,8 @@ const tagRender = (props: CustomTagProps & { labelsDict: Record<string, any> }) 
   );
 };
 
+const { TextArea } = Input;
+
 export const NewTaskModal = (props: IProps) => {
   const { projectId, modal, setModal, selectedTask, setSelectedTask } = props;
   const { containers } = useSelector((state: IState) => state.containers);
@@ -264,10 +266,11 @@ export const NewTaskModal = (props: IProps) => {
             name="name"
             control={control}
             render={({ field }) => (
-              <Input
-                placeholder="Task name"
+              <TextArea
                 {...field}
-                className={cn(!isNewTask && "hidden-input")}
+                autoSize
+                placeholder="Task name"
+                className={cn("Input", !isNewTask && "hidden-input")}
                 style={{ fontSize: "16px", fontWeight: "600" }}
               />
             )}

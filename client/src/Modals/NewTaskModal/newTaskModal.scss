@@ -70,12 +70,13 @@
   }
 
   .hidden-input {
-    border: none;
+    border-color: #fff;
     &:hover {
       background-color: rgb(245 244 244);
     }
     &:focus {
       background-color: transparent;
+      border-color: #1677ff;
     }
   }
 }
