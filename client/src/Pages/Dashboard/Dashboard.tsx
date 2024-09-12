@@ -66,7 +66,14 @@ export const Dashboard: React.FC = () => {
           />
         )}
       </div>
-      {modal.open && <CreateProjectModal modal={modal} setModal={setModal} selectedProject={selectedProject} />}
+      {modal.open && (
+        <CreateProjectModal
+          modal={modal}
+          setModal={setModal}
+          selectedProject={selectedProject}
+          setSelectedProject={setSelectedProject}
+        />
+      )}
     </Content>
   );
 };

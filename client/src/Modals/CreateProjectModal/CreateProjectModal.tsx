@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Input as AntdInput, Modal, Button, Divider } from "antd";
 import { useForm, Controller } from "react-hook-form";
@@ -26,6 +26,7 @@ interface IProps {
   modal: { open: boolean; type: number };
   setModal: ({ open, type }: { open: boolean; type: number }) => void;
   selectedProject: IProject | null;
+  setSelectedProject: (project: IProject | null) => void;
 }
 
 const { TextArea } = AntdInput;
@@ -45,7 +46,8 @@ const schema = yup
   .required();
 
 export const CreateProjectModal = (props: IProps) => {
-  const { modal, setModal, selectedProject } = props;
+  const { modal, setModal, selectedProject, setSelectedProject } = props;
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { setAlert } = useAlertContext();
   const { setPopup } = usePopupContext();
   const dispatch = useDispatch();
@@ -55,6 +57,7 @@ export const CreateProjectModal = (props: IProps) => {
     handleSubmit,
     setValue,
     formState: { errors, isDirty, isValid },
+    reset,
   } = useForm<IFormInputs>({
     defaultValues: {
       id: undefined,
@@ -75,39 +78,52 @@ export const CreateProjectModal = (props: IProps) => {
     }
   }, [selectedProject]);
 
+  const onClose = () => {
+    setModal({ open: false, type: MODAL_TYPE.CREATE });
+    setSelectedProject(null);
+    setIsSubmitting(false);
+    reset();
+  };
+
   const onSubmit = async (data: IFormInputs) => {
     try {
+      setIsSubmitting(true);
       if (modal.type === MODAL_TYPE.CREATE) {
         const res = await ProjectService.createProject(data);
         const newProject: IProject = res.data;
         dispatch(projectActions.addProject(newProject));
         setAlert({ type: "success", message: "Project created successfully!" });
-        setModal({ open: false, type: MODAL_TYPE.CREATE });
+        onClose();
       }
       if (modal.type === MODAL_TYPE.EDIT) {
         const res = await ProjectService.updateProject(data);
         const updatedProject: IProject = res.data;
         dispatch(projectActions.updateProject(updatedProject));
         setAlert({ type: "success", message: "Project updated successfully!" });
-        setModal({ open: false, type: MODAL_TYPE.CREATE });
+        onClose();
       }
     } catch (error) {
       console.error(error);
       modal.type === MODAL_TYPE.CREATE && setAlert({ type: "error", message: "Could not create project" });
       modal.type === MODAL_TYPE.EDIT && setAlert({ type: "error", message: "Could not update project" });
+      setIsSubmitting(false);
     }
   };
 
   const onDelete = async () => {
+    setIsSubmitting(true);
     if (selectedProject) {
       try {
         await ProjectService.deleteProject(selectedProject.id);
         dispatch(projectActions.deleteProject(selectedProject.id));
         setAlert({ type: "success", message: "Project deleted successfully!" });
         setModal({ open: false, type: MODAL_TYPE.CREATE });
+        setSelectedProject(null);
+        setIsSubmitting(false);
       } catch (err) {
         setAlert({ type: "error", message: "Something went wrong!" });
         console.log(err);
+        setIsSubmitting(false);
       }
     }
   };
@@ -185,6 +201,7 @@ export const CreateProjectModal = (props: IProps) => {
                     buttons: [{ text: "Delete", type: "primary", danger: true, onClick: onDelete }],
                   })
                 }
+                disabled={isSubmitting}
               >
                 Delete
               </Button>
@@ -197,6 +214,7 @@ export const CreateProjectModal = (props: IProps) => {
               onClick={handleSubmit(onSubmit)}
               style={{ marginLeft: "20px" }}
               disabled={!isDirty || !isValid}
+              loading={isSubmitting}
             >
               {modal.type === MODAL_TYPE.CREATE ? "Create" : "Edit"}
             </Button>
