@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Modal, Button, Divider } from "antd";
 import { Input } from "../../Components/Common/Input/Input";
@@ -35,6 +36,7 @@ const schema = yup
 
 export const CreateSectionModal = (props: IProps) => {
   const { projectId, open, setModal } = props;
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { setAlert } = useAlertContext();
   const dispatch = useDispatch();
 
@@ -42,6 +44,7 @@ export const CreateSectionModal = (props: IProps) => {
     control,
     handleSubmit,
     formState: { errors, isValid, isDirty },
+    reset,
   } = useForm<IFormInputs>({
     defaultValues: {
       id: undefined,
@@ -53,15 +56,19 @@ export const CreateSectionModal = (props: IProps) => {
   });
 
   const onSubmit = async (data: IFormInputs) => {
+    setIsSubmitting(true);
     try {
       const res = await ContainersService.addNewContainer(data);
       const newContainer: IContainer = res.data;
       dispatch(containersActions.addContainer(newContainer));
       setAlert({ type: "success", message: "Section added successfully!" });
+      setIsSubmitting(false);
+      reset();
       setModal(false);
     } catch (error) {
       console.error(error);
       setAlert({ type: "error", message: "Failed to add new section" });
+      setIsSubmitting(false);
     }
   };
 
@@ -98,6 +105,7 @@ export const CreateSectionModal = (props: IProps) => {
               onClick={handleSubmit(onSubmit)}
               style={{ marginLeft: "20px" }}
               disabled={!isDirty || !isValid}
+              loading={isSubmitting}
             >
               Submit
             </Button>

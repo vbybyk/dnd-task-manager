@@ -95,6 +95,7 @@ export const NewTaskModal = (props: IProps) => {
   const dispatch = useDispatch();
 
   const [isOpenLabelsModal, setIsOpenLabelsModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
 
   const containersOptions = containers.map((container: IContainer) => ({ value: container.id, label: container.name }));
@@ -152,10 +153,12 @@ export const NewTaskModal = (props: IProps) => {
   const onClose = () => {
     setModal({ open: false, type: MODAL_TYPE.CREATE });
     setSelectedTask(null);
+    setIsSubmitting(false);
     setTimeout(() => reset(), 500);
   };
 
   const onSubmit = async (data: any) => {
+    setIsSubmitting(true);
     try {
       if (isNewTask) {
         const task: ITask = {
@@ -171,6 +174,7 @@ export const NewTaskModal = (props: IProps) => {
       } else {
         const res = await TasksService.updateTask(data.id, {
           ...data,
+          projectId,
           labels: labels?.filter((label) => data.labels?.find((l: any) => l.value === label.id)) || [],
         });
         dispatch(tasksActions.setTask(res.data));
@@ -179,6 +183,7 @@ export const NewTaskModal = (props: IProps) => {
       }
     } catch (err) {
       setAlert({ type: "error", message: "Something went wrong!" });
+      setIsSubmitting(false);
       console.log(err);
     }
   };
@@ -253,6 +258,7 @@ export const NewTaskModal = (props: IProps) => {
               onClick={handleSubmit(onSubmit)}
               style={{ marginLeft: "20px" }}
               disabled={!isDirty || !isValid}
+              loading={isSubmitting}
             >
               Save
             </Button>

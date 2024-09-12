@@ -60,11 +60,11 @@ export const Project: React.FC = () => {
   }, [projId]);
 
   useEffect(() => {
-    if (tasks.length && containers.length > 0) {
+    if (projId && containers.length > 0) {
       const transformedData = transformData(tasks, containers);
       setItems(transformedData);
     }
-  }, [tasks, containers]);
+  }, [projId, tasks, containers]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
