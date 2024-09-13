@@ -1,3 +1,4 @@
+import { useParams } from "react-router-dom";
 import { Dispatch } from "redux";
 import { useDispatch } from "react-redux";
 import { Divider, Tag } from "antd";
@@ -14,9 +15,14 @@ interface ICard {
   task: ITask;
 }
 
+type Params = {
+  projId: string;
+};
+
 export const Card = (props: ICard) => {
   const dispatch: Dispatch = useDispatch();
   const { setAlert } = useAlertContext();
+  const { projId } = useParams<Params>() as Params;
   const { task } = props;
   const { name, labels, images, assigneeId }: ITask = task;
 
@@ -25,6 +31,7 @@ export const Card = (props: ICard) => {
       const res = await TasksService.updateTask(task.id, {
         ...task,
         assigneeId,
+        projectId: +projId,
       });
       dispatch(tasksActions.setTask(res.data));
       setAlert({ type: "success", message: "Updated successfully!" });
