@@ -172,7 +172,7 @@ export const NewTaskModal = (props: IProps) => {
         setAlert({ type: "success", message: "Task created successfully!" });
         onClose();
       } else {
-        const res = await TasksService.updateTask(data.id, {
+        const res = await TasksService.updateTask({
           ...data,
           projectId,
           labels: labels?.filter((label) => data.labels?.find((l: any) => l.value === label.id)) || [],
@@ -191,7 +191,7 @@ export const NewTaskModal = (props: IProps) => {
   const onDelete = async () => {
     if (selectedTask) {
       try {
-        await TasksService.deleteTask(selectedTask.id);
+        await TasksService.deleteTask(selectedTask.projectId, selectedTask.id);
         dispatch(tasksActions.deleteTask(selectedTask.id));
         setAlert({ type: "success", message: "Task deleted successfully!" });
         onClose();

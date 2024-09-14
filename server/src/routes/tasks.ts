@@ -5,18 +5,19 @@ import { updateTasks } from "../commands/Tasks";
 import { uploadImage } from "../commands/ImgUpload";
 
 export const attachTaskRoutes = (app: Application) => {
-  app.post("/tasks/create", async (req, res) => {
+  app.post("/projects/:projectId/task", async (req, res) => {
+    const { projectId } = req.params;
     try {
-      const tasks = await TaskModel.find({ containerId: 1, projectId: req.body.projectId });
+      const tasks = await TaskModel.find({ containerId: 1, projectId });
       tasks.sort((a, b) => a.sortId - b.sortId);
       const lastSortId = tasks.length > 0 ? tasks[tasks.length - 1].sortId : 0;
       const newSortId = lastSortId + 1;
 
-      const allTasks = await TaskModel.find({ projectId: req.body.projectId });
+      const allTasks = await TaskModel.find({ projectId });
       const lastTaskId = allTasks.length > 0 ? allTasks[allTasks.length - 1].id : 0;
       const newTaskId = lastTaskId + 1;
 
-      const newTask = await TaskModel.create({ ...req.body, id: newTaskId, sortId: newSortId });
+      const newTask = await TaskModel.create({ ...req.body, projectId, id: newTaskId, sortId: newSortId });
 
       res.json(newTask);
     } catch (err) {
@@ -24,19 +25,27 @@ export const attachTaskRoutes = (app: Application) => {
     }
   });
 
-  app.put("/tasks/:id", async (req, res) => {
-    const { id } = req.params;
+  app.put("/projects/:projectId/tasks/:id", async (req, res) => {
+    const { id, projectId } = req.params;
     try {
-      const updatedTask = await TaskModel.findOneAndUpdate({ id }, req.body, { returnOriginal: false });
+      const updatedTask = await TaskModel.findOneAndUpdate({ id, projectId }, req.body, {
+        returnOriginal: false,
+      });
+      if (!updatedTask) {
+        return res.status(404).send("Task not found.");
+      }
       res.json(updatedTask);
     } catch (err) {
       res.status(500).send(`Error updating task: ${err}`);
     }
   });
 
-  app.delete("/tasks/:id", async (req, res) => {
+  app.delete("/projects/:projectId/tasks/:id", async (req, res) => {
     try {
-      await TaskModel.findOneAndDelete({ id: req.params.id });
+      const task = await TaskModel.findOneAndDelete({ id: req.params.id, projectId: req.params.projectId });
+      if (!task) {
+        return res.status(404).send("No task found to delete");
+      }
       res.send("Task deleted");
     } catch (err) {
       res.status(500).send(`Error deleting task: ${err}`);

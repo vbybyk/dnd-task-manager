@@ -28,7 +28,7 @@ export const Card = (props: ICard) => {
 
   const onChangeAssignee = async (assigneeId: number) => {
     try {
-      const res = await TasksService.updateTask(task.id, {
+      const res = await TasksService.updateTask({
         ...task,
         assigneeId,
         projectId: +projId,
