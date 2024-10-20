@@ -5,7 +5,7 @@ export const attachContainerRoutes = (app: Application) => {
   app.get("/projects/:id/containers", async (_req, res) => {
     try {
       const containers = await ContainerModel.find({ projectId: _req.params.id });
-      res.send(containers);
+      res.send(containers?.sort((a, b) => a.id - b.id));
     } catch (err) {
       res.status(500).send(`Error getting containers: ${err}`);
     }
