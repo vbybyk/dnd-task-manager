@@ -146,6 +146,7 @@ export const CreateProjectModal = (props: IProps) => {
               field={field}
               label="Project name"
               htmlFor="name"
+              id="name"
               required
               placeholder="Project name"
               error={error}
@@ -158,13 +159,16 @@ export const CreateProjectModal = (props: IProps) => {
           control={control}
           render={({ field }) => (
             <div className="Input" style={{ marginBottom: "20px" }}>
-              <label className="input-label required">Description</label>
+              <label className="input-label required" htmlFor="description">
+                Description
+              </label>
               <TextArea
                 placeholder="Describe your project"
                 autoSize={{ minRows: 3, maxRows: 20 }}
                 maxLength={550}
                 showCount={true}
                 required
+                id="description"
                 {...field}
               />
               {errors.description?.message && <p className="required-field-message">{errors.description?.message}</p>}
@@ -208,7 +212,7 @@ export const CreateProjectModal = (props: IProps) => {
             )}
           </div>
           <div className="new-project-modal__buttons-wrapper__right">
-            <Button onClick={() => setModal({ open: false, type: MODAL_TYPE.CREATE })}>Cancel</Button>
+            <Button onClick={onClose}>Cancel</Button>
             <Button
               type="primary"
               onClick={handleSubmit(onSubmit)}

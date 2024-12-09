@@ -9,11 +9,13 @@
   "dependencies": {
     "@phosphor-icons/react": "^2.1.5",
     "@vitejs/plugin-react": "^4.3.1",
+    "@vitest/ui": "^2.1.6",
     "antd": "^5.17.0",
     "antd-img-crop": "^4.22.0",
     "axios": "^1.2.0",
     "classnames": "^2.5.1",
     "concurrently": "^7.5.0",
+    "jsdom": "^25.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.40.0",
@@ -28,6 +30,7 @@
     "vite": "^5.3.3",
     "vite-plugin-node-polyfills": "^0.22.0",
     "vite-tsconfig-paths": "^4.3.2",
+    "vitest": "^2.1.6",
     "web-vitals": "^2.1.4",
     "yup": "^0.32.11"
   },
@@ -36,7 +39,7 @@
     "build": "vite build --emptyOutDir",
     "start": "serve -s dist",
     "heroku-postbuild": "npm run build",
-    "test": "vite test",
+    "test": "vitest --watch",
     "eject": "vite eject"
   },
   "eslintConfig": {
@@ -62,14 +65,19 @@
     "@dnd-kit/core": "^3.1.1",
     "@dnd-kit/sortable": "^3.1.0",
     "@hookform/resolvers": "^2.9.10",
+    "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^13.5.0",
+    "@testing-library/react": "^16.0.1",
+    "@testing-library/user-event": "^14.5.2",
     "@types/jest": "^27.5.2",
     "@types/node": "^20.14.10",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
+    "eslint-plugin-jest-dom": "^5.5.0",
+    "eslint-plugin-testing-library": "^7.0.0",
+    "eslint-plugin-vitest": "^0.5.4",
     "json-server": "^0.17.1",
+    "msw": "^2.6.6",
     "redux-devtools-extension": "^2.13.9"
   }
 }

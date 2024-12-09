@@ -23,6 +23,13 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
+    test: {
+      globals: true,
+      environment: "jsdom",
+      setupFiles: "./src/setupTests.ts",
+      setupFilesAfterEnv: ["./src/setupTests.ts"],
+      css: true,
+    },
     server: {
       port: process.env.PORT || 3005,
       open: false,

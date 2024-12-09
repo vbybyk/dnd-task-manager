@@ -15,7 +15,7 @@ import useTasks from "../Hooks/useTasks";
 import useUsers from "../Hooks/useUsers";
 import "./App.scss";
 
-const APP: React.FC = () => {
+export const APP: React.FC = () => {
   const { getProjects } = useTasks();
   const { getUser, getUsers } = useUsers();
 
@@ -43,7 +43,7 @@ const APP: React.FC = () => {
     </BrowserRouter>
   );
 };
-export const App: React.FC = (props: any) => {
+export const App = (props: any) => {
   return (
     <AppContext>
       <Provider store={store}>

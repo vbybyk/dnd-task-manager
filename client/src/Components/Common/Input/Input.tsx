@@ -12,16 +12,17 @@ interface IInput {
   disabled?: boolean;
   error?: any;
   style?: any;
+  id?: string;
 }
 
 export const Input = (props: IInput) => {
-  const { field, label, htmlFor, className = "", placeholder, required, disabled, error, style } = props;
+  const { field, label, htmlFor, className = "", placeholder, required, disabled, error, style, id } = props;
   return (
     <div className={cn("Input", className)} style={style}>
       <label htmlFor={htmlFor} className={cn("input-label", required && "required")}>
         {label}
       </label>
-      <AntdInput {...field} placeholder={placeholder} required={required} disabled={disabled} />
+      <AntdInput {...field} id={id} placeholder={placeholder} required={required} disabled={disabled} />
       {error && <p className="field-error">{error?.message}</p>}
     </div>
   );

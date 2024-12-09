@@ -32,6 +32,7 @@ export const ProjectCard = (props: any) => {
             onClickEdit(item);
           }}
           className="icon-button"
+          aria-label="edit"
         />
       </div>
       <p className="ProjectCard-description">{item.description}</p>
