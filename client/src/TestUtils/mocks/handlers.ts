@@ -3,7 +3,7 @@ import { BACKEND_URL } from "../../config";
 
 export const handlers = [
   // Handles a GET /projects/:projectId request
-  http.get("http://localhost:9000/projects/:projectId", async () => {
+  http.get(`${BACKEND_URL}/projects/:projectId`, async () => {
     await delay(100);
     return HttpResponse.json({
       id: "1",
@@ -52,6 +52,32 @@ export const handlers = [
       [
         { id: "1", name: "User 1" },
         { id: "2", name: "User 2" },
+      ],
+      { status: 200 }
+    );
+  }),
+
+  // Handles a GET /projects/:projectId/tasks request
+  http.get(`${BACKEND_URL}/projects/:projectId/tasks`, async (req) => {
+    const { projectId } = req.params;
+    await delay(100);
+    return HttpResponse.json(
+      [
+        { _id: "4884", id: 1, name: "Task 1", projectId, containerId: "2345" },
+        { _id: "djd2039", id: 2, name: "Task 2", projectId, containerId: "3466" },
+      ],
+      { status: 200 }
+    );
+  }),
+
+  // Handles a GET /projects/:projectId/containers request
+  http.get(`${BACKEND_URL}/projects/:projectId/containers`, async (req) => {
+    const { projectId } = req.params;
+    await delay(100);
+    return HttpResponse.json(
+      [
+        { _id: "2345", id: 1, name: "Container 1", projectId },
+        { _id: "3466", id: 2, name: "Container 2", projectId },
       ],
       { status: 200 }
     );

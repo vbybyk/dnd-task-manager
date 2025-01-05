@@ -2,6 +2,7 @@ import { ReactElement, PropsWithChildren } from "react";
 import { render, RenderOptions } from "@testing-library/react";
 import { APP } from "../App";
 import { Provider } from "react-redux";
+import { MemoryRouter } from "react-router-dom";
 import { ConfigProvider } from "antd";
 import AppContext from "../Context/AppContext";
 import { configureStore } from "../Store";
@@ -11,10 +12,12 @@ const renderWithContext = (
   {
     initialState,
     store = configureStore(initialState),
+    withRouter = true,
     ...renderOptions
   }: {
     initialState?: any;
     store?: any;
+    withRouter?: boolean;
   } & Omit<RenderOptions, "queries"> = {}
 ) => {
   function Wrapper({ children }: PropsWithChildren<{}>): JSX.Element {
@@ -29,7 +32,7 @@ const renderWithContext = (
               },
             }}
           >
-            <APP>{children}</APP>
+            {withRouter ? <MemoryRouter initialEntries={["/"]}>{children}</MemoryRouter> : children}
           </ConfigProvider>
         </Provider>
       </AppContext>
