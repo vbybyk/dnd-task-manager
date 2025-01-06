@@ -6,7 +6,6 @@ import { AppLayout } from "../../../../App/AppLayout/AppLayout";
 import { Dashboard } from "../../../../Pages/Dashboard/Dashboard";
 import { Project } from "../../../../Pages/Project/Project";
 import { RouterProvider, createMemoryRouter, NavLink } from "react-router-dom";
-import { aw } from "vitest/dist/chunks/reporters.D7Jzd9GS";
 
 // Mock window.matchMedia
 beforeAll(() => {
@@ -46,7 +45,7 @@ const initialState = {
 describe("Sidebar", () => {
   test("renders Sidebar component", async () => {
     render(<Sidebar />);
-    const dashboardMenuItem = screen.getByRole("menuitem", { name: /dashboard/i });
+    const dashboardMenuItem = await screen.findByRole("menuitem", { name: /dashboard/i });
     expect(dashboardMenuItem).toBeInTheDocument();
   });
 
@@ -86,18 +85,16 @@ describe("Sidebar", () => {
     const linkWithinMenuItem = within(projectMenuItem).getByRole("link", { name: /project 1/i });
     expect(linkWithinMenuItem).toBeInTheDocument();
 
-    userEvent.click(linkWithinMenuItem);
+    await userEvent.click(linkWithinMenuItem);
 
-    await waitFor(() => {
-      const heading = screen.getByRole("heading", { level: 2, name: "Project 1" });
-      expect(heading).toBeInTheDocument();
-    });
+    const heading = await screen.findByRole("heading", { level: 2, name: "Project 1" });
+    expect(heading).toBeInTheDocument();
 
     const dashboardMenuItem = await screen.findByRole("menuitem", { name: /dashboard/i });
     const linkWithinDashboardMenuItem = within(dashboardMenuItem).getByRole("link", { name: /dashboard/i });
     expect(linkWithinDashboardMenuItem).toBeInTheDocument();
 
-    userEvent.click(linkWithinDashboardMenuItem);
+    await userEvent.click(linkWithinDashboardMenuItem);
 
     await waitFor(() => {
       const heading = screen.getByRole("heading", { level: 2, name: "My Dashboard" });

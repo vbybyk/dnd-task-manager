@@ -2,14 +2,6 @@ import { http, HttpResponse, delay } from "msw";
 import { BACKEND_URL } from "../../config";
 
 export const handlers = [
-  // Handles a GET /projects/:projectId request
-  http.get(`${BACKEND_URL}/projects/:projectId`, async () => {
-    await delay(100);
-    return HttpResponse.json({
-      id: "1",
-      name: "Project 1",
-    });
-  }),
   // Handles a GET /projects request
   http.get(`${BACKEND_URL}/projects`, async () => {
     await delay(50);
@@ -22,12 +14,33 @@ export const handlers = [
     );
   }),
 
+  // Handles a GET /projects/:projectId request
+  http.get(`${BACKEND_URL}/projects/:projectId`, async () => {
+    await delay(100);
+    return HttpResponse.json({
+      id: "1",
+      name: "Project 1",
+    });
+  }),
+
+  // Handles a PUT /projects/:projectId request
+  http.put(`${BACKEND_URL}/projects/:projectId`, async () => {
+    await delay(250);
+    return HttpResponse.json(
+      {
+        id: 1,
+        name: "Project 1 edited",
+      },
+      { status: 200 }
+    );
+  }),
+
   // Handles a POST /projects/create request
   http.post(`${BACKEND_URL}/projects/create`, async (req) => {
     await delay(250);
     return HttpResponse.json(
       {
-        id: "3",
+        id: 3,
         name: "Project 3",
         description: "New project",
       },
@@ -78,6 +91,19 @@ export const handlers = [
       [
         { _id: "2345", id: 1, name: "Container 1", projectId },
         { _id: "3466", id: 2, name: "Container 2", projectId },
+      ],
+      { status: 200 }
+    );
+  }),
+
+  // Handles a GET /projects/:projectId/labels request
+  http.get(`${BACKEND_URL}/projects/:projectId/labels`, async (req) => {
+    const { projectId } = req.params;
+    await delay(100);
+    return HttpResponse.json(
+      [
+        { _id: "1", border: "#44546F", color: "#172B4D", id: 1, label: "FRONTEND", value: "#F5CD47", projectId },
+        { _id: "2", border: "#44546F", color: "#172B4D", id: 1, label: "FRONTEND", value: "#F5CD47", projectId },
       ],
       { status: 200 }
     );
