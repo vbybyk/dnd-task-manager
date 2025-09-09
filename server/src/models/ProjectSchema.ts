@@ -3,7 +3,7 @@ import { TaskModel } from "./TaskSchema";
 import { ContainerModel } from "./ContainerSchema";
 import { LabelModel } from "./LabelSchema";
 
-interface Project extends Document {
+export interface Project extends Document {
   id: number;
   name: string;
   description: string;

@@ -1,14 +1,14 @@
 import { Application } from "express";
-import { ProjectModel } from "../models/ProjectSchema";
+import { ProjectModel, Project } from "../models/ProjectSchema";
 import { ContainerModel } from "../models/ContainerSchema";
 
 export const attachProjectRoutes = (app: Application) => {
   app.get("/projects", async (_req, res) => {
-    await ProjectModel.find({}, (err: any, data: any) => {
+    await ProjectModel.find({}, (err: any, data: Project[]) => {
       if (err) {
         res.send(err);
       } else {
-        res.send(data);
+        res.send(data?.sort((a, b) => a.id - b.id));
       }
     }).clone();
   });
